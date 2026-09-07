@@ -1,390 +1,323 @@
 <!DOCTYPE html>
-<html lang='en'><head>
-  <meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='Minimalist theme for Hugo'>
-<meta name='theme-color' content='#ffcdf0'>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01 施圳溪 - 嘉仁里里長參選人 | 2026 扎根嘉仁 永續躍進</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 
-<meta property='og:title' content='Minimo'>
-<meta property='og:description' content='Minimalist theme for Hugo'>
-<meta property='og:url' content='http://www.example.com/'>
-<meta property='og:site_name' content='Minimo'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content='2020-02-21T10:43:53&#43;08:00'/><meta name='twitter:card' content='summary'>
-
-<meta name="generator" content="Hugo 0.64.1" />
-
-  <title>Minimo</title>
-  <link rel='canonical' href='http://www.example.com/'>
-  
-    <link href="http://www.example.com/index.xml" rel="alternate" type="application/rss+xml" title="Minimo" />
-  
-  
-  <link rel='icon' href='/favicon.ico'>
-<link rel='stylesheet' href='/assets/css/main.ab98e12b.css'><link rel='stylesheet' href='/css/custom.css'><style>
-:root{--color-accent:#ffcdf0;}
-</style>
-
-  
-
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        // WGSN x Coloro 2026 Color of the Year: Transformative Teal
+                        'transformative-teal': '#306263',
+                        'transformative-teal-dark': '#23494A',
+                        'transformative-teal-light': '#4A8B8C',
+                        
+                        // Pantone 2026 Color of the Year: Cloud Dancer
+                        'cloud-dancer': '#F0EEE9',
+                        
+                        // Accents (Derived from 2026 trend palettes for small highlights)
+                        'amber-haze': '#D9A441' 
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F0EEE9; /* Cloud Dancer */
+            color: #1F2937;
+        }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        .text-shadow-sm {
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
-<body class='home type-page has-sidebar'>
+<body class="antialiased selection:bg-transformative-teal selection:text-cloud-dancer">
 
-  <div class='site'><div id='sidebar' class='sidebar'>
-  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
-
-  <div class='container'><section class='widget widget-about sep-after'>
-  <header>
-    
-    <div class='logo'>
-      <a href='/'>
-        <img src='/images/logo.png'>
-      </a>
-    </div>
-    
-    <h2 class='title site-title '>
-      <a href='/'>
-      Minimo
-      </a>
-    </h2>
-    <div class='desc'>
-    Minimalist theme for Hugo
-    </div>
-  </header>
-
-</section>
-<section class='widget widget-search sep-after'>
-  <header>
-    <h4 class='title widget-title'>Search</h4>
-  </header>
-
-  <form action='/search' id='search-form' class='search-form'>
-    <label>
-      <span class='screen-reader-text'>Search</span>
-      <input id='search-term' class='search-term' type='search' name='q' placeholder='Search&hellip;'>
-    </label></form>
-
-</section>
-<section class='widget widget-sidebar_menu sep-after'><nav id='sidebar-menu' class='menu sidebar-menu' aria-label='Sidebar Menu'>
-    <div class='container'>
-      <ul><li class='item current'>
-  <a aria-current='page' href='/'>Home</a></li><li class='item has-children'>
-  <a href='/docs/'>Docs</a><button class='sub-menu-toggler'>
-    <span class='screen-reader-text'>expand sub menu</span>
-    <span class='sign'></span>
-  </button>
-
-  <ul class='sub-menu'><li class='item'>
-  <a href='/docs/menus/'>Menus</a></li><li class='item'>
-  <a href='/docs/widgets/'>Widgets</a></li></ul></li><li class='item'>
-  <a href='/docs/sidebar/'>Sidebar</a></li></ul>
-    </div>
-  </nav>
-
-</section><section class='widget widget-taxonomy_cloud sep-after'>
-  <header>
-    <h4 class='title widget-title'>Tags</h4>
-  </header>
-
-  <div class='container list-container'>
-  <ul class='list taxonomy-cloud'><li>
-        <a href='/tags/algolia/' style='font-size:1em'>algolia</a>
-      </li><li>
-        <a href='/tags/authors/' style='font-size:1em'>authors</a>
-      </li><li>
-        <a href='/tags/chroma/' style='font-size:1em'>chroma</a>
-      </li><li>
-        <a href='/tags/config/' style='font-size:2em'>Configuration</a>
-      </li><li>
-        <a href='/tags/fuse.js/' style='font-size:1em'>fuse.js</a>
-      </li><li>
-        <a href='/tags/hub/' style='font-size:1em'>hub</a>
-      </li><li>
-        <a href='/tags/hugo/' style='font-size:1em'>hugo</a>
-      </li><li>
-        <a href='/tags/i18n/' style='font-size:1em'>i18n</a>
-      </li><li>
-        <a href='/tags/katex/' style='font-size:1em'>katex</a>
-      </li><li>
-        <a href='/tags/lunr.js/' style='font-size:1em'>lunr.js</a>
-      </li><li>
-        <a href='/tags/menus/' style='font-size:1em'>menus</a>
-      </li><li>
-        <a href='/tags/og/' style='font-size:1em'>Opengraph</a>
-      </li><li>
-        <a href='/tags/pygments/' style='font-size:1em'>pygments</a>
-      </li><li>
-        <a href='/tags/search/' style='font-size:1.5em'>search</a>
-      </li><li>
-        <a href='/tags/shortcode/' style='font-size:1em'>shortcode</a>
-      </li><li>
-        <a href='/tags/translation/' style='font-size:1em'>translation</a>
-      </li><li>
-        <a href='/tags/widgets/' style='font-size:1em'>widgets</a>
-      </li></ul>
-</div>
-
-
-</section>
-</div>
-
-  <div class='sidebar-overlay'></div>
-</div><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
-  <div class='container'>
-    <a class='screen-reader-text' href='#content'>Skip to Content</a>
-
-<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
-  <span class='screen-reader-text'>Toggle Sidebar</span>
-  <span class='open'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <line x1="3" y1="12" x2="21" y2="12" />
-  <line x1="3" y1="6" x2="21" y2="6" />
-  <line x1="3" y1="18" x2="21" y2="18" />
-  
-</svg>
-</span>
-  <span class='close'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <line x1="18" y1="6" x2="6" y2="18" />
-  <line x1="6" y1="6" x2="18" y2="18" />
-  
-</svg>
-</span>
-</button>
-    <ul><li class='item current'>
-        <a aria-current='page' href='/'>Home</a>
-      </li><li class='item'>
-        <a href='/docs/'>Docs</a>
-      </li><li class='item'>
-        <a href='/typography/'>Typography</a>
-      </li><li class='item'>
-        <a href='/about/'>About</a>
-      </li><li class='item'>
-        <a href='https://github.com/MunifTanjim/minimo'>Repo</a>
-      </li></ul>
-  </div>
-</nav><div class='header-widgets'>
-        <div class='container'><style>.widget-breadcrumbs li:after{content:'\2f '}</style>
-  <section class='widget widget-breadcrumbs sep-after'>
-    <nav id='breadcrumbs'>
-      <ol><li><span>Home</span></li></ol>
-    </nav>
-  </section></div>
-      </div>
-
-      <header id='header' class='header site-header'>
-        <div class='container sep-after'>
-          <div class='header-info'><h1 class='site-title title'>Minimo</h1><p class='desc site-desc'>Minimalist theme for Hugo</p>
-          </div>
+    <header class="pattern-bg text-cloud-dancer py-16 px-6 relative overflow-hidden shadow-lg">
+        <div class="absolute top-0 right-0 p-4 opacity-20 text-9xl font-black italic">01</div>
+        <div class="max-w-5xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between">
+            <div class="mb-8 md:mb-0 md:w-2/3">
+                <div class="inline-block bg-amber-haze text-transformative-teal-dark font-bold px-3 py-1 rounded-full text-sm mb-4 tracking-widest shadow-sm">
+                    KEELUNG ANLE JIA-REN LI 2026
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black tracking-tight mb-2 text-shadow-sm">
+                    施圳溪
+                </h1>
+                <h2 class="text-2xl md:text-3xl font-medium mb-6 opacity-90">
+                    嘉仁里里長參選人 <span class="font-bold text-amber-haze bg-transformative-teal-dark px-2 py-1 rounded ml-2">NO.01</span>
+                </h2>
+                <p class="text-xl md:text-2xl font-light tracking-wide border-l-4 border-amber-haze pl-4">
+                    扎根嘉仁 · 永續躍進<br>
+                    <span class="text-lg opacity-80 mt-1 block">您的希望・我來行動・共同實現</span>
+                </p>
+            </div>
+            
+            <div class="md:w-1/3 flex justify-center md:justify-end">
+                <div class="bg-cloud-dancer text-transformative-teal rounded-full w-48 h-48 md:w-64 md:h-64 flex items-center justify-center flex-col shadow-2xl border-4 border-amber-haze transform rotate-3 transition-transform hover:rotate-0 duration-300">
+                    <span class="text-xl font-bold">支持・服務・安全</span>
+                    <span class="text-5xl font-black mt-2">嘉 仁</span>
+                    <i class="fa-solid fa-leaf mt-3 text-amber-haze text-2xl"></i>
+                </div>
+            </div>
         </div>
-      </header>
+    </header>
 
-      <main id='content'>
-
-
-
-<div class='entry'>
-  
-  <div class='container entry-content'>
-  <blockquote>
-<p>Minimalism is not a lack of something. It’s simply the perfect amount of something.
-— Nicholas Burroughs</p>
-</blockquote>
-
-</div>
-
-</div>
-<div class='home-widgets'>
-  <div class='container sep-before'><section class='widget widget-recent_posts sep-after'>
-  <header>
-    <h4 class='title widget-title'>Recent Posts</h4>
-  </header>
-
-  <ul class='list'>
-  
-    <li class='item'>
-  <div class='meta'>
-    <span>
-  <span class='screen-reader-text'>Posted on </span>
-  <time datetime='2020-02-21T10:43:53&#43;08:00'>2020, Feb 21</time>
-</span>
-
-  </div>
-  <header class='item-header'>
-    <h3 class='item-title'>
-      <a href='/post/888/'>888</a>
-    </h3>
-  </header>
-</li>
-
-  
-    <li class='item'>
-  <div class='meta'>
-    <span>
-  <span class='screen-reader-text'>Posted on </span>
-  <time datetime='2018-08-12T12:30:00&#43;06:00'>2018, Aug 12</time>
-</span>
-
-  </div>
-  <header class='item-header'>
-    <h3 class='item-title'>
-      <a href='/docs/katex-support/'>KaTeX Support</a>
-    </h3>
-  </header>
-</li>
-
-  
-    <li class='item'>
-  <div class='meta'>
-    <span>
-  <span class='screen-reader-text'>Posted on </span>
-  <time datetime='2018-07-06T01:00:00&#43;06:00'>2018, Jul 06</time>
-</span>
-
-  </div>
-  <header class='item-header'>
-    <h3 class='item-title'>
-      <a href='/docs/search-fuse-js/'>Search: Fuse.js</a>
-    </h3>
-  </header>
-</li>
-
-  
-    <li class='item'>
-  <div class='meta'>
-    <span>
-  <span class='screen-reader-text'>Posted on </span>
-  <time datetime='2018-07-05T23:30:00&#43;06:00'>2018, Jul 05</time>
-</span>
-
-  </div>
-  <header class='item-header'>
-    <h3 class='item-title'>
-      <a href='/docs/search-algolia/'>Search: Algolia</a>
-    </h3>
-  </header>
-</li>
-
-  
-  </ul>
-</section>
-</div>
-</div>      </main>
-
-      <footer id='footer' class='footer'>
-        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
-    <ul><li>
-        <a href='https://github.com/MunifTanjim' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Open Github account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-  
-</svg>
-</a>
-      </li><li>
-        <a href='https://facebook.com/MunifTanjim' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Open Facebook account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-  
-</svg>
-</a>
-      </li><li>
-        <a href='https://twitter.com/MunifTanjim' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
-  
-</svg>
-</a>
-      </li><li>
-        <a href='https://instagram.com/MunifTanjim' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Open Instagram account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-  <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
-  
-</svg>
-</a>
-      </li><li>
-        <a href='mailto:contact@example.com' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Contact via Email</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-  <polyline points="22,6 12,13 2,6"/>
-  
-</svg>
-</a>
-      </li><li>
-        <a href='https://codepen.io/MunifTanjim' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Open Codepen account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
-  <line x1="12" y1="22" x2="12" y2="15.5"/>
-  <polyline points="22 8.5 12 15.5 2 8.5"/>
-  <polyline points="2 15.5 12 8.5 22 15.5"/>
-  <line x1="12" y1="2" x2="12" y2="8.5"/>
-  
-</svg>
-</a>
-      </li><li>
-        <a href='https://gitlab.com/MunifTanjim' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Open Gitlab account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 0 1-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 0 1 4.82 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0 1 18.6 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.51L23 13.45a.84.84 0 0 1-.35.94z"/>
-  
-</svg>
-</a>
-      </li><li>
-        <a href='https://linkedin.com/in/muniftanjim' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Open Linkedin account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-  <rect x="2" y="9" width="4" height="12"/>
-  <circle cx="4" cy="4" r="2"/>
-  
-</svg>
-</a>
-      </li><li>
-        <a href='https://t.me/MunifTanjim' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Open Telegram account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <path d="m 22.05,1.577 c -0.393,-0.016 -0.784,0.08 -1.117,0.235 -0.484,0.186 -4.92,1.902 -9.41,3.64 C 9.263,6.325 7.005,7.198 5.267,7.867 3.53,8.537 2.222,9.035 2.153,9.059 c -0.46,0.16 -1.082,0.362 -1.61,0.984 -0.79581202,1.058365 0.21077405,1.964825 1.004,2.499 1.76,0.564 3.58,1.102 5.087,1.608 0.556,1.96 1.09,3.927 1.618,5.89 0.174,0.394 0.553,0.54 0.944,0.544 l -0.002,0.02 c 0,0 0.307,0.03 0.606,-0.042 0.3,-0.07 0.677,-0.244 1.02,-0.565 0.377,-0.354 1.4,-1.36 1.98,-1.928 l 4.37,3.226 0.035,0.02 c 0,0 0.484,0.34 1.192,0.388 0.354,0.024 0.82,-0.044 1.22,-0.337 0.403,-0.294 0.67,-0.767 0.795,-1.307 0.374,-1.63 2.853,-13.427 3.276,-15.38 L 23.676,4.725 C 23.972,3.625 23.863,2.617 23.18,2.02 22.838,1.723 22.444,1.593 22.05,1.576 Z"/>
-  
-</svg>
-</a>
-      </li><li>
-        <a href='https://scholar.google.com/citations?user=qc6CJjYAAAAJ' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Open Google_scholar account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <path d="M21.328 2.002v9.2M8.695 7.85c.014-.787-.11-2.236.28-2.89.623-1.045.856-1.39 1.797-1.989 1.953-.988 4.296.692 4.296.692.803.564 1.672 2.1 1.672 2.1l1.368-1.824-5.444-1.754-3.515 1.34L6.08 7.681m9.109 3.42s.65-.633 1.168-1.085c.461-.402.516-.714.6-.914.18-.426.268-.909.268-1.446 0-.7-.131-1.274-.388-1.735-.031-.053 0 0-.097-.157l4.588-3.762H10.32L3.672 7.85l5.023-.024c.23 1.237.619 1.575 1.019 2.222.744.719 1.13 1.194 2.215 1.194.254 0 2.6-.057 2.842-.09 0 0 .546 1.199-.133 1.71-.41.31.576 1.304.576 1.304s-5.577.831-6.523 1.427a4.13 4.13 0 0 0-1.306 1.277 3.034 3.034 0 0 0-.493 1.665c0 .502.106.955.32 1.357.214.403.493.733.84.99.345.258.744.473 1.194.649.45.174.896.297 1.342.367a8.348 8.348 0 0 0 3.41-.166 7.754 7.754 0 0 0 1.964-.807 4.28 4.28 0 0 0 1.49-1.443c.38-.609.57-1.292.57-2.049 0-.574-.116-1.096-.347-1.57a3.755 3.755 0 0 0-.847-1.164c-.335-.302-2.19-1.837-2.19-1.837"/>
-  
-</svg>
-</a>
-      </li><li>
-        <a href='https://www.youtube.com/channel/UCT-U0rNerYxItGcuoPX-WYA' target='_blank' rel='noopener'>
-          <span class='screen-reader-text'>Open Youtube account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
-  <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
-  
-</svg>
-</a>
-      </li></ul>
-  </nav>
-</section><div class='copyright'>
-  <p> &copy; 2017-2020 MunifTanjim </p>
-</div>
-
+    <section class="py-16 px-6 max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-black text-transformative-teal tracking-wider mb-2">3S PROMISES</h2>
+            <p class="text-xl text-gray-600 font-medium">打造安心幸福里</p>
+            <div class="h-1 w-24 bg-amber-haze mx-auto mt-4 rounded"></div>
         </div>
-      </footer>
 
-    </div>
-  </div><script>window.__assets_js_src="/assets/js/"</script>
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Support -->
+            <div class="bg-white rounded-2xl shadow-md p-8 border-t-8 border-transformative-teal hover:shadow-xl transition-shadow duration-300">
+                <div class="w-14 h-14 bg-transformative-teal-light/20 rounded-xl flex items-center justify-center text-transformative-teal text-2xl mb-6">
+                    <i class="fa-solid fa-hands-holding-child"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-transformative-teal mb-2">Support</h3>
+                <h4 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-100">世代支持·相伴老幼</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
+                        <div>
+                            <strong class="block text-gray-800">獨居長照關懷</strong>
+                            <span class="text-sm text-gray-600">建立三分級動態造冊，主動查訪、定點接送，關懷零死角。</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
+                        <div>
+                            <strong class="block text-gray-800">家人行善團</strong>
+                            <span class="text-sm text-gray-600">定透明互助行善網絡與惜食快閃發送網，提供弱勢微型助學金。</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
+                        <div>
+                            <strong class="block text-gray-800">創客學習共融</strong>
+                            <span class="text-sm text-gray-600">結合工程專業，開辦3D列印/IoT創客班，推動青銀共融。</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
-<script src='/assets/js/main.c3bcf2df.js'></script><script src='/js/custom.js'></script>
+            <!-- Services -->
+            <div class="bg-white rounded-2xl shadow-md p-8 border-t-8 border-transformative-teal hover:shadow-xl transition-shadow duration-300">
+                <div class="w-14 h-14 bg-transformative-teal-light/20 rounded-xl flex items-center justify-center text-transformative-teal text-2xl mb-6">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-transformative-teal mb-2">Services</h3>
+                <h4 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-100">效能服務·數位透明</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
+                        <div>
+                            <strong class="block text-gray-800">敏捷透明里政</strong>
+                            <span class="text-sm text-gray-600">推動「里政進度旗標系統」，公開建言進度與卡關原因。</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
+                        <div>
+                            <strong class="block text-gray-800">社區數位升級</strong>
+                            <span class="text-sm text-gray-600">建置官方LINE帳號、廣播電子化，重要通知不再漏接。</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
+                        <div>
+                            <strong class="block text-gray-800">嘉仁點數回收</strong>
+                            <span class="text-sm text-gray-600">結合宮廟法制化資源回收站，「社區積點」兌換物資。</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Security -->
+            <div class="bg-white rounded-2xl shadow-md p-8 border-t-8 border-transformative-teal hover:shadow-xl transition-shadow duration-300">
+                <div class="w-14 h-14 bg-transformative-teal-light/20 rounded-xl flex items-center justify-center text-transformative-teal text-2xl mb-6">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-transformative-teal mb-2">Security</h3>
+                <h4 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-100">智慧安全・守護生命</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
+                        <div>
+                            <strong class="block text-gray-800">AED 急救網</strong>
+                            <span class="text-sm text-gray-600">結合超商與活動中心廣設AED，推動全民急救認證。</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
+                        <div>
+                            <strong class="block text-gray-800">死角照明防護</strong>
+                            <span class="text-sm text-gray-600">檢視巷弄反光門牌，死角加裝智慧LED 燈與監視器。</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
+                        <div>
+                            <strong class="block text-gray-800">IoT 安防氣象</strong>
+                            <span class="text-sm text-gray-600">免費到府裝獨居智慧門磁、SOS鈕；建微型氣象站預警。</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white py-16 px-6 shadow-inner border-y border-gray-200">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-black text-transformative-teal tracking-wider mb-2">ACTION BLUEPRINT</h2>
+                <p class="text-xl text-gray-600 font-medium">實踐藍圖 具體行動方案</p>
+                <div class="h-1 w-24 bg-amber-haze mx-auto mt-4 rounded"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-x-12 gap-y-16">
+                
+                <!-- Blueprint 01 -->
+                <div class="relative pl-16">
+                    <div class="absolute left-0 top-0 text-5xl font-black text-cloud-dancer" style="-webkit-text-stroke: 1px #306263;">01</div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1">MAKER TECHNOLOGY</h3>
+                        <h4 class="text-2xl font-black text-transformative-teal mb-4">創客工坊 科技守護家人</h4>
+                        <p class="text-gray-600 leading-relaxed text-justify">
+                            運用電子工程專業，開設里民 IoT 科技手作班。學員作品將成為免費的「智慧門磁與SOS求救鈕」，由志工團隊為獨居長輩親自到府安裝，打造無感知、有溫度的社區安全防護網。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Blueprint 02 -->
+                <div class="relative pl-16">
+                    <div class="absolute left-0 top-0 text-5xl font-black text-cloud-dancer" style="-webkit-text-stroke: 1px #306263;">02</div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1">AGILE TRANSPARENCY</h3>
+                        <h4 class="text-2xl font-black text-transformative-teal mb-4">敏捷里政看板 終結黑箱</h4>
+                        <p class="text-gray-600 leading-relaxed text-justify">
+                            引進系統開發看板管理思維，將里民建議透過五大狀態旗標(評估中、進行中、已完成、缺經費、缺人手)透明公開。坦白進度，邀請里民共思對策，讓里政不僅是口頭承諾。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Blueprint 03 -->
+                <div class="relative pl-16">
+                    <div class="absolute left-0 top-0 text-5xl font-black text-cloud-dancer" style="-webkit-text-stroke: 1px #306263;">03</div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1">KINDNESS EDUCATION</h3>
+                        <h4 class="text-2xl font-black text-transformative-teal mb-4">家人行善團 惜物與助學</h4>
+                        <p class="text-gray-600 leading-relaxed text-justify">
+                            建立「惜食快閃發送網」，將即期食品在短時間內透過 LINE 與志工網絡送達弱勢戶。結合資源回收專款專用透明帳戶，補助在地弱勢學子開學用品，讓愛心真正落地。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Blueprint 04 -->
+                <div class="relative pl-16">
+                    <div class="absolute left-0 top-0 text-5xl font-black text-cloud-dancer" style="-webkit-text-stroke: 1px #306263;">04</div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1">CULTURE PLACEMAKING</h3>
+                        <h4 class="text-2xl font-black text-transformative-teal mb-4">文化創生 嘉仁星光步道</h4>
+                        <p class="text-gray-600 leading-relaxed text-justify">
+                            整合劉銘傳隧道、老大公廟等文史資源，設置乾淨安全的景觀展望點。升級步道照明，舉辦「嘉仁文史微旅行」，帶動周邊店家活絡發展，把嘉仁的美行銷出去。
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-transformative-teal-dark text-cloud-dancer pt-16 pb-8 border-t-[12px] border-amber-haze">
+        <div class="max-w-6xl mx-auto px-6">
+            
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-12 mb-12">
+                
+                <!-- Quote and Candidate Info -->
+                <div class="md:w-3/5 text-center md:text-left">
+                    <div class="mb-6 relative">
+                        <i class="fa-solid fa-quote-left text-4xl absolute -top-4 -left-2 text-transformative-teal-light opacity-50"></i>
+                        <p class="text-xl md:text-2xl font-light italic leading-relaxed pl-8 relative z-10">
+                            我們的每一項政見，都是具備可行性、透明度與永續經營的系統計畫。我承諾用多年電子工程的嚴謹與對家鄉的熱愛，將嘉仁里打造為基隆安樂區的幸福指標社區。
+                        </p>
+                        <i class="fa-solid fa-quote-right text-4xl absolute -bottom-4 right-2 text-transformative-teal-light opacity-50"></i>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h2 class="text-3xl font-bold text-amber-haze mb-2">施圳溪</h2>
+                        <p class="text-lg opacity-80 mb-6">嘉仁里里長參選人 / NO. 01</p>
+                        
+                        <div class="space-y-3 font-medium">
+                            <p class="flex items-center justify-center md:justify-start gap-3">
+                                <i class="fa-solid fa-phone w-6 text-center text-amber-haze"></i> 
+                                <a href="tel:0928813308" class="hover:text-white transition-colors">願景熱線 0928-813-308</a>
+                            </p>
+                            <p class="flex items-center justify-center md:justify-start gap-3">
+                                <i class="fa-brands fa-line w-6 text-center text-[#00B900] bg-white rounded p-0.5 text-sm"></i> 
+                                <span>LINE ID 0928813308</span>
+                            </p>
+                            <p class="flex items-center justify-center md:justify-start gap-3">
+                                <i class="fa-solid fa-envelope w-6 text-center text-amber-haze"></i> 
+                                <a href="mailto:ableshih@gmail.com" class="hover:text-white transition-colors">願景信箱 ableshih@gmail.com</a>
+                            </p>
+                            <p class="flex items-center justify-center md:justify-start gap-3">
+                                <i class="fa-brands fa-facebook w-6 text-center text-[#1877F2] bg-white rounded p-0.5 text-sm"></i> 
+                                <span>FB/ableshih</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR Codes Area -->
+                <div class="md:w-2/5 flex flex-row gap-6 justify-center">
+                    <div class="text-center flex flex-col items-center">
+                        <div class="bg-white p-2 rounded-xl shadow-lg mb-3 transform hover:-translate-y-2 transition-transform duration-300">
+                            <!-- User's LINE QR Code -->
+                            <img src="89788.jpg" onerror="this.onerror=null; this.src='https://placehold.co/160x160/306263/F0EEE9?text=LINE+QR'" alt="LINE 官方帳號" class="w-32 h-32 md:w-40 md:h-40 object-cover rounded-lg">
+                        </div>
+                        <span class="font-bold tracking-widest text-sm bg-transformative-teal px-3 py-1 rounded-full"><i class="fa-brands fa-line mr-1"></i>加LINE</span>
+                    </div>
+                    
+                    <div class="text-center flex flex-col items-center">
+                        <div class="bg-white p-2 rounded-xl shadow-lg mb-3 transform hover:-translate-y-2 transition-transform duration-300">
+                            <!-- User's FB QR Code -->
+                            <img src="fb.png" onerror="this.onerror=null; this.src='https://placehold.co/160x160/306263/F0EEE9?text=FB+QR'" alt="FB 粉絲專頁" class="w-32 h-32 md:w-40 md:h-40 object-cover rounded-lg">
+                        </div>
+                        <span class="font-bold tracking-widest text-sm bg-transformative-teal px-3 py-1 rounded-full"><i class="fa-brands fa-facebook mr-1"></i>追蹤 FB</span>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="border-t border-transformative-teal-light/50 pt-6 mt-8 flex flex-col md:flex-row justify-between items-center text-sm opacity-60">
+                <p>2026 施圳溪競選團隊、廣告製作</p>
+                <div class="mt-2 md:mt-0 text-center md:text-right">
+                    <p>Designed with WGSN Transformative Teal (#306263)</p>
+                    <p>& Pantone 2026 Cloud Dancer (#F0EEE9)</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 </body>
-
 </html>
-
