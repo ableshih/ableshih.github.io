@@ -89,20 +89,25 @@
         // ==========================================
         // 1. 請在此處填寫您的圖片與影片檔案名稱
         // ==========================================
-        // type: 'image' (圖片) 或 'video' (影片)
-        // src: '對應的檔案路徑' (相對於此網頁的位置)
         const mediaFiles = [
-            { type: 'image', src: 'images/基隆大武崙淹水成因對策.png' },  // 替換為實際檔名
             { type: 'image', src: 'images/基隆大武崙淹水成因對策.png' },
-            { type: 'video', src: 'https://drive.google.com/file/d/1rX6VZ6Db1GqSR50sLqjv_fiCrM3ivh6n/view?usp=sharing' },
-            // 若有更多檔案，請依循格式繼續往下加...
+            { type: 'image', src: 'images/基隆大武崙淹水成因對策.png' },
+            
+            // 【修改重點 1】將 Google Drive 影片的 type 改為 'gdrive'
+            // 將原本網址的 /view?usp=sharing 改為 /preview
+            // 加入 duration 屬性設定這支影片要停留多久 (毫秒)，例如 30000 = 30秒
+            { 
+                type: 'gdrive', 
+                src: 'https://drive.google.com/file/d/1rX6VZ6Db1GqSR50sLqjv_fiCrM3ivh6n/preview',
+                duration: 30000 
+            }
         ];
 
-        // 圖片停留時間 (毫秒)，5000 = 5秒
+        // 圖片預設停留時間 (毫秒)，5000 = 5秒
         const IMAGE_DURATION = 5000; 
 
         // ==========================================
-        // 以下為播放器邏輯，無需修改
+        // 以下為播放器邏輯
         // ==========================================
         let currentIndex = 0;
         let timer = null;
@@ -128,7 +133,6 @@
                 img.src = media.src;
                 img.className = 'w-full h-full object-contain animate-fade-in';
                 
-                // 圖片載入錯誤處理 (跳下一張)
                 img.onerror = () => playNext();
                 
                 container.appendChild(img);
@@ -142,11 +146,9 @@
                 video.playsInline = true;
                 video.className = 'w-full h-full object-contain animate-fade-in';
                 
-                // 顯示音量控制鍵
                 muteBtn.classList.remove('hidden');
                 muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
                 
-                // 影片播完跳下一則，錯誤也跳下一則
                 video.onended = playNext;
                 video.onerror = () => playNext();
 
@@ -157,11 +159,26 @@
                 };
 
                 container.appendChild(video);
+                
+            } else if (media.type === 'gdrive') {
+                // 【修改重點 2】新增針對 Google Drive 的處理邏輯
+                const iframe = document.createElement('iframe');
+                iframe.src = media.src;
+                iframe.className = 'w-full h-full border-0 animate-fade-in';
+                iframe.allow = "autoplay";
+                
+                container.appendChild(iframe);
+                
+                // 讀取設定的停留時間，若未設定則預設停留 15 秒
+                const driveDuration = media.duration || 15000; 
+                timer = setTimeout(playNext, driveDuration);
             }
         }
 
         // 啟動播放器
         window.onload = renderMedia;
     </script>
+
+    
 </body>
 </html>
