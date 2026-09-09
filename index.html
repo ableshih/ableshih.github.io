@@ -51,7 +51,7 @@
 </head>
 <body class="antialiased selection:bg-transformative-teal selection:text-cloud-dancer">
 
-    <header class="pattern-bg text-cloud-dancer py-16 px-6 relative overflow-hidden shadow-lg">
+    <header class="pattern-bg text-cloud-dancer py-16 px-6 relative overflow-hidden shadow-lg pb-24">
         <div class="absolute top-0 right-0 p-4 opacity-20 text-9xl font-black italic">01</div>
         <div class="max-w-5xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between">
             <div class="mb-8 md:mb-0 md:w-2/3">
@@ -80,6 +80,21 @@
         </div>
     </header>
 
+    <!-- 新增：快速導覽按鈕 (懸浮於 Header 下方) -->
+    <section class="max-w-5xl mx-auto px-6 -mt-8 relative z-20 mb-8">
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="photos.html" class="group flex items-center gap-2 bg-transformative-teal hover:bg-amber-haze text-cloud-dancer hover:text-transformative-teal-dark font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fa-solid fa-camera"></i> 活動照片
+            </a>
+            <a href="shops.html" class="group flex items-center gap-2 bg-transformative-teal hover:bg-amber-haze text-cloud-dancer hover:text-transformative-teal-dark font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fa-solid fa-store"></i> 在地店家
+            </a>
+            <a href="suggestions.html" class="group flex items-center gap-2 bg-transformative-teal hover:bg-amber-haze text-cloud-dancer hover:text-transformative-teal-dark font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fa-regular fa-comment-dots"></i> 市政建言
+            </a>
+        </div>
+    </section>
+
     <section class="py-16 px-6 max-w-6xl mx-auto">
         <div class="text-center mb-12">
             <h2 class="text-4xl font-black text-transformative-teal tracking-wider mb-2">3S PROMISES</h2>
@@ -93,8 +108,11 @@
                 <div class="w-14 h-14 bg-transformative-teal-light/20 rounded-xl flex items-center justify-center text-transformative-teal text-2xl mb-6">
                     <i class="fa-solid fa-hands-holding-child"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-transformative-teal mb-2">Support</h3>
-                <h4 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-100">世代支持·相伴老幼</h4>
+                <!-- 標題修改為超連結 -->
+                <a href="support.html" class="block group mb-4 pb-2 border-b-2 border-gray-100 cursor-pointer">
+                    <h3 class="text-2xl font-bold text-transformative-teal mb-2 group-hover:text-amber-haze transition-colors">Support</h3>
+                    <h4 class="text-lg font-bold text-gray-800 group-hover:text-transformative-teal transition-colors">世代支持·相伴老幼</h4>
+                </a>
                 <ul class="space-y-4">
                     <li class="flex items-start">
                         <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
@@ -125,8 +143,11 @@
                 <div class="w-14 h-14 bg-transformative-teal-light/20 rounded-xl flex items-center justify-center text-transformative-teal text-2xl mb-6">
                     <i class="fa-solid fa-mobile-screen-button"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-transformative-teal mb-2">Services</h3>
-                <h4 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-100">效能服務·數位透明</h4>
+                <!-- 標題修改為超連結 -->
+                <a href="services.html" class="block group mb-4 pb-2 border-b-2 border-gray-100 cursor-pointer">
+                    <h3 class="text-2xl font-bold text-transformative-teal mb-2 group-hover:text-amber-haze transition-colors">Services</h3>
+                    <h4 class="text-lg font-bold text-gray-800 group-hover:text-transformative-teal transition-colors">效能服務·數位透明</h4>
+                </a>
                 <ul class="space-y-4">
                     <li class="flex items-start">
                         <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
@@ -157,8 +178,11 @@
                 <div class="w-14 h-14 bg-transformative-teal-light/20 rounded-xl flex items-center justify-center text-transformative-teal text-2xl mb-6">
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-transformative-teal mb-2">Security</h3>
-                <h4 class="text-lg font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-100">智慧安全・守護生命</h4>
+                <!-- 標題修改為超連結 -->
+                <a href="security.html" class="block group mb-4 pb-2 border-b-2 border-gray-100 cursor-pointer">
+                    <h3 class="text-2xl font-bold text-transformative-teal mb-2 group-hover:text-amber-haze transition-colors">Security</h3>
+                    <h4 class="text-lg font-bold text-gray-800 group-hover:text-transformative-teal transition-colors">智慧安全・守護生命</h4>
+                </a>
                 <ul class="space-y-4">
                     <li class="flex items-start">
                         <i class="fa-solid fa-check text-amber-haze mt-1 mr-3"></i>
@@ -200,8 +224,11 @@
                 <div class="relative pl-16">
                     <div class="absolute left-0 top-0 text-5xl font-black text-cloud-dancer" style="-webkit-text-stroke: 1px #306263;">01</div>
                     <div class="relative z-10">
-                        <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1">MAKER TECHNOLOGY</h3>
-                        <h4 class="text-2xl font-black text-transformative-teal mb-4">創客工坊 科技守護家人</h4>
+                        <!-- 標題修改為超連結 -->
+                        <a href="blueprint-01.html" class="block group mb-4 cursor-pointer">
+                            <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1 group-hover:text-transformative-teal transition-colors">MAKER TECHNOLOGY</h3>
+                            <h4 class="text-2xl font-black text-transformative-teal group-hover:text-amber-haze transition-colors">創客工坊 科技守護家人</h4>
+                        </a>
                         <p class="text-gray-600 leading-relaxed text-justify">
                             運用電子工程專業，開設里民 IoT 科技手作班。學員作品將成為免費的「智慧門磁與SOS求救鈕」，由志工團隊為獨居長輩親自到府安裝，打造無感知、有溫度的社區安全防護網。
                         </p>
@@ -212,8 +239,11 @@
                 <div class="relative pl-16">
                     <div class="absolute left-0 top-0 text-5xl font-black text-cloud-dancer" style="-webkit-text-stroke: 1px #306263;">02</div>
                     <div class="relative z-10">
-                        <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1">AGILE TRANSPARENCY</h3>
-                        <h4 class="text-2xl font-black text-transformative-teal mb-4">敏捷里政看板 終結黑箱</h4>
+                        <!-- 標題修改為超連結 -->
+                        <a href="blueprint-02.html" class="block group mb-4 cursor-pointer">
+                            <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1 group-hover:text-transformative-teal transition-colors">AGILE TRANSPARENCY</h3>
+                            <h4 class="text-2xl font-black text-transformative-teal group-hover:text-amber-haze transition-colors">敏捷里政看板 終結黑箱</h4>
+                        </a>
                         <p class="text-gray-600 leading-relaxed text-justify">
                             引進系統開發看板管理思維，將里民建議透過五大狀態旗標(評估中、進行中、已完成、缺經費、缺人手)透明公開。坦白進度，邀請里民共思對策，讓里政不僅是口頭承諾。
                         </p>
@@ -224,8 +254,11 @@
                 <div class="relative pl-16">
                     <div class="absolute left-0 top-0 text-5xl font-black text-cloud-dancer" style="-webkit-text-stroke: 1px #306263;">03</div>
                     <div class="relative z-10">
-                        <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1">KINDNESS EDUCATION</h3>
-                        <h4 class="text-2xl font-black text-transformative-teal mb-4">家人行善團 惜物與助學</h4>
+                        <!-- 標題修改為超連結 -->
+                        <a href="blueprint-03.html" class="block group mb-4 cursor-pointer">
+                            <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1 group-hover:text-transformative-teal transition-colors">KINDNESS EDUCATION</h3>
+                            <h4 class="text-2xl font-black text-transformative-teal group-hover:text-amber-haze transition-colors">家人行善團 惜物與助學</h4>
+                        </a>
                         <p class="text-gray-600 leading-relaxed text-justify">
                             建立「惜食快閃發送網」，將即期食品在短時間內透過 LINE 與志工網絡送達弱勢戶。結合資源回收專款專用透明帳戶，補助在地弱勢學子開學用品，讓愛心真正落地。
                         </p>
@@ -236,8 +269,11 @@
                 <div class="relative pl-16">
                     <div class="absolute left-0 top-0 text-5xl font-black text-cloud-dancer" style="-webkit-text-stroke: 1px #306263;">04</div>
                     <div class="relative z-10">
-                        <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1">CULTURE PLACEMAKING</h3>
-                        <h4 class="text-2xl font-black text-transformative-teal mb-4">文化創生 嘉仁星光步道</h4>
+                        <!-- 標題修改為超連結 -->
+                        <a href="blueprint-04.html" class="block group mb-4 cursor-pointer">
+                            <h3 class="text-xl font-bold text-gray-800 uppercase tracking-widest mb-1 group-hover:text-transformative-teal transition-colors">CULTURE PLACEMAKING</h3>
+                            <h4 class="text-2xl font-black text-transformative-teal group-hover:text-amber-haze transition-colors">文化創生 嘉仁星光步道</h4>
+                        </a>
                         <p class="text-gray-600 leading-relaxed text-justify">
                             整合劉銘傳隧道、老大公廟等文史資源，設置乾淨安全的景觀展望點。升級步道照明，舉辦「嘉仁文史微旅行」，帶動周邊店家活絡發展，把嘉仁的美行銷出去。
                         </p>
