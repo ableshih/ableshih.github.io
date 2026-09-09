@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活動紀錄 - 施圳溪 | 嘉仁里里長參選人</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        /* 隱藏滾動條以呈現全螢幕沉浸感 */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="antialiased h-screen flex flex-col selection:bg-transformative-teal selection:text-cloud-dancer">
+
+    <!-- 頂部導覽列 -->
+    <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-10">
+        <div>
+            <h1 class="text-2xl font-black tracking-widest">施圳溪 <span class="text-sm font-medium opacity-80 ml-2 tracking-normal">嘉仁里里長參選人</span></h1>
+        </div>
+        <a href="index.html" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2">
+            <i class="fa-solid fa-house"></i> 回首頁
+        </a>
+    </header>
+
+    <!-- 輪播展示區 -->
+    <main class="flex-grow relative bg-black flex items-center justify-center overflow-hidden">
+        
+        <!-- 媒體容器 (JS會將圖片或影片放入此處) -->
+        <div id="media-container" class="w-full h-full flex items-center justify-center relative">
+            <!-- 載入中動畫 -->
+            <div class="text-cloud-dancer text-xl animate-pulse"><i class="fa-solid fa-spinner fa-spin"></i> 載入活動紀錄中...</div>
+        </div>
+
+        <!-- 浮動資訊列 -->
+        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-6 text-cloud-dancer flex justify-between items-end">
+            <div>
+                <span class="inline-block bg-transformative-teal text-xs font-bold px-2 py-1 rounded mb-2">ACTION</span>
+                <h2 class="text-2xl font-bold tracking-wider">扎根嘉仁 ‧ 永續躍進</h2>
+                <p class="text-sm opacity-80">您的希望 ‧ 我來行動 ‧ 共同實現</p>
+            </div>
+            
+            <!-- 控制按鈕 -->
+            <div class="flex gap-4">
+                <button id="mute-btn" class="w-10 h-10 rounded-full bg-white/20 hover:bg-amber-haze text-white flex items-center justify-center transition-colors hidden">
+                    <i class="fa-solid fa-volume-xmark"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==========================================
+        // 1. 請在此處填寫您的圖片與影片檔案名稱
+        // ==========================================
+        // type: 'image' (圖片) 或 'video' (影片)
+        // src: '對應的檔案路徑' (相對於此網頁的位置)
+        const mediaFiles = [
+            { type: 'image', src: 'images/photo1.jpg' },  // 替換為實際檔名
+            { type: 'image', src: 'images/photo2.png' },
+            { type: 'video', src: 'images/video1.mp4' },
+            // 若有更多檔案，請依循格式繼續往下加...
+        ];
+
+        // 圖片停留時間 (毫秒)，5000 = 5秒
+        const IMAGE_DURATION = 5000; 
+
+        // ==========================================
+        // 以下為播放器邏輯，無需修改
+        // ==========================================
+        let currentIndex = 0;
+        let timer = null;
+        const container = document.getElementById('media-container');
+        const muteBtn = document.getElementById('mute-btn');
+        let isMuted = true;
+
+        function playNext() {
+            clearTimeout(timer);
+            currentIndex = (currentIndex + 1) % mediaFiles.length;
+            renderMedia();
+        }
+
+        function renderMedia() {
+            if (mediaFiles.length === 0) return;
+            
+            const media = mediaFiles[currentIndex];
+            container.innerHTML = ''; // 清空當前內容
+            muteBtn.classList.add('hidden'); // 預設隱藏靜音鍵
+
+            if (media.type === 'image') {
+                const img = document.createElement('img');
+                img.src = media.src;
+                img.className = 'w-full h-full object-contain animate-fade-in';
+                
+                // 圖片載入錯誤處理 (跳下一張)
+                img.onerror = () => playNext();
+                
+                container.appendChild(img);
+                timer = setTimeout(playNext, IMAGE_DURATION);
+
+            } else if (media.type === 'video') {
+                const video = document.createElement('video');
+                video.src = media.src;
+                video.autoplay = true;
+                video.muted = isMuted;
+                video.playsInline = true;
+                video.className = 'w-full h-full object-contain animate-fade-in';
+                
+                // 顯示音量控制鍵
+                muteBtn.classList.remove('hidden');
+                muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+                
+                // 影片播完跳下一則，錯誤也跳下一則
+                video.onended = playNext;
+                video.onerror = () => playNext();
+
+                muteBtn.onclick = () => {
+                    isMuted = !isMuted;
+                    video.muted = isMuted;
+                    muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+                };
+
+                container.appendChild(video);
+            }
+        }
+
+        // 啟動播放器
+        window.onload = renderMedia;
+    </script>
+</body>
+</html>
