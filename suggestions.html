@@ -85,21 +85,23 @@
         </div>
     </main>
 
+
+
+
+
+
+    <!-- 引入 YouTube 官方 API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         // ==========================================
-        // 1. 請在此處填寫您的圖片與影片檔案名稱
+        // 1. 請在此處填寫您的圖片與 YouTube 影片
         // ==========================================
         const mediaFiles = [
             { type: 'image', src: 'images/基隆大武崙淹水成因對策.png' },
-            { type: 'image', src: 'images/基隆大武崙淹水成因對策.png' },
             
-            // 【修改重點】
-            // 1. 將 type 改回 'video' (使用原生播放器)
-            // 2. 將原本的 Google Drive 網址轉換為 uc?export=download&id=檔案ID 的格式
-            { 
-                type: 'video', 
-                src: 'https://drive.google.com/uc?export=download&id=1rX6VZ6Db1GqSR50sLqjv_fiCrM3ivh6n' 
-            }
+            // 【修改重點 1】將 type 改為 'youtube'，並填寫網址後方的影片 ID
+            // 您的網址是 https://youtu.be/rAGwEug0F-4，ID 就是 rAGwEug0F-4
+            { type: 'youtube', videoId: 'rAGwEug0F-4' }
         ];
 
         // 圖片預設停留時間 (毫秒)，5000 = 5秒
@@ -110,12 +112,25 @@
         // ==========================================
         let currentIndex = 0;
         let timer = null;
+        let ytPlayer = null; // 用來控制 YouTube 播放器
+        let isYoutubeReady = false; // 追蹤 API 是否載入完畢
+        
         const container = document.getElementById('media-container');
         const muteBtn = document.getElementById('mute-btn');
         let isMuted = true;
 
+        // 當 YouTube API 載入完成時，瀏覽器會自動呼叫這個函數
+        function onYouTubeIframeAPIReady() {
+            isYoutubeReady = true;
+        }
+
         function playNext() {
             clearTimeout(timer);
+            // 如果當前是 YouTube 影片，跳轉前先把舊的播放器清掉
+            if (ytPlayer) {
+                ytPlayer.destroy();
+                ytPlayer = null;
+            }
             currentIndex = (currentIndex + 1) % mediaFiles.length;
             renderMedia();
         }
@@ -124,7 +139,7 @@
             if (mediaFiles.length === 0) return;
             
             const media = mediaFiles[currentIndex];
-            container.innerHTML = ''; // 清空當前內容
+            container.innerHTML = ''; // 清空畫面
             muteBtn.classList.add('hidden'); // 預設隱藏靜音鍵
 
             if (media.type === 'image') {
@@ -137,46 +152,74 @@
                 container.appendChild(img);
                 timer = setTimeout(playNext, IMAGE_DURATION);
 
-            } else if (media.type === 'video') {
-                const video = document.createElement('video');
-                video.src = media.src;
-                video.autoplay = true;
-                video.muted = isMuted;
-                video.playsInline = true;
-                video.className = 'w-full h-full object-contain animate-fade-in';
-                
-                muteBtn.classList.remove('hidden');
-                muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
-                
-                video.onended = playNext;
-                video.onerror = () => playNext();
+            } else if (media.type === 'youtube') {
+                // 如果 API 還沒準備好，等 0.5 秒再試一次
+                if (!isYoutubeReady) {
+                    timer = setTimeout(renderMedia, 500);
+                    return;
+                }
 
-                muteBtn.onclick = () => {
-                    isMuted = !isMuted;
-                    video.muted = isMuted;
-                    muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
-                };
+                // 建立一個 div 讓 YouTube API 掛載影片
+                const ytDiv = document.createElement('div');
+                ytDiv.id = 'yt-player-container';
+                ytDiv.className = 'w-full h-full animate-fade-in';
+                container.appendChild(ytDiv);
 
-                container.appendChild(video);
-                
-            } else if (media.type === 'gdrive') {
-                // 【修改重點 2】新增針對 Google Drive 的處理邏輯
-                const iframe = document.createElement('iframe');
-                iframe.src = media.src;
-                iframe.className = 'w-full h-full border-0 animate-fade-in';
-                iframe.allow = "autoplay";
-                
-                container.appendChild(iframe);
-                
-                // 讀取設定的停留時間，若未設定則預設停留 15 秒
-                const driveDuration = media.duration || 15000; 
-                timer = setTimeout(playNext, driveDuration);
+                // 初始化 YouTube 播放器
+                ytPlayer = new YT.Player('yt-player-container', {
+                    videoId: media.videoId,
+                    playerVars: {
+                        'autoplay': 1,           // 自動播放
+                        'mute': isMuted ? 1 : 0, // 靜音 (必須靜音才能自動播放)
+                        'controls': 0,           // 隱藏下方進度條與控制列，畫面更乾淨
+                        'rel': 0,                // 播完不顯示其他頻道的推薦影片
+                        'modestbranding': 1,     // 隱藏 YouTube Logo
+                        'playsinline': 1         // 支援手機端網頁內嵌播放
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange,
+                        'onError': () => playNext() // 如果發生錯誤直接跳下一則
+                    }
+                });
             }
         }
 
-        // 啟動播放器
-        window.onload = renderMedia;
+        // 當 YouTube 準備好開始播放時
+        function onPlayerReady(event) {
+            event.target.playVideo(); // 強制開始播放
+            
+            // 顯示自訂的靜音切換按鈕
+            muteBtn.classList.remove('hidden');
+            muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+            
+            muteBtn.onclick = () => {
+                isMuted = !isMuted;
+                if (isMuted) {
+                    event.target.mute();
+                } else {
+                    event.target.unMute();
+                }
+                muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+            };
+        }
+
+        // 監聽 YouTube 播放狀態
+        function onPlayerStateChange(event) {
+            // YT.PlayerState.ENDED (數值為 0) 代表影片播完了
+            if (event.data === 0) {
+                playNext(); // 播完自動跳下一張圖片/影片
+            }
+        }
+
+        // 啟動輪播
+        window.onload = () => {
+            renderMedia();
+        };
     </script>
+
+    
+    
 
     
 </body>
