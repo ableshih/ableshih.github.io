@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>活動紀錄 - 施圳溪 | 嘉仁里里長參選人</title>
+    <title>在地店家與手藝人 - 施圳溪 | 嘉仁里里長參選人</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,34 +20,27 @@
                     },
                     colors: {
                         'transformative-teal': '#306263',
+                        'transformative-teal-dark': '#23494A',
                         'cloud-dancer': '#F0EEE9',
                         'amber-haze': '#D9A441' 
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 1s ease-in-out',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #F0EEE9; color: #1F2937; }
+        body { 
+            background-color: #F0EEE9; /* Cloud Dancer */
+            color: #1F2937; 
+        }
         .pattern-bg {
             background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
             background-size: 20px 20px;
             background-color: #306263;
         }
-        /* 隱藏滾動條以呈現全螢幕沉浸感 */
-        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="antialiased h-screen flex flex-col selection:bg-transformative-teal selection:text-cloud-dancer">
+<body class="antialiased min-h-screen flex flex-col selection:bg-transformative-teal selection:text-cloud-dancer">
 
     <!-- 頂部導覽列 -->
     <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-10">
@@ -59,120 +52,64 @@
         </a>
     </header>
 
-    <!-- 輪播展示區 -->
-    <main class="flex-grow relative bg-black flex items-center justify-center overflow-hidden">
+    <!-- 主要內容區 -->
+    <main class="flex-grow max-w-6xl mx-auto px-6 py-12 md:py-20 w-full">
         
-        <!-- 媒體容器 (JS會將圖片或影片放入此處) -->
-        <div id="media-container" class="w-full h-full flex items-center justify-center relative">
-            <!-- 載入中動畫 -->
-            <div class="text-cloud-dancer text-xl animate-pulse"><i class="fa-solid fa-spinner fa-spin"></i> 載入活動紀錄中...</div>
+        <!-- 頁面標題 -->
+        <div class="text-center mb-16">
+            <div class="inline-block bg-transformative-teal text-cloud-dancer font-bold px-3 py-1 rounded-full text-sm mb-4 tracking-widest shadow-sm">
+                COMMUNITY DIRECTORY
+            </div>
+            <h2 class="text-4xl md:text-5xl font-black text-transformative-teal tracking-wider mb-4">在地店家與手藝人</h2>
+            <p class="text-xl text-gray-600 font-medium">支持在地專業，活絡嘉仁社區發展</p>
+            <div class="h-1 w-24 bg-amber-haze mx-auto mt-6 rounded"></div>
         </div>
 
-        <!-- 浮動資訊列 -->
-        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-6 text-cloud-dancer flex justify-between items-end">
-            <div>
-                <span class="inline-block bg-transformative-teal text-xs font-bold px-2 py-1 rounded mb-2">ACTION</span>
-                <h2 class="text-2xl font-bold tracking-wider">扎根嘉仁 ‧ 永續躍進</h2>
-                <p class="text-sm opacity-80">您的希望 ‧ 我來行動 ‧ 共同實現</p>
-            </div>
+        <!-- 
+            按鈕導覽網格區
+            設定為手機版每排 2 個，平板 3 個，電腦版 5 個 
+        -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8">
             
-            <!-- 控制按鈕 -->
-            <div class="flex gap-4">
-                <button id="mute-btn" class="w-10 h-10 rounded-full bg-white/20 hover:bg-amber-haze text-white flex items-center justify-center transition-colors hidden">
-                    <i class="fa-solid fa-volume-xmark"></i>
-                </button>
-            </div>
+            <!-- 1. 機車店按鈕 -->
+            <!-- hover:scale-110 負責變大動畫，hover:bg-amber-haze 負責換色 -->
+            <a href="shop-motorcycle.html" class="group flex flex-col items-center justify-center p-8 bg-white border-b-4 border-transformative-teal rounded-2xl shadow-md transition-all duration-300 transform hover:scale-110 hover:bg-amber-haze hover:border-transformative-teal-dark hover:shadow-2xl cursor-pointer text-center">
+                <i class="fa-solid fa-motorcycle text-5xl text-transformative-teal group-hover:text-white transition-colors mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800 group-hover:text-transformative-teal-dark transition-colors">機車店</h3>
+            </a>
+
+            <!-- 2. 水電按鈕 -->
+            <a href="shop-plumbing.html" class="group flex flex-col items-center justify-center p-8 bg-white border-b-4 border-transformative-teal rounded-2xl shadow-md transition-all duration-300 transform hover:scale-110 hover:bg-amber-haze hover:border-transformative-teal-dark hover:shadow-2xl cursor-pointer text-center">
+                <i class="fa-solid fa-plug text-5xl text-transformative-teal group-hover:text-white transition-colors mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800 group-hover:text-transformative-teal-dark transition-colors">水電</h3>
+            </a>
+
+            <!-- 3. 防水按鈕 -->
+            <a href="shop-waterproof.html" class="group flex flex-col items-center justify-center p-8 bg-white border-b-4 border-transformative-teal rounded-2xl shadow-md transition-all duration-300 transform hover:scale-110 hover:bg-amber-haze hover:border-transformative-teal-dark hover:shadow-2xl cursor-pointer text-center">
+                <i class="fa-solid fa-droplet-slash text-5xl text-transformative-teal group-hover:text-white transition-colors mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800 group-hover:text-transformative-teal-dark transition-colors">防水</h3>
+            </a>
+
+            <!-- 4. 宮廟按鈕 -->
+            <a href="shop-temple.html" class="group flex flex-col items-center justify-center p-8 bg-white border-b-4 border-transformative-teal rounded-2xl shadow-md transition-all duration-300 transform hover:scale-110 hover:bg-amber-haze hover:border-transformative-teal-dark hover:shadow-2xl cursor-pointer text-center">
+                <i class="fa-solid fa-vihara text-5xl text-transformative-teal group-hover:text-white transition-colors mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800 group-hover:text-transformative-teal-dark transition-colors">宮廟</h3>
+            </a>
+
+            <!-- 5. 家教按鈕 -->
+            <a href="shop-tutor.html" class="group flex flex-col items-center justify-center p-8 bg-white border-b-4 border-transformative-teal rounded-2xl shadow-md transition-all duration-300 transform hover:scale-110 hover:bg-amber-haze hover:border-transformative-teal-dark hover:shadow-2xl cursor-pointer text-center">
+                <i class="fa-solid fa-book-open-reader text-5xl text-transformative-teal group-hover:text-white transition-colors mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800 group-hover:text-transformative-teal-dark transition-colors">家教</h3>
+            </a>
+
         </div>
+
     </main>
 
-    <script>
-        // ==========================================
-        // 1. 請在此處填寫您的圖片與影片檔案名稱
-        // ==========================================
-        // type: 'image' (圖片) 或 'video' (影片)
-        // src: '對應的檔案路徑' (相對於此網頁的位置)
-        const mediaFiles = [
-            { type: 'image', src: 'images/1aclbc-d5yj6-001.jpg' },  // 替換為實際檔名
-            { type: 'image', src: 'images/2aclbc-d5yj6-002.jpg' },
-            { type: 'image', src: 'images/3aclbc-d5yj6-003.jpg' },
-            { type: 'image', src: 'images/4aclbc-d5yj6-004.jpg' },
-            { type: 'image', src: 'images/5aclbc-d5yj6-005.jpg' },
-            { type: 'image', src: 'images/6aclbc-d5yj6-006.jpg' },
-            { type: 'image', src: 'images/7aclbc-d5yj6-007.jpg' },
-            { type: 'image', src: 'images/8aclbc-d5yj6-008.jpg' },
-            { type: 'image', src: 'images/9aclbc-d5yj6-009.jpg' },
-            { type: 'image', src: 'images/10-aclbc-d5yj6-010.jpg' },
-            { type: 'image', src: 'images/11-aclbc-d5yj6-011.jpg' },
-            { type: 'image', src: 'images/12-aclbc-d5yj6-012.jpg' },
-            { type: 'image', src: 'images/13-aclbc-d5yj6-013.jpg' },
-            { type: 'video', src: 'images/打造會呼吸的智慧里：3S_承諾運作解析.mp4' },
-            // 若有更多檔案，請依循格式繼續往下加...
-        ];
+    <!-- 簡易頁尾 -->
+    <footer class="bg-transformative-teal-dark text-cloud-dancer py-8 text-center border-t-8 border-amber-haze">
+        <p class="text-sm opacity-80">2026 施圳溪競選團隊・扎根嘉仁 永續躍進</p>
+    </footer>
 
-        // 圖片停留時間 (毫秒)，8000 = 8秒
-        const IMAGE_DURATION = 8000; 
-
-        // ==========================================
-        // 以下為播放器邏輯，無需修改
-        // ==========================================
-        let currentIndex = 0;
-        let timer = null;
-        const container = document.getElementById('media-container');
-        const muteBtn = document.getElementById('mute-btn');
-        let isMuted = true;
-
-        function playNext() {
-            clearTimeout(timer);
-            currentIndex = (currentIndex + 1) % mediaFiles.length;
-            renderMedia();
-        }
-
-        function renderMedia() {
-            if (mediaFiles.length === 0) return;
-            
-            const media = mediaFiles[currentIndex];
-            container.innerHTML = ''; // 清空當前內容
-            muteBtn.classList.add('hidden'); // 預設隱藏靜音鍵
-
-            if (media.type === 'image') {
-                const img = document.createElement('img');
-                img.src = media.src;
-                img.className = 'w-full h-full object-contain animate-fade-in';
-                
-                // 圖片載入錯誤處理 (跳下一張)
-                img.onerror = () => playNext();
-                
-                container.appendChild(img);
-                timer = setTimeout(playNext, IMAGE_DURATION);
-
-            } else if (media.type === 'video') {
-                const video = document.createElement('video');
-                video.src = media.src;
-                video.autoplay = true;
-                video.muted = isMuted;
-                video.playsInline = true;
-                video.className = 'w-full h-full object-contain animate-fade-in';
-                
-                // 顯示音量控制鍵
-                muteBtn.classList.remove('hidden');
-                muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
-                
-                // 影片播完跳下一則，錯誤也跳下一則
-                video.onended = playNext;
-                video.onerror = () => playNext();
-
-                muteBtn.onclick = () => {
-                    isMuted = !isMuted;
-                    video.muted = isMuted;
-                    muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
-                };
-
-                container.appendChild(video);
-            }
-        }
-
-        // 啟動播放器
-        window.onload = renderMedia;
-    </script>
 </body>
 </html>
