@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世代支持・相伴老幼 | Support - 施圳溪 嘉仁里</title>
+    
+    <!-- 引入一致的字體與圖示庫 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* 品牌專屬色系 */
+            --primary-color: #306263;      /* transformative-teal */
+            --secondary-color: #4a8f90;    
+            --accent-color: #D9A441;       /* amber-haze */
+            --bg-light: #F0EEE9;           /* cloud-dancer */
+            --text-dark: #1F2937;
+            --text-muted: #666;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 共通背景設定 */
+        .pattern-bg {
+            background-image: radial-gradient(var(--bg-light) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: var(--primary-color);
+            color: var(--bg-light);
+        }
+
+        /* ===== 置頂頁首導覽列 ===== */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            position: sticky; 
+            top: 0; 
+            z-index: 999; 
+        }
+        
+        .site-header-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            margin: 0;
+        }
+        
+        .site-header-subtitle {
+            font-size: 0.875rem;
+            font-weight: 500;
+            opacity: 0.8;
+            margin-left: 0.5rem;
+            letter-spacing: normal;
+        }
+
+        .btn-home {
+            background-color: var(--accent-color);
+            color: #1a3637; 
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.875rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-home:hover {
+            background-color: #ffffff;
+            color: var(--primary-color);
+        }
+
+        /* ===== 英雄橫幅區塊 ===== */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), #1e3f40);
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem 6rem 2rem;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+            font-weight: 900;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* 主內容區塊 (負邊距讓內容往上浮動) */
+        .container {
+            max-width: 1000px;
+            margin: -3rem auto 2rem auto; 
+            padding: 0 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* ===== 政見卡片區塊 ===== */
+        .policy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .policy-card {
+            background: white;
+            border-radius: 12px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025);
+            border-bottom: 5px solid var(--primary-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .policy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(48, 98, 99, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            margin: 0 auto 20px auto;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .policy-card:hover .icon-wrapper {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .policy-card h3 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .policy-details {
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .policy-details li {
+            list-style: none;
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+
+        .policy-details li::before {
+            content: '\f058'; 
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: var(--accent-color);
+        }
+
+        .highlight-tag {
+            display: inline-block;
+            background-color: var(--bg-light);
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+            border: 1px solid rgba(48, 98, 99, 0.2);
+            margin-right: 5px;
+        }
+
+        /* ===== 頁尾 ===== */
+        .site-footer {
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-badge {
+            display: inline-block;
+            background-color: var(--bg-light);
+            color: var(--primary-color);
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .site-footer h2 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.25rem;
+        }
+
+        .site-footer p {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .site-header { flex-direction: column; gap: 15px; text-align: center; }
+            .policy-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頁首導覽列 -->
+    <header class="site-header pattern-bg">
+        <div>
+            <h1 class="site-header-title">施圳溪<span class="site-header-subtitle">嘉仁里里長參選人</span></h1>
+        </div>
+        <a href="index.html" class="btn-home">
+            <i class="fa-solid fa-house"></i> 回首頁
+        </a>
+    </header>
+
+    <!-- 英雄橫幅區 -->
+    <div class="hero-section">
+        <h1>世代支持・相伴老幼</h1>
+        <p>3S 核心政見：Support 專案</p>
+    </div>
+
+    <!-- 主要內容區 -->
+    <div class="container">
+        
+        <div class="policy-grid">
+            
+            <!-- 政見 1：獨居長照關懷 -->
+            <div class="policy-card">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-handshake-angle"></i>
+                </div>
+                <h3>獨居長照關懷</h3>
+                <ul class="policy-details">
+                    <li><strong>動態造冊管理：</strong>落實「查訪、分級、造冊」三分級機制，精準掌握社區長輩的實際需求。</li>
+                    <li><strong>零死角貼心關懷：</strong>推動主動查訪與定點接送服務，讓長輩外出更安全、就醫更便利。</li>
+                </ul>
+                <div class="highlight-tag">#三分級動態造冊</div>
+                <div class="highlight-tag">#定點接送</div>
+            </div>
+
+            <!-- 政見 2：家人行善團 -->
+            <div class="policy-card">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-heart-circle-plus"></i>
+                </div>
+                <h3>家人行善團</h3>
+                <ul class="policy-details">
+                    <li><strong>透明互助網絡：</strong>建立公開透明的行善平台與「惜食快閃發送網」，讓愛心資源快速且有效分配。</li>
+                    <li><strong>弱勢微型助學金：</strong>籌集並設立微型助學金，幫助弱勢學童，讓教育資源溫暖每個角落。</li>
+                </ul>
+                <div class="highlight-tag">#透明行善</div>
+                <div class="highlight-tag">#惜食快閃</div>
+                <div class="highlight-tag">#微型助學金</div>
+            </div>
+
+            <!-- 政見 3：創客學習共融 -->
+            <div class="policy-card">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-cube"></i>
+                </div>
+                <h3>創客學習共融</h3>
+                <ul class="policy-details">
+                    <li><strong>科技專業導入：</strong>結合自身工程專業，開辦 3D 列印與 IoT 物聯網創客班。</li>
+                    <li><strong>青銀跨世代共融：</strong>透過手作與科技學習打破年齡界線，讓青年與長輩共同動腦、動手體驗新科技。</li>
+                </ul>
+                <div class="highlight-tag">#3D列印</div>
+                <div class="highlight-tag">#IoT創客班</div>
+                <div class="highlight-tag">#青銀共融</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer class="site-footer pattern-bg">
+        <span class="footer-badge">ACTION</span>
+        <h2>扎根嘉仁 ‧ 永續躍進</h2>
+        <p>您的希望 ‧ 我來行動 ‧ 共同實現</p>
+    </footer>
+
+</body>
+</html>
