@@ -3,14 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>嘉仁里 W.A.R. 里政服務網</title>
+    <title>嘉仁里 W.A.R. 里政服務網 | 施圳溪</title>
+    
+    <!-- 引入與 photos.html 相同的字體與圖示庫 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
-            --primary-color: #1a5c9a;
-            --secondary-color: #2e8b57;
-            --accent-color: #f39c12;
-            --bg-light: #f8f9fa;
-            --text-dark: #333;
+            /* 採用 photos.html 的專屬色系 */
+            --primary-color: #306263;      /* transformative-teal */
+            --secondary-color: #4a8f90;    /* teal 的次要色，用於進度條等 */
+            --accent-color: #D9A441;       /* amber-haze */
+            --bg-light: #F0EEE9;           /* cloud-dancer */
+            --text-dark: #1F2937;
             --text-muted: #666;
         }
 
@@ -18,37 +26,99 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            font-family: 'Noto Sans TC', sans-serif;
         }
 
         body {
-            background-color: #eaeef1;
+            background-color: var(--bg-light);
             color: var(--text-dark);
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        header {
-            background: linear-gradient(135deg, var(--primary-color), #0f3d6b);
+        /* ===== 共通背景設定 (與 photos.html 一致) ===== */
+        .pattern-bg {
+            background-image: radial-gradient(var(--bg-light) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: var(--primary-color);
+            color: var(--bg-light);
+        }
+
+        /* ===== 頁首導覽列 (已加入置頂設定) ===== */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* 稍微加深陰影，讓浮動感更明顯 */
+            
+            /* 置頂關鍵設定 */
+            position: sticky; 
+            top: 0; 
+            z-index: 999; /* 確保永遠在最上層 */
+        }
+        
+        .site-header-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            margin: 0;
+        }
+        
+        .site-header-subtitle {
+            font-size: 0.875rem;
+            font-weight: 500;
+            opacity: 0.8;
+            margin-left: 0.5rem;
+            letter-spacing: normal;
+        }
+
+        .btn-home {
+            background-color: var(--accent-color);
+            color: #1a3637; /* 深綠色以增加對比 */
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.875rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-home:hover {
+            background-color: #ffffff;
+            color: var(--primary-color);
+        }
+
+        /* ===== 英雄橫幅區塊 ===== */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), #1e3f40);
             color: white;
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 4rem 2rem 6rem 2rem;
         }
 
-        header h1 {
+        .hero-section h1 {
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
             letter-spacing: 2px;
+            font-weight: 900;
         }
 
-        header p {
+        .hero-section p {
             font-size: 1.2rem;
             opacity: 0.9;
         }
 
+        /* 主內容區塊 */
         .container {
             max-width: 1000px;
-            margin: -2rem auto 2rem auto;
+            margin: -3rem auto 2rem auto; /* 往上浮動蓋住部分橫幅，增加立體感 */
             padding: 0 20px;
+            position: relative;
+            z-index: 5;
         }
 
         /* 標語區塊 */
@@ -83,16 +153,15 @@
             font-size: 0.9rem;
             color: var(--text-muted);
             margin-top: 5px;
-            font-weight: normal;
         }
 
         /* W.A.R. 步驟區塊 */
         .section-title {
             text-align: center;
             font-size: 1.8rem;
+            font-weight: bold;
             color: var(--primary-color);
             margin: 40px 0 20px;
-            position: relative;
         }
         
         .war-steps {
@@ -106,7 +175,7 @@
         .step {
             margin-bottom: 25px;
             padding-left: 20px;
-            border-left: 4px solid var(--secondary-color);
+            border-left: 4px solid var(--accent-color);
         }
 
         .step:last-child {
@@ -114,26 +183,24 @@
         }
 
         .step h3 {
-            color: var(--secondary-color);
+            color: var(--primary-color);
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-weight: bold;
         }
 
         .mindset {
-            background: #f0f7f4;
+            background: rgba(48, 98, 99, 0.1);
             padding: 10px;
             border-radius: 5px;
             font-size: 0.95rem;
             margin-bottom: 10px;
-            color: #2c7a4b;
+            color: var(--primary-color);
         }
 
         .sentence {
             font-style: italic;
             color: var(--text-muted);
-            background: var(--bg-light);
+            background: #fafafa;
             padding: 10px;
             border-left: 3px solid #ccc;
         }
@@ -145,11 +212,10 @@
             padding: 30px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             margin-bottom: 40px;
-            border: 1px solid #e1e5e8;
         }
 
         .hashtags {
-            color: #1d9bf0;
+            color: var(--primary-color);
             font-weight: bold;
             margin-top: 15px;
         }
@@ -195,10 +261,10 @@
         }
 
         .badge.eval { background-color: #6c757d; }
-        .badge.prog { background-color: #0d6efd; }
+        .badge.prog { background-color: var(--secondary-color); }
         .badge.done { background-color: #198754; }
         .badge.pause { background-color: #dc3545; }
-        .badge.tag { background-color: #ffc107; color: #333; font-size: 0.8rem; margin-left: 10px;}
+        .badge.tag { background-color: var(--accent-color); color: #333; font-size: 0.8rem; margin-left: 10px;}
 
         .progress-bar-bg {
             background: #e9ecef;
@@ -231,8 +297,44 @@
             color: var(--text-muted);
         }
 
+        /* ===== 頁尾 ===== */
+        .site-footer {
+            padding: 3rem 2rem;
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-badge {
+            display: inline-block;
+            background-color: var(--bg-light);
+            color: var(--primary-color);
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .site-footer h2 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.25rem;
+        }
+
+        .site-footer p {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
+            .site-header { flex-direction: column; gap: 15px; text-align: center; }
             .status-item {
                 flex-direction: column;
                 align-items: flex-start;
@@ -250,11 +352,23 @@
 </head>
 <body>
 
-    <header>
-        <h1>希望、行動、實現</h1>
-        <p>W.A.R. 競選核心理念 ── 為嘉仁里而戰！</p>
+    <!-- 頁首導覽列 -->
+    <header class="site-header pattern-bg">
+        <div>
+            <h1 class="site-header-title">施圳溪<span class="site-header-subtitle">嘉仁里里長參選人</span></h1>
+        </div>
+        <a href="https://ableshih.github.io/" class="btn-home">
+            <i class="fa-solid fa-house"></i> 回首頁
+        </a>
     </header>
 
+    <!-- 原本的英雄橫幅區 (套用漸層主色) -->
+    <div class="hero-section">
+        <h1>希望、行動、實現</h1>
+        <p>W.A.R. 競選核心理念 ── 為嘉仁里而戰！</p>
+    </div>
+
+    <!-- 主要內容區 -->
     <div class="container">
         
         <!-- Slogan Section -->
@@ -358,7 +472,7 @@
                     </div>
                     <div>
                         <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%; background:var(--secondary-color);"></div>
+                            <div class="progress-bar-fill" style="width: 100%; background:#198754;"></div>
                         </div>
                         <span style="font-weight:bold; color:var(--text-muted);">100%</span>
                     </div>
@@ -376,9 +490,15 @@
                     </div>
                 </div>
             </div>
-            
         </div>
     </div>
+
+    <!-- 頁尾 -->
+    <footer class="site-footer pattern-bg">
+        <span class="footer-badge">ACTION</span>
+        <h2>扎根嘉仁 ‧ 永續躍進</h2>
+        <p>您的希望 ‧ 我來行動 ‧ 共同實現</p>
+    </footer>
 
 </body>
 </html>
