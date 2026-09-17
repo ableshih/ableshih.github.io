@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在地店家與手藝人名錄 - 施圳溪 | 嘉仁里里長參選人</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'transformative-teal-dark': '#23494A',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        /* 隱藏過濾按鈕欄的滾動條，保持美觀 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-transformative-teal selection:text-cloud-dancer">
+
+    <!-- 頂部導覽列 -->
+    <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-10 sticky top-0">
+        <div>
+            <h1 class="text-2xl font-black tracking-widest">施圳溪 <span class="text-sm font-medium opacity-80 ml-2 tracking-normal">嘉仁里里長參選人</span></h1>
+        </div>
+        <a href="index.html" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2">
+            <i class="fa-solid fa-house"></i> 回首頁
+        </a>
+    </header>
+
+    <!-- 主要內容區 -->
+    <main class="flex-grow max-w-7xl mx-auto px-6 py-12 w-full">
+        
+        <!-- 頁面標題 -->
+        <div class="text-center mb-10">
+            <div class="inline-block bg-transformative-teal text-cloud-dancer font-bold px-3 py-1 rounded-full text-sm mb-4 tracking-widest shadow-sm">
+                COMMUNITY DIRECTORY
+            </div>
+            <h2 class="text-3xl md:text-5xl font-black text-transformative-teal tracking-wider mb-4">嘉仁里店家指南</h2>
+            <p class="text-lg text-gray-600 font-medium">支持在地專業，活絡嘉仁社區發展</p>
+        </div>
+
+        <!-- 分類過濾按鈕區 (手機版可橫向滑動) -->
+        <div class="flex overflow-x-auto no-scrollbar gap-3 mb-10 pb-2 justify-start md:justify-center">
+            <button onclick="filterSelection('all')" class="filter-btn active whitespace-nowrap px-5 py-2 rounded-full font-bold transition-colors bg-transformative-teal text-white shadow-md border-2 border-transformative-teal">全部顯示</button>
+            <button onclick="filterSelection('宮廟')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full font-bold transition-colors bg-white text-transformative-teal border-2 border-transformative-teal hover:bg-transformative-teal hover:text-white">宮廟</button>
+            <button onclick="filterSelection('餐飲')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full font-bold transition-colors bg-white text-transformative-teal border-2 border-transformative-teal hover:bg-transformative-teal hover:text-white">餐飲</button>
+            <button onclick="filterSelection('機車')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full font-bold transition-colors bg-white text-transformative-teal border-2 border-transformative-teal hover:bg-transformative-teal hover:text-white">機車</button>
+            <button onclick="filterSelection('汽車')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full font-bold transition-colors bg-white text-transformative-teal border-2 border-transformative-teal hover:bg-transformative-teal hover:text-white">汽車</button>
+            <button onclick="filterSelection('建材水電')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full font-bold transition-colors bg-white text-transformative-teal border-2 border-transformative-teal hover:bg-transformative-teal hover:text-white">建材水電</button>
+            <button onclick="filterSelection('禮儀社')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full font-bold transition-colors bg-white text-transformative-teal border-2 border-transformative-teal hover:bg-transformative-teal hover:text-white">禮儀社</button>
+            <button onclick="filterSelection('景點')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full font-bold transition-colors bg-white text-transformative-teal border-2 border-transformative-teal hover:bg-transformative-teal hover:text-white">景點</button>
+        </div>
+
+        <!-- 卡片網格區 -->
+        <div id="shop-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            
+            <!-- 店家卡片模板開始 -->
+
+            <!-- 宮廟類 -->
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="宮廟">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60">
+                    <i class="fa-solid fa-vihara text-6xl"></i>
+                </div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-amber-haze text-transformative-teal-dark text-xs font-bold px-3 py-1 rounded w-max mb-3">宮廟</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">基隆代天府</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里崇德路212-91號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224262854" class="hover:underline">02-2426-2854</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="宮廟">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-vihara text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-amber-haze text-transformative-teal-dark text-xs font-bold px-3 py-1 rounded w-max mb-3">宮廟</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">基隆慈玄宮</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里崇德路178巷30之1號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224229748" class="hover:underline">02-2422-9748</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="宮廟">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-vihara text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-amber-haze text-transformative-teal-dark text-xs font-bold px-3 py-1 rounded w-max mb-3">宮廟</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">基隆德天宮</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里崇德路178巷21號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224271812" class="hover:underline">02-2427-1812</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="宮廟">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-vihara text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-amber-haze text-transformative-teal-dark text-xs font-bold px-3 py-1 rounded w-max mb-3">宮廟</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">醒天宮</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里崇德路168巷28號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224247629" class="hover:underline">02-2424-7629</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="宮廟">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-vihara text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-amber-haze text-transformative-teal-dark text-xs font-bold px-3 py-1 rounded w-max mb-3">宮廟</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">基隆開基老大公廟</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里樂一路76巷37號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224273596" class="hover:underline">02-2427-3596</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="宮廟">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-vihara text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-amber-haze text-transformative-teal-dark text-xs font-bold px-3 py-1 rounded w-max mb-3">宮廟</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">玄武聖仁宮</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里崇德路85之7號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224275059" class="hover:underline">02-2427-5059</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="宮廟">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-vihara text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-amber-haze text-transformative-teal-dark text-xs font-bold px-3 py-1 rounded w-max mb-3">宮廟</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">嘉仁里福德宮</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里樂一路76巷13號</p>
+                        <p class="flex items-center gap-2 text-gray-400"><i class="fa-solid fa-phone text-gray-300 w-4 text-center"></i> 無提供電話</p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="宮廟">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-vihara text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-amber-haze text-transformative-teal-dark text-xs font-bold px-3 py-1 rounded w-max mb-3">宮廟</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">基隆勝信宮</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里崇德路82巷101號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224262011" class="hover:underline">02-2426-2011</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <!-- 餐飲類 -->
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="餐飲">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-utensils text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-transformative-teal text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">餐飲</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">麥味登基隆老大公店</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段208號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224259593" class="hover:underline">02-2425-9593</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="餐飲">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-utensils text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-transformative-teal text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">餐飲</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Mini私房點心</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段236號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224280027" class="hover:underline">02-2428-0027</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="餐飲">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-utensils text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-transformative-teal text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">餐飲</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">爆Q美式炸雞-安樂店</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段188號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0970090818" class="hover:underline">0970-090-818</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="餐飲">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-utensils text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-transformative-teal text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">餐飲</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">漢堡工坊</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段81號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224255105" class="hover:underline">02-2425-5105</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <!-- 機車類 -->
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="機車">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-motorcycle text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-[#4a8f90] text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">機車</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">嘉順機車行</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段272號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224261200" class="hover:underline">02-2426-1200</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="機車">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-motorcycle text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-[#4a8f90] text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">機車</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">宏佳騰機車_騰達</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段179號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224348866" class="hover:underline">02-2434-8866</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="機車">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-motorcycle text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-[#4a8f90] text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">機車</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">寬達三陽機車</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段121號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224300169" class="hover:underline">02-2430-0169</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <!-- 汽車類 -->
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="汽車">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-car text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-gray-600 text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">汽車</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">專業汽車凹痕修復<br><span class="text-lg">個人工作室</span></h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段201號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0905244881" class="hover:underline">0905-244-881</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="汽車">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-car text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-gray-600 text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">汽車</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">明德汽車專業維修</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段199號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224321898" class="hover:underline">02-2432-1898</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <!-- 禮儀社類 -->
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="禮儀社">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-dove text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-[#23494A] text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">禮儀社</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">第一禮儀社</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段149號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224314446" class="hover:underline">02-2431-4446</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="禮儀社">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-dove text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-[#23494A] text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">禮儀社</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">永生生命禮儀</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里崇德路192號</p>
+                        <p class="flex items-center gap-2 text-gray-400"><i class="fa-solid fa-phone text-gray-300 w-4 text-center"></i> 無提供電話</p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <!-- 建材水電類 -->
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="建材水電">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-wrench text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-[#8B5A2B] text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">建材水電</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">聚山建材行</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里安樂路一段152號</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-transformative-teal w-4 text-center"></i> <a href="tel:0224255618" class="hover:underline">02-2425-5618</a></p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+            <!-- 景點/其他類 -->
+            <div class="shop-card flex flex-col bg-white rounded-2xl shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1" data-category="景點">
+                <div class="h-40 bg-[#f8f5f0] flex items-center justify-center text-transformative-teal opacity-60"><i class="fa-solid fa-map-location-dot text-6xl"></i></div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <span class="inline-block bg-[#5c8b2b] text-white text-xs font-bold px-3 py-1 rounded w-max mb-3">景點</span>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">劉銘傳隧道北口</h3>
+                    <div class="text-gray-600 text-sm space-y-3 mb-4 flex-grow">
+                        <p class="flex items-start gap-2"><i class="fa-solid fa-location-dot mt-1 text-transformative-teal w-4 text-center"></i> 204基隆市安樂區嘉仁里崇德路81號</p>
+                        <p class="flex items-center gap-2 text-gray-400"><i class="fa-solid fa-phone text-gray-300 w-4 text-center"></i> 無提供電話</p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 text-sm text-gray-400"><i class="fa-solid fa-note-sticky mr-1"></i> 備註：無</div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- 簡易頁尾 -->
+    <footer class="bg-transformative-teal-dark text-cloud-dancer py-8 text-center border-t-8 border-amber-haze mt-10">
+        <p class="text-sm opacity-80">2026 施圳溪競選團隊・扎根嘉仁 永續躍進</p>
+    </footer>
+
+    <!-- 分類過濾功能的 JavaScript -->
+    <script>
+        function filterSelection(category) {
+            // 處理按鈕樣式切換
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                // 判斷按鈕的文字是否包含該類別名稱（或是'all'對應'全部'）
+                const btnText = btn.textContent.trim();
+                if ((category === 'all' && btnText === '全部顯示') || btnText === category) {
+                    btn.classList.add('bg-transformative-teal', 'text-white');
+                    btn.classList.remove('bg-white', 'text-transformative-teal');
+                } else {
+                    btn.classList.remove('bg-transformative-teal', 'text-white');
+                    btn.classList.add('bg-white', 'text-transformative-teal');
+                }
+            });
+
+            // 處理卡片顯示與隱藏
+            const cards = document.querySelectorAll('.shop-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
