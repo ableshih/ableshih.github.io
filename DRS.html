@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扎根嘉仁 ‧ 永續躍進 | 施圳溪 嘉仁里</title>
+    
+    <!-- 引入一致的字體與圖示庫 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* 品牌專屬色系 */
+            --primary-color: #306263;      
+            --secondary-color: #4a8f90;    
+            --accent-color: #D9A441;       
+            --bg-light: #F0EEE9;           
+            --text-dark: #1F2937;
+            --text-muted: #666;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans TC', sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        .pattern-bg { background-image: radial-gradient(var(--bg-light) 1px, transparent 1px); background-size: 20px 20px; background-color: var(--primary-color); color: var(--bg-light); }
+
+        /* ===== 置頂頁首導覽列 ===== */
+        .site-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 999; }
+        .site-header-title { font-size: 1.5rem; font-weight: 900; letter-spacing: 0.1em; margin: 0; }
+        .site-header-subtitle { font-size: 0.875rem; font-weight: 500; opacity: 0.8; margin-left: 0.5rem; }
+        .btn-home { background-color: var(--accent-color); color: #1a3637; padding: 0.5rem 1rem; border-radius: 9999px; font-weight: bold; font-size: 0.875rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: background-color 0.3s, color 0.3s; }
+        .btn-home:hover { background-color: #ffffff; color: var(--primary-color); }
+
+        /* ===== 英雄橫幅區塊 ===== */
+        .hero-section { background: linear-gradient(135deg, var(--primary-color), #1e3f40); color: white; text-align: center; padding: 5rem 2rem 7rem 2rem; position: relative; overflow: hidden; }
+        .hero-section h1 { font-size: 3rem; margin-bottom: 0.5rem; letter-spacing: 4px; font-weight: 900; }
+        .hero-section p { font-size: 1.3rem; opacity: 0.9; color: var(--accent-color); font-weight: bold; letter-spacing: 2px; margin-top: 10px; }
+
+        /* 主內容區塊 (負邊距讓內容往上浮動) */
+        .container { max-width: 1100px; margin: -4rem auto 2rem auto; padding: 0 20px; position: relative; z-index: 5; }
+
+        /* ===== 引言金句區塊 ===== */
+        .quote-box { background: white; border-left: 6px solid var(--accent-color); padding: 20px 30px; margin: 0 auto 40px auto; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); text-align: center; font-size: 1.25rem; font-weight: 700; color: var(--primary-color); }
+
+        /* ===== 政見卡片區塊 ===== */
+        .section-title { text-align: center; font-size: 2rem; font-weight: 900; color: var(--primary-color); margin: 60px 0 30px; letter-spacing: 1px; }
+        .policy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 20px; }
+        .policy-card { background: white; border-radius: 12px; padding: 35px 25px; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025); border-bottom: 5px solid var(--primary-color); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; }
+        .policy-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border-bottom-color: var(--accent-color); }
+        .icon-wrapper { width: 70px; height: 70px; background-color: rgba(48, 98, 99, 0.1); color: var(--primary-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2rem; margin: 0 auto 20px auto; transition: background-color 0.3s, color 0.3s; }
+        .policy-card:hover .icon-wrapper { background-color: var(--primary-color); color: white; }
+        .policy-card h3 { color: var(--primary-color); font-size: 1.4rem; margin-bottom: 15px; font-weight: 900; letter-spacing: 1px; }
+        .policy-details { text-align: left; margin-top: 15px; }
+        .policy-details li { list-style: none; margin-bottom: 12px; padding-left: 24px; position: relative; font-size: 1rem; color: var(--text-dark); line-height: 1.5; }
+        .policy-details li::before { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 2px; color: var(--accent-color); }
+        .highlight-tag { display: inline-block; background-color: var(--bg-light); color: var(--primary-color); font-size: 0.85rem; font-weight: bold; padding: 4px 10px; border-radius: 6px; margin-top: 10px; border: 1px solid rgba(48, 98, 99, 0.2); margin-right: 5px; }
+
+        /* ===== 比較表格 ===== */
+        .table-responsive { width: 100%; overflow-x: auto; margin-bottom: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .styled-table { width: 100%; border-collapse: collapse; font-size: 1.05rem; text-align: left; background-color: white; min-width: 700px; }
+        .styled-table thead tr { background-color: var(--primary-color); color: #ffffff; font-weight: bold; text-align: center; }
+        .styled-table th, .styled-table td { padding: 18px 20px; border: 1px solid #eaeaea; }
+        .styled-table tbody tr { transition: background-color 0.2s; }
+        .styled-table tbody tr:hover { background-color: #f5f8f8; }
+        .styled-table td:first-child { font-weight: bold; color: var(--primary-color); background-color: rgba(48, 98, 99, 0.05); width: 25%; text-align: center; }
+        .styled-table td:nth-child(2) { color: var(--text-muted); width: 35%; }
+        .styled-table td:nth-child(3) { font-weight: bold; color: #1a5c9a; }
+
+        /* ===== 點擊放大圖片的專屬樣式 ===== */
+        .zoom-img-container { margin: 60px auto; text-align: center; max-width: 100%; }
+        .zoom-img { display: block; margin: 0 auto; max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.2); cursor: zoom-in; transition: transform 0.3s ease; }
+        .zoom-img:hover { transform: scale(1.02); }
+        
+        /* ===== 彈出視窗 (Modal) 樣式 ===== */
+        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
+        .modal-content { margin: auto; display: block; max-width: 95%; max-height: 90vh; margin-top: 5vh; object-fit: contain; animation: zoom 0.3s ease; border-radius: 8px; }
+        @keyframes zoom { from {transform:scale(0.9); opacity:0;} to {transform:scale(1); opacity:1;} }
+        .close-btn { position: absolute; top: 20px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .close-btn:hover { color: var(--accent-color); }
+
+        /* ===== 頁尾 ===== */
+        .site-footer { padding: 4rem 2rem; margin-top: 4rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .footer-badge { display: inline-block; background-color: var(--bg-light); color: var(--primary-color); font-size: 0.75rem; font-weight: bold; padding: 0.25rem 0.5rem; border-radius: 0.25rem; margin-bottom: 1rem; }
+        .site-footer h2 { font-size: 1.8rem; font-weight: 900; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+        .site-footer p { font-size: 1rem; opacity: 0.9; margin-top: 0.5rem; }
+
+        @media (max-width: 768px) {
+            .site-header { flex-direction: column; gap: 15px; text-align: center; }
+            .hero-section h1 { font-size: 2.2rem; }
+            .policy-grid { grid-template-columns: 1fr; }
+            .close-btn { right: 20px; top: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頁首導覽列 -->
+    <header class="site-header pattern-bg">
+        <div>
+            <h1 class="site-header-title">施圳溪<span class="site-header-subtitle">嘉仁里里長參選人</span></h1>
+        </div>
+        <a href="index.html" class="btn-home">
+            <i class="fa-solid fa-house"></i> 回首頁
+        </a>
+    </header>
+
+    <!-- 英雄橫幅區 -->
+    <div class="hero-section">
+        <h1>扎根嘉仁 ‧ 永續躍進</h1>
+        <p>您的希望 ‧ 我來行動 ‧ 共同實現</p>
+    </div>
+
+    <!-- 主要內容區 -->
+    <div class="container">
+        
+        <!-- 金句 1 -->
+        <div class="quote-box">
+            「沒有扎實的根基，就沒有永續的躍進。」
+        </div>
+
+        <!-- ＝＝＝＝ 移出網格的放大圖片區塊 ＝＝＝＝ -->
+        <!-- 放置於最醒目的位置，點擊即可全螢幕放大 -->
+        <div class="zoom-img-container" style="margin-top: 0;">
+            <img src="images/DRS_0917.png" 
+                 alt="施圳溪：扎根嘉仁，永續躍進" 
+                 class="zoom-img"
+                 onclick="openImageModal(this.src)">
+            
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 12px; font-weight: bold;">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> 點擊圖片放大檢視
+            </p>
+        </div>
+
+        <!-- Section 1: 生機藍圖 -->
+        <h2 class="section-title">我們的生機藍圖</h2>
+        <div class="policy-grid">
+            <div class="policy-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-seedling"></i></div>
+                <h3>扎根</h3>
+                <ul class="policy-details">
+                    <li>傾聽民意</li>
+                    <li>盤點痛點</li>
+                    <li>穩固社區基礎</li>
+                </ul>
+            </div>
+            <div class="policy-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-gears"></i></div>
+                <h3>行動</h3>
+                <ul class="policy-details">
+                    <li>政策規劃</li>
+                    <li>爭取資源</li>
+                    <li>高效執行</li>
+                </ul>
+            </div>
+            <div class="policy-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-tree"></i></div>
+                <h3>躍進</h3>
+                <ul class="policy-details">
+                    <li>安全防護</li>
+                    <li>綠色營造</li>
+                    <li>繁榮的 2026 嘉仁里</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section 2: 重新定義社區治理 -->
+        <h2 class="section-title">重新定義社區治理：2026 永續新典範</h2>
+        <div class="quote-box" style="border-left-color: var(--primary-color); background: rgba(48, 98, 99, 0.05);">
+            嘉仁里需要的不再只是「通報者」，而是具備執行力的「規劃師」。
+        </div>
+        
+        <div class="table-responsive">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>治理維度</th>
+                        <th>傳統服務模式</th>
+                        <th>💡 施圳溪的 2026 模式</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>服務態度</td>
+                        <td><strong>被動反應</strong><br>等待通報才處理</td>
+                        <td><strong>主動規劃</strong><br>數據導向，提前預防</td>
+                    </tr>
+                    <tr>
+                        <td>溝通機制</td>
+                        <td><strong>單向布達</strong><br>僅傳達上級政令</td>
+                        <td><strong>雙向共創</strong><br>建立平台，匯聚民意</td>
+                    </tr>
+                    <tr>
+                        <td>問題解決</td>
+                        <td><strong>傳統修補</strong><br>頭痛醫頭，腳痛醫腳</td>
+                        <td><strong>永續治理</strong><br>全盤檢視，治標且治本</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 3: W.A.R 社區治理引擎 -->
+        <h2 class="section-title">啟動社區治理引擎：希望與行動的無限迴圈</h2>
+        <div class="policy-grid">
+            
+            <!-- 您的希望 -->
+            <div class="policy-card">
+                <div class="icon-wrapper"><i class="fa-regular fa-comments"></i></div>
+                <h3>1. 您的希望 (Wish)</h3>
+                <p style="color: var(--text-muted); margin-bottom:15px; font-weight:bold;">全天候、零距離的民意匯聚</p>
+                <ul class="policy-details">
+                    <li><strong>老者實地踏勘：</strong>走訪街巷，發掘隱藏痛點</li>
+                    <li><strong>青年數位渠道：</strong>建立高效的即時通訊網</li>
+                    <li><strong>跨代對話：</strong>兼顧長照需求與青年生活</li>
+                </ul>
+                <div class="highlight-tag">每一種聲音都是推動嘉仁里前進的動力</div>
+            </div>
+
+            <!-- 我來行動 -->
+            <div class="policy-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                <h3>2. 我來行動 (Action)</h3>
+                <p style="color: var(--text-muted); margin-bottom:15px; font-weight:bold;">從藍圖到施工的精準執行力</p>
+                <ul class="policy-details">
+                    <li><strong>資源盤點：</strong>科學化評估現有資源與市府預算</li>
+                    <li><strong>提出方案：</strong>針對問題核心，量身打造解決方案</li>
+                    <li><strong>積極爭取：</strong>向上對接資源，確保專案落地執行</li>
+                </ul>
+                <div class="highlight-tag">不喊空泛口號，只交具體進度</div>
+            </div>
+
+            <!-- 共同實現 -->
+            <div class="policy-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-diagram-project"></i></div>
+                <h3>3. 共同實現 (Realize)</h3>
+                <p style="color: var(--text-muted); margin-bottom:15px; font-weight:bold;">看見改變，共享永續躍進</p>
+                <ul class="policy-details">
+                    <li><strong>透明驗收：</strong>將在地期盼轉化為可被檢驗的實績</li>
+                    <li><strong>社區共享：</strong>建立一套持續運轉、自我優化的社區升級機制</li>
+                </ul>
+                <div class="highlight-tag">施政成果屬於每一位在地居民</div>
+            </div>
+        </div>
+
+        <!-- Section 4: 2026 永續躍進地圖 -->
+        <h2 class="section-title">預見未來：2026 嘉仁里永續躍進地圖</h2>
+        <div class="policy-grid">
+            <div class="policy-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-road-barrier"></i></div>
+                <h3>基礎建設升級與<br>安全路網</h3>
+            </div>
+            <div class="policy-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-leaf"></i></div>
+                <h3>綠色空間與<br>永續環境營造</h3>
+            </div>
+            <div class="policy-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-people-roof"></i></div>
+                <h3>全齡友善與<br>長照互助網</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 頁尾 -->
+    <footer class="site-footer pattern-bg">
+        <span class="footer-badge">READY FOR 2026</span>
+        <h2>準備好迎接嘉仁里的永續躍進了嗎？</h2>
+        <p style="margin: 15px 0;">☑ 最深的在地扎根 &nbsp;|&nbsp; ☑ 最強的行動引擎 &nbsp;|&nbsp; ☑ 最清晰的 2026 藍圖</p>
+        <div style="margin-top: 20px; font-size: 1.2rem; font-weight: bold; color: var(--accent-color);">
+            您的希望，交給 施圳溪 來行動，讓我們共同實現。
+        </div>
+    </footer>
+
+    <!-- ＝＝＝＝ 圖片彈出視窗 (Modal) 的隱藏結構 ＝＝＝＝ -->
+    <div id="imageModal" class="modal" onclick="closeImageModal()">
+        <span class="close-btn">&times;</span>
+        <img class="modal-content" id="expandedImg">
+    </div>
+
+    <!-- ＝＝＝＝ 控制彈出視窗的腳本 ＝＝＝＝ -->
+    <script>
+        function openImageModal(imgSrc) {
+            var modal = document.getElementById("imageModal");
+            var modalImg = document.getElementById("expandedImg");
+            modal.style.display = "block";
+            modalImg.src = imgSrc;
+            document.body.style.overflow = "hidden"; // 防止背景滾動
+        }
+        function closeImageModal() {
+            var modal = document.getElementById("imageModal");
+            modal.style.display = "none";
+            document.body.style.overflow = "auto"; // 恢復背景滾動
+        }
+    </script>
+</body>
+</html>
