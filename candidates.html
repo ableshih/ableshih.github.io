@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基隆市里長參選人查詢系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: "Noto Sans TC", sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="bg-teal-700 text-white p-6 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold tracking-widest">基隆市里長參選人快速查詢</h1>
+        </div>
+
+        <div class="p-6 md:p-8">
+            <!-- 篩選選單區 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 bg-gray-100 p-4 rounded-lg">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">行政區</label>
+                    <select id="districtFilter" class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-teal-500 outline-none">
+                        <option value="all">顯示所有行政區</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">里別 (依行政區連動)</label>
+                    <select id="neighborhoodFilter" class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-teal-500 outline-none disabled:bg-gray-200">
+                        <option value="all">顯示所有里別</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">政黨</label>
+                    <select id="partyFilter" class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-teal-500 outline-none">
+                        <option value="all">顯示所有政黨</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 資料列表區 -->
+            <div class="overflow-x-auto rounded-lg border border-gray-200">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-100 text-gray-700">
+                        <tr>
+                            <th class="p-4 border-b font-bold w-1/4">行政區</th>
+                            <th class="p-4 border-b font-bold w-1/4">里別</th>
+                            <th class="p-4 border-b font-bold w-1/4">姓名</th>
+                            <th class="p-4 border-b font-bold w-1/4">政黨</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTable" class="text-gray-800 divide-y divide-gray-200">
+                        <!-- JavaScript 將動態填入資料 -->
+                    </tbody>
+                </table>
+                <div id="noDataMessage" class="hidden text-center text-gray-500 py-8 font-medium">
+                    找不到符合條件的參選人
+                </div>
+            </div>
+            
+            <div class="mt-4 text-right text-gray-500 text-sm font-medium">
+                總計筆數：<span id="dataCount">0</span> 筆
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 原始資料
+        const rawData = `基隆市中正區 正砂里 曾思容 無
+基隆市中正區 正砂里 陳枋菱 無
+基隆市中正區 港通里 林政宏 無
+基隆市中正區 港通里 簡進發 無
+基隆市中正區 中船里 秦煒強 無
+基隆市中正區 中船里 蔣春生 國
+基隆市中正區 正船里 沈陸成 無
+基隆市中正區 正船里 張義泰 無
+基隆市中正區 入船里 郭蒼成 無
+基隆市中正區 入船里 朱紹平 無
+基隆市中正區 真砂里 魏君龍 國
+基隆市中正區 真砂里 洪春生 無
+基隆市中正區 砂灣里 簡曉東 國
+基隆市中正區 砂灣里 林志宏 無
+基隆市中正區 建國里 吳榮泉 無
+基隆市中正區 建國里 陳堃信 無
+基隆市中正區 建國里 王雅蘭 無
+基隆市中正區 社寮里 許春美 無
+基隆市中正區 社寮里 范詠翔 無
+基隆市中正區 和憲里 簡姷寧 無
+基隆市中正區 和憲里 蘇來成 無
+基隆市中正區 碧砂里 黃志強 無
+基隆市中正區 碧砂里 黃余葉 無
+基隆市中正區 碧砂里 盧俊龍 無
+基隆市中正區 長潭里 鍾麗美 無
+基隆市中正區 長潭里 蕭乾文 無
+基隆市中正區 長潭里 陳惠珠 無
+基隆市中正區 中正里 梁火龍 無
+基隆市中正區 中正里 李莉榛 無
+基隆市中正區 正濱里 羅政偉 國
+基隆市中正區 正濱里 周封君 國
+基隆市中正區 新豐里 張君瑜 無
+基隆市中正區 新豐里 丁麗娜 無
+基隆市中正區 新富里 莊紫濠 無
+基隆市中正區 新富里 曹呈祥 無
+基隆市中正區 德義里 張建源 無
+基隆市中正區 正義里 駱錫賢 國
+基隆市中正區 信義里 江添丁 無
+基隆市中正區 義重里 林世英 國
+基隆市中正區 中濱里 謝家榮 無
+基隆市中正區 海濱里 莊哲豪 無
+基隆市中正區 平寮里 蔡淑貞 無
+基隆市中正區 八斗里 杜劍秋 無
+基隆市中正區 中砂里 廖文雄 無
+基隆市中正區 砂子里 陳俊宇 無
+基隆市七堵區 長興里 姚琴富 無
+基隆市七堵區 長興里 柯金標 無
+基隆市七堵區 正光里 許正聲 無
+基隆市七堵區 正光里 李泳亮 無
+基隆市七堵區 富民里 吳明宗 國
+基隆市七堵區 富民里 吳洺豐 無
+基隆市七堵區 富民里 張雯惠 無
+基隆市七堵區 永平里 張美瓊 無
+基隆市七堵區 永平里 黃朝家 無
+基隆市七堵區 泰安里 陳文樹 無
+基隆市七堵區 泰安里 詹仁豪 無
+基隆市七堵區 堵南里 余佩儒 無
+基隆市七堵區 堵南里 沈雅玲 無
+基隆市七堵區 瑪南里 朱睿舟 無
+基隆市七堵區 瑪南里 蘇陳素花 無
+基隆市七堵區 瑪東里 李門長 無
+基隆市七堵區 瑪東里 林宏家 無
+基隆市七堵區 友一里 陳宏輝 無
+基隆市七堵區 友一里 蕭雪 無
+基隆市七堵區 友一里 張百合 無
+基隆市七堵區 友一里 郭翠芬 無
+基隆市七堵區 百福里 張佑瑋 無
+基隆市七堵區 百福里 何孟翰 無
+基隆市七堵區 實踐里 林介佳 無
+基隆市七堵區 實踐里 張曉玫 無
+基隆市七堵區 友二里 蘇秋福 無
+基隆市七堵區 正明里 謝連堂 無
+基隆市七堵區 長安里 陳栓基 無
+基隆市七堵區 瑪西里 陳美雲 無
+基隆市七堵區 堵北里 謝孟翰 無
+基隆市七堵區 永安里 陳君治 無
+基隆市七堵區 八德里 余文財 無
+基隆市七堵區 自強里 張仁化 無
+基隆市七堵區 六堵里 余良盛 無
+基隆市暖暖區 八西里 何梓廷 無
+基隆市暖暖區 八西里 林明傳 無
+基隆市暖暖區 八南里 陳碧琴 無
+基隆市暖暖區 八南里 李湘蓮 無
+基隆市暖暖區 過港里 鄧仁隆 國
+基隆市暖暖區 過港里 陳清池 無
+基隆市暖暖區 碇內里 林錦隆 無
+基隆市暖暖區 碇內里 盧宥牟 無
+基隆市暖暖區 暖同里 李傳河 無
+基隆市暖暖區 暖同里 黃博彥 無
+基隆市暖暖區 暖暖里 簡桂香 無
+基隆市暖暖區 暖暖里 黃雍容 無
+基隆市暖暖區 暖暖里 陳歷翔 無
+基隆市暖暖區 暖東里 林嘉萬 無
+基隆市暖暖區 暖東里 林淑娟 無
+基隆市暖暖區 暖西里 王奕荃 無
+基隆市暖暖區 暖西里 詹凱傑 無
+基隆市暖暖區 八中里 林浩隆 無
+基隆市暖暖區 八中里 陳美霞 無
+基隆市暖暖區 碇安里 余冠龍 無
+基隆市暖暖區 碇安里 傅瑜 無
+基隆市暖暖區 八堵里 蔡毓濱 無
+基隆市暖暖區 碇和里 林香 無
+基隆市暖暖區 碇祥里 黃博源 國
+基隆市仁愛區 林泉里 駱俊雄 無
+基隆市仁愛區 林泉里 門采誼 無
+基隆市仁愛區 花崗里 姜永國 無
+基隆市仁愛區 花崗里 李寶玉 無
+基隆市仁愛區 虹橋里 鄭淑芬 無
+基隆市仁愛區 虹橋里 李碧霞 無
+基隆市仁愛區 水錦里 林國星 無
+基隆市仁愛區 水錦里 許淑金 無
+基隆市仁愛區 智仁里 林志堅 無
+基隆市仁愛區 智仁里 彭秀英 無
+基隆市仁愛區 玉田里 林逸鴻 無
+基隆市仁愛區 玉田里 王培宇 無
+基隆市仁愛區 仁德里 王朝成 無
+基隆市仁愛區 仁德里 熊素蘭 無
+基隆市仁愛區 仁德里 游茗任 無
+基隆市仁愛區 博愛里 邱三元 民
+基隆市仁愛區 博愛里 許家睿 無
+基隆市仁愛區 福仁里 何美麗 無
+基隆市仁愛區 福仁里 陳家斌 無
+基隆市仁愛區 育仁里 藍正信 無
+基隆市仁愛區 育仁里 蔡秋雲 無
+基隆市仁愛區 英仁里 羅景安 無
+基隆市仁愛區 英仁里 蕭銓佑 無
+基隆市仁愛區 龍門里 李炳勳 無
+基隆市仁愛區 龍門里 林宗益 無
+基隆市仁愛區 德厚里 莊育超 無
+基隆市仁愛區 德厚里 林淑真 無
+基隆市仁愛區 崇文里 詹文卿 無
+基隆市仁愛區 崇文里 陳明楷 無
+基隆市仁愛區 書院里 林文肯 無
+基隆市仁愛區 書院里 許睿雅 無
+基隆市仁愛區 明德里 許文杰 無
+基隆市仁愛區 明德里 藍諺廷 無
+基隆市仁愛區 同風里 戴學禮 無
+基隆市仁愛區 同風里 吳振宏 無
+基隆市仁愛區 同風里 楊春生 無
+基隆市仁愛區 文昌里 王明清 無
+基隆市仁愛區 新店里 陳祐益 無
+基隆市仁愛區 光華里 陳世豐 無
+基隆市仁愛區 和明里 陳建平 無
+基隆市仁愛區 忠勇里 林羅清梅 無
+基隆市仁愛區 文安里 李隆進 無
+基隆市仁愛區 兆連里 潘國龍 無
+基隆市仁愛區 獅球里 林錦榮 無
+基隆市仁愛區 曲水里 徐鄭麗鳳 無
+基隆市仁愛區 朝棟里 李光健 無
+基隆市仁愛區 誠仁里 洪棟全 無
+基隆市仁愛區 吉仁里 李建德 無
+基隆市中山區 安民里 羅聰德 無
+基隆市中山區 安民里 簡美玲 無
+基隆市中山區 安民里 王玉慧 無
+基隆市中山區 仁正里 陳炳楠 無
+基隆市中山區 仁正里 陳秀玉 無
+基隆市中山區 健民里 郭正勇 無
+基隆市中山區 健民里 劉健鑑 無
+基隆市中山區 通明里 蘇祐平 無
+基隆市中山區 通明里 劉建良 無
+基隆市中山區 通明里 蕭財源 無
+基隆市中山區 協和里 張中信 民
+基隆市中山區 協和里 張哲源 無
+基隆市中山區 西榮里 呂英聰 無
+基隆市中山區 西榮里 李小梅 無
+基隆市中山區 西榮里 陳美珍 無
+基隆市中山區 西華里 陳柏豪 無
+基隆市中山區 西華里 陳萬昌 無
+基隆市中山區 西定里 翁木梨 無
+基隆市中山區 西定里 辜靜如 無
+基隆市中山區 西康里 潘泰榮 無
+基隆市中山區 西康里 張繼志 無
+基隆市中山區 德和里 陳紫華 無
+基隆市中山區 德和里 吳明寶 無
+基隆市中山區 德和里 江岳宸 無
+基隆市中山區 德和里 范振鈿 無
+基隆市中山區 德和里 李勃毅 無
+基隆市中山區 德安里 謝銘傳 無
+基隆市中山區 德安里 陳志遠 無
+基隆市中山區 和平里 張和妹 無
+基隆市中山區 和平里 邱暄琳 人
+基隆市中山區 和慶里 李詹淇 無
+基隆市中山區 和慶里 陳嘉和 無
+基隆市中山區 中和里 蘇彩雪 無
+基隆市中山區 新建里 高瑞堂 無
+基隆市中山區 安平里 楊昀逸 無
+基隆市中山區 中山里 羅予廷 無
+基隆市中山區 民治里 黃國偉 無
+基隆市中山區 中興里 李進發 無
+基隆市中山區 通化里 徐麗玲 無
+基隆市中山區 居仁里 洪文慶 無
+基隆市中山區 文化里 潘誼樺 無
+基隆市中山區 仙洞里 賴正男 無
+基隆市中山區 太白里 鄭吉雄 無
+基隆市安樂區 西川里 謝明宗 無
+基隆市安樂區 西川里 王忠誠 無
+基隆市安樂區 定國里 徐英俊 無
+基隆市安樂區 定國里 鄒汶憲 無
+基隆市安樂區 新西里 謝宗遠 無
+基隆市安樂區 新西里 闕豐軒 無
+基隆市安樂區 新西里 陳漢昭 無
+基隆市安樂區 新西里 李慧貞 無
+基隆市安樂區 新西里 黃世榮 無
+基隆市安樂區 慈仁里 王雅潔 無
+基隆市安樂區 慈仁里 劉師成 無
+基隆市安樂區 永康里 陳銘坤 無
+基隆市安樂區 永康里 陳東鵬 無
+基隆市安樂區 嘉仁里 王貴美 無
+基隆市安樂區 嘉仁里 施圳溪 無
+基隆市安樂區 安和里 童意鵬 無
+基隆市安樂區 安和里 盧國雄 無
+基隆市安樂區 樂一里 羅勇賢 國
+基隆市安樂區 樂一里 曾玉穎 無
+基隆市安樂區 樂一里 徐佑昇 無
+基隆市安樂區 外寮里 顏厚廣 無
+基隆市安樂區 外寮里 鄭美英 無
+基隆市安樂區 中崙里 徐晉吉 無
+基隆市安樂區 中崙里 林萬發 無
+基隆市安樂區 中崙里 李源林 無
+基隆市安樂區 內寮里 嚴福神 無
+基隆市安樂區 內寮里 黃嘉德 無
+基隆市安樂區 新崙里 林金龍 無
+基隆市安樂區 新崙里 蘇林玉琴 無
+基隆市安樂區 六合里 蔡志峰 無
+基隆市安樂區 六合里 潘德發 無
+基隆市安樂區 七賢里 鍾尚倫 無
+基隆市安樂區 七賢里 陳德和 無
+基隆市安樂區 壯觀里 黃詩涵 無
+基隆市安樂區 壯觀里 陳威竹 無
+基隆市安樂區 鶯歌里 邱美足 無
+基隆市安樂區 武崙里 李文財 無
+基隆市安樂區 長樂里 張德發 無
+基隆市安樂區 興寮里 黃書筠 無
+基隆市安樂區 鶯安里 劉大維 無
+基隆市安樂區 定邦里 林惠蓮 無
+基隆市安樂區 干城里 俞秀真 無
+基隆市安樂區 三民里 簡義雄 無
+基隆市安樂區 四維里 黃雅玲 無
+基隆市安樂區 五福里 舒瑞利 無
+基隆市信義區 義昭里 童冠睿 無
+基隆市信義區 義昭里 林猷青 無
+基隆市信義區 義和里 林毓峯 無
+基隆市信義區 義和里 蔡麗月 無
+基隆市信義區 智慧里 蔡美玉 無
+基隆市信義區 智慧里 紀勘 無
+基隆市信義區 禮儀里 郭金德 無
+基隆市信義區 禮儀里 蔡念辰 無
+基隆市信義區 信綠里 吳銘達 無
+基隆市信義區 信綠里 苗志文 無
+基隆市信義區 東光里 陳財源 無
+基隆市信義區 東光里 余瑛鋗 無
+基隆市信義區 東明里 薛凱威 無
+基隆市信義區 東明里 翁誠鍾 無
+基隆市信義區 東安里 潘力煜 無
+基隆市信義區 東安里 趙金發 無
+基隆市信義區 東安里 林睿騰 無
+基隆市信義區 東安里 賴建宇 無
+基隆市信義區 孝岡里 吳石金 無
+基隆市信義區 孝岡里 許尊德 無
+基隆市信義區 孝深里 陳怡賓 無
+基隆市信義區 孝深里 李偉辰 無
+基隆市信義區 孝深里 陳憲欽 無
+基隆市信義區 孝深里 郭姵萱 無
+基隆市信義區 孝德里 朱志偉 無
+基隆市信義區 孝德里 林擎宇 無
+基隆市信義區 孝忠里 藍明華 無
+基隆市信義區 孝忠里 陳冠良 無
+基隆市信義區 孝忠里 簡清雲 無
+基隆市信義區 仁壽里 張富凱 無
+基隆市信義區 仁義里 王柏力 無
+基隆市信義區 義幸里 李王環 無
+基隆市信義區 義民里 連轉旺 無
+基隆市信義區 智誠里 何希華 無
+基隆市信義區 禮東里 賴興泉 無
+基隆市信義區 東信里 賴姵綺 無
+基隆市信義區 孝賢里 莊琬琳 無`;
+
+        // 轉換資料為物件陣列
+        const parseData = (text) => {
+            return text.trim().split('\n').map(line => {
+                // 過濾掉多餘的空白或 Tab
+                const parts = line.trim().split(/\s+/);
+                if(parts.length >= 4) {
+                    return {
+                        district: parts[0],
+                        neighborhood: parts[1],
+                        name: parts[2],
+                        party: parts[3]
+                    };
+                }
+                return null;
+            }).filter(item => item !== null);
+        };
+
+        const candidates = parseData(rawData);
+
+        // 取得唯一的行政區與政黨清單
+        const districts = [...new Set(candidates.map(c => c.district))];
+        const parties = [...new Set(candidates.map(c => c.party))];
+
+        // 取得 DOM 元素
+        const districtSelect = document.getElementById('districtFilter');
+        const neighborhoodSelect = document.getElementById('neighborhoodFilter');
+        const partySelect = document.getElementById('partyFilter');
+        const dataTable = document.getElementById('dataTable');
+        const noDataMessage = document.getElementById('noDataMessage');
+        const dataCount = document.getElementById('dataCount');
+
+        // 初始化選單
+        const initSelects = () => {
+            districts.forEach(d => {
+                const option = document.createElement('option');
+                option.value = d;
+                option.textContent = d;
+                districtSelect.appendChild(option);
+            });
+
+            parties.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p;
+                // 自動對應完整政黨名稱
+                let partyName = p;
+                if (p === '無') partyName = '無黨籍';
+                if (p === '國') partyName = '中國國民黨';
+                if (p === '民') partyName = '民主進步黨';
+                if (p === '人') partyName = '人民民主黨';
+                
+                option.textContent = partyName;
+                partySelect.appendChild(option);
+            });
+        };
+
+        // 更新里別選單 (根據選擇的行政區自動剔除重複)
+        const updateNeighborhoods = (selectedDistrict) => {
+            neighborhoodSelect.innerHTML = '<option value="all">顯示所有里別</option>';
+            
+            if (selectedDistrict === 'all') {
+                neighborhoodSelect.disabled = true;
+                return;
+            }
+
+            neighborhoodSelect.disabled = false;
+            const filteredNeighborhoods = [...new Set(
+                candidates
+                    .filter(c => c.district === selectedDistrict)
+                    .map(c => c.neighborhood)
+            )];
+
+            filteredNeighborhoods.forEach(n => {
+                const option = document.createElement('option');
+                option.value = n;
+                option.textContent = n;
+                neighborhoodSelect.appendChild(option);
+            });
+        };
+
+        // 渲染表格資料
+        const renderTable = () => {
+            const selectedDistrict = districtSelect.value;
+            const selectedNeighborhood = neighborhoodSelect.value;
+            const selectedParty = partySelect.value;
+
+            const filteredData = candidates.filter(c => {
+                const matchDistrict = selectedDistrict === 'all' || c.district === selectedDistrict;
+                const matchNeighborhood = selectedNeighborhood === 'all' || c.neighborhood === selectedNeighborhood;
+                const matchParty = selectedParty === 'all' || c.party === selectedParty;
+                return matchDistrict && matchNeighborhood && matchParty;
+            });
+
+            dataTable.innerHTML = '';
+
+            if (filteredData.length === 0) {
+                noDataMessage.classList.remove('hidden');
+            } else {
+                noDataMessage.classList.add('hidden');
+                filteredData.forEach(c => {
+                    // 美化政黨標籤顯示
+                    let partyClass = 'bg-gray-100 text-gray-700';
+                    let partyText = '無黨籍';
+                    
+                    if (c.party === '國') {
+                        partyClass = 'bg-blue-100 text-blue-800';
+                        partyText = '國民黨';
+                    } else if (c.party === '民') {
+                        partyClass = 'bg-green-100 text-green-800';
+                        partyText = '民進黨';
+                    } else if (c.party === '人') {
+                        partyClass = 'bg-red-100 text-red-800';
+                        partyText = '人民民主黨';
+                    }
+
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-teal-50 transition-colors';
+                    row.innerHTML = `
+                        <td class="p-4">${c.district}</td>
+                        <td class="p-4 font-bold text-teal-800">${c.neighborhood}</td>
+                        <td class="p-4 text-lg">${c.name}</td>
+                        <td class="p-4"><span class="px-2 py-1 rounded text-sm font-bold ${partyClass}">${partyText}</span></td>
+                    `;
+                    dataTable.appendChild(row);
+                });
+            }
+            
+            dataCount.textContent = filteredData.length;
+        };
+
+        // 綁定事件監聽器
+        districtSelect.addEventListener('change', (e) => {
+            updateNeighborhoods(e.target.value);
+            renderTable();
+        });
+
+        neighborhoodSelect.addEventListener('change', renderTable);
+        partySelect.addEventListener('change', renderTable);
+
+        // 執行初始化
+        initSelects();
+        renderTable();
+    </script>
+</body>
+</html>
