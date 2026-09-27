@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安定的力量阿娟 | 檢舉達人</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background-color: #F0EEE9; 
+            color: #1F2937; 
+        }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        /* 隱藏滾動條 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F0EEE9; }
+        ::-webkit-scrollbar-thumb { background: #306263; border-radius: 4px; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-transformative-teal selection:text-cloud-dancer">
+
+    <!-- 頂部導覽列 -->
+    <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-10 sticky top-0">
+        <div>
+            <h1 class="text-2xl font-black tracking-widest">阿娟 <span class="text-sm font-medium opacity-80 ml-2 tracking-normal">安定的力量 ‧ 檢舉達人</span></h1>
+        </div>
+        <a href="#" class="bg-amber-haze text-transformative-teal px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2">
+            <i class="fa-solid fa-house"></i> 回首頁
+        </a>
+    </header>
+
+    <!-- 主要內容區塊 -->
+    <main class="flex-grow container mx-auto px-4 py-10">
+        
+        <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in">
+            
+            <!-- 標題橫幅 -->
+            <div class="pattern-bg text-cloud-dancer p-8 text-center relative">
+                <div class="absolute inset-0 bg-black/20"></div>
+                <div class="relative z-10">
+                    <span class="inline-block bg-amber-haze text-transformative-teal text-xs font-bold px-3 py-1 rounded mb-3">ACTION</span>
+                    <h2 class="text-4xl font-black tracking-wider mb-2">安定的力量：阿娟</h2>
+                    <p class="text-lg opacity-90 font-medium">地方秩序維護者 ‧ 檢舉達人</p>
+                </div>
+            </div>
+
+            <!-- 兩欄式內容 -->
+            <div class="p-8 grid md:grid-cols-2 gap-10">
+                
+                <!-- 起因與背景 -->
+                <div class="space-y-6">
+                    <div class="border-b-2 border-transformative-teal pb-3 flex items-center gap-3">
+                        <i class="fa-solid fa-bolt text-amber-haze text-2xl"></i>
+                        <h3 class="text-2xl font-bold text-transformative-teal">事件起因與背景</h3>
+                    </div>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex gap-4 bg-cloud-dancer p-4 rounded-xl border-l-4 border-amber-haze hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-car-burst text-transformative-teal mt-1 text-lg"></i>
+                            <div>
+                                <strong class="block text-transformative-teal mb-1 text-lg">重大車禍意外</strong>
+                                <p class="text-gray-700 leading-relaxed">於基隆市中心仁二路二信循環站，在人行道上行走遭計程車撞擊，住進加護病房昏迷長達七天。</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 bg-cloud-dancer p-4 rounded-xl border-l-4 border-transformative-teal hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-scale-balanced text-transformative-teal mt-1 text-lg"></i>
+                            <div>
+                                <strong class="block text-transformative-teal mb-1 text-lg">司法執行未果</strong>
+                                <p class="text-gray-700 leading-relaxed">肇事計程車駕駛雖已遭法院判罰，至今仍未完成強制執行。</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 bg-cloud-dancer p-4 rounded-xl border-l-4 border-amber-haze hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-head-side-virus text-transformative-teal mt-1 text-lg"></i>
+                            <div>
+                                <strong class="block text-transformative-teal mb-1 text-lg">車禍後遺症</strong>
+                                <p class="text-gray-700 leading-relaxed">事故為她留下了視力受損、記憶力減退及長期頭痛等後遺症。</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 bg-cloud-dancer p-4 rounded-xl border-l-4 border-[#306263] hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-file-medical text-transformative-teal mt-1 text-lg"></i>
+                            <div>
+                                <strong class="block text-transformative-teal mb-1 text-lg">精神鑑定健康</strong>
+                                <p class="text-gray-700 leading-relaxed">經精神科醫師、臨床心理師、社工師組成團隊進行「司法精神鑑定」，證實無精神問題非常健康。</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="flex gap-3 flex-wrap pt-2">
+                        <span class="bg-transformative-teal text-cloud-dancer px-4 py-2 rounded-full text-sm font-bold shadow-sm"><i class="fa-solid fa-brain mr-2"></i>邏輯清晰</span>
+                        <span class="bg-transformative-teal text-cloud-dancer px-4 py-2 rounded-full text-sm font-bold shadow-sm"><i class="fa-solid fa-chart-line mr-2"></i>股市高手</span>
+                    </div>
+                </div>
+
+                <!-- 實際行動與作為 -->
+                <div class="space-y-6">
+                    <div class="border-b-2 border-transformative-teal pb-3 flex items-center gap-3">
+                        <i class="fa-solid fa-shield-halved text-amber-haze text-2xl"></i>
+                        <h3 class="text-2xl font-bold text-transformative-teal">行動與作為</h3>
+                    </div>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex gap-4 bg-cloud-dancer p-4 rounded-xl border-l-4 border-transformative-teal hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-building-shield text-transformative-teal mt-1 text-lg"></i>
+                            <div>
+                                <strong class="block text-transformative-teal mb-1 text-lg">密集檢舉與警民合作</strong>
+                                <p class="text-gray-700 leading-relaxed">每兩小時固定檢舉違規停車，主要出警配合單位為「安定派出所」。</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 bg-cloud-dancer p-4 rounded-xl border-l-4 border-transformative-teal hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-bullhorn text-transformative-teal mt-1 text-lg"></i>
+                            <div>
+                                <strong class="block text-transformative-teal mb-1 text-lg">安樂市場糾察員</strong>
+                                <p class="text-gray-700 leading-relaxed">檢舉安樂市場攤商將攤位佔用道路中央，影響行人通行導致動線混亂的亂象。</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 bg-cloud-dancer p-4 rounded-xl border-l-4 border-[#306263] hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-arrow-trend-up text-transformative-teal mt-1 text-lg"></i>
+                            <div>
+                                <strong class="block text-transformative-teal mb-1 text-lg">顯著改善成效</strong>
+                                <p class="text-gray-700 leading-relaxed">經過檢舉，安樂市場的秩序已大為改善，目前僅剩三至四攤依然故我。</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 bg-cloud-dancer p-4 rounded-xl border-l-4 border-red-500 hover:shadow-md transition-shadow">
+                            <i class="fa-solid fa-triangle-exclamation text-transformative-teal mt-1 text-lg"></i>
+                            <div>
+                                <strong class="block text-transformative-teal mb-1 text-lg">面臨人身安全風險</strong>
+                                <p class="text-gray-700 leading-relaxed">曾遭外地三人毆打，警方未派刑事人員立案；地方更謠傳其曾在廟口夜市遭遇暴力攻擊。</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
