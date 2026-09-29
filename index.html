@@ -35,6 +35,10 @@
         }
     </script>
     <style>
+        /* 加入平滑捲動效果 */
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             background-color: #F0EEE9; /* Cloud Dancer */
             color: #1F2937;
@@ -47,11 +51,29 @@
         .text-shadow-sm {
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
+        
+        /* 浮動回到最上按鈕樣式 */
+        #backToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+            transform: translateY(20px);
+        }
+        #backToTopBtn.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-transformative-teal selection:text-cloud-dancer">
 
-    <header class="pattern-bg text-cloud-dancer py-16 px-6 relative overflow-hidden shadow-lg pb-24">
+    <!-- 頁首，加入 id="top" 讓返回按鈕有目標可指 -->
+    <header id="top" class="pattern-bg text-cloud-dancer py-16 px-6 relative overflow-hidden shadow-lg pb-24">
         <div class="absolute top-0 right-0 p-4 opacity-20 text-9xl font-black italic">OK</div>
         <div class="max-w-5xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between">
             <div class="mb-8 md:mb-0 md:w-2/3">
@@ -59,7 +81,17 @@
                     KEELUNG ANLE JIA-REN LI 2026
                 </div>
 
+                <h1 class="text-5xl md:text-7xl font-black tracking-tight mb-2 text-shadow-sm">
+                    <a href="DRS.html" class="inline-block transform transition-all duration-300 hover:opacity-80 hover:scale-105 cursor-pointer origin-left">
+                        施圳溪
+                    </a>
+                </h1>                
 
+                <h2 class="text-2xl md:text-3xl font-medium mb-6 opacity-90 hover:opacity-100 transition-opacity">
+                    <a href="DRS.html" class="inline-block transform transition-transform duration-300 hover:scale-105 cursor-pointer origin-left" title="點擊觀看：嘉仁里生機藍圖">
+                        嘉仁里里長參選人 <span class="font-bold text-amber-haze bg-transformative-teal-dark px-2 py-1 rounded ml-2"> </span>
+                    </a>
+                </h2>
 
 
 <h1 class="text-5xl md:text-7xl font-black tracking-tight mb-2 text-shadow-sm">
@@ -96,44 +128,21 @@
 					</span>
 </p>
 
-
-
-
-                    
-                   
                 </p>
             </div>
-
 
             <div class="md:w-1/3 flex justify-center md:justify-end">
                 <div class="bg-cloud-dancer text-transformative-teal rounded-full w-48 h-48 md:w-64 md:h-64 flex items-center justify-center flex-col shadow-2xl border-4 border-amber-haze transform rotate-3 transition-transform hover:rotate-0 duration-300">
                     <span class="text-base md:text-xl font-bold">支持・服務・安全</span>
-                    
                     <span class="text-4xl md:text-5xl font-black mt-2 tracking-widest">嘉 仁</span>
                     
                     <!-- 諧音設計：帶有房屋圖示的溫暖小標籤 -->
                     <span class="text-sm md:text-base font-bold text-amber-haze mt-1 tracking-widest flex items-center gap-1">
                         <i class="fa-solid fa-house-user"></i> 就是家人
                     </span>
-                    
                     <i class="fa-solid fa-leaf mt-2 text-transformative-teal/50 text-xl md:text-2xl"></i>
                 </div>
             </div>
-
-
-
-
-
-            
-
-
-
-
-
-
-
-
-            
         </div>
     </header>
 
@@ -149,22 +158,25 @@
             <a href="care.html" class="group flex items-center gap-2 bg-transformative-teal hover:bg-amber-haze text-cloud-dancer hover:text-transformative-teal-dark font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                 <i class="fa-regular fa-comment-dots"></i> 長照
             </a>
+            <!-- 錨點：快速跳至市政建言 -->
+            
             <a href="suggestions.html" class="group flex items-center gap-2 bg-transformative-teal hover:bg-amber-haze text-cloud-dancer hover:text-transformative-teal-dark font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                 <i class="fa-regular fa-comment-dots"></i> 市政建言
             </a>
             <a href="Whistleblower.html" class="group flex items-center gap-2 bg-transformative-teal hover:bg-amber-haze text-cloud-dancer hover:text-transformative-teal-dark font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                 <i class="fa-regular fa-comment-dots"></i> 安定的力量阿娟 檢舉達人
             </a>
-			<a href="candidates.html" class="group flex items-center gap-2 bg-transformative-teal hover:bg-amber-haze text-cloud-dancer hover:text-transformative-teal-dark font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <a href="candidates.html" class="group flex items-center gap-2 bg-transformative-teal hover:bg-amber-haze text-cloud-dancer hover:text-transformative-teal-dark font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                 <i class="fa-regular fa-comment-dots"></i> 里長議員參選人查詢
             </a>
-			<a href="spring_roll.html" class="group flex items-center gap-2 bg-transformative-teal hover:bg-amber-haze text-cloud-dancer hover:text-transformative-teal-dark font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <a href="spring_roll.html" class="group flex items-center gap-2 bg-transformative-teal hover:bg-amber-haze text-cloud-dancer hover:text-transformative-teal-dark font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                 <i class="fa-regular fa-comment-dots"></i> 安樂市場潤餅伯
             </a>
         </div>
     </section>
 
-    <section class="py-16 px-6 max-w-6xl mx-auto">
+    <!-- 區塊 1：打造安心幸福里 (加上 id="promises") -->
+    <section id="promises" class="py-16 px-6 max-w-6xl mx-auto scroll-mt-8">
         <div class="text-center mb-12">
             <h2 class="text-4xl font-black text-transformative-teal tracking-wider mb-2">3S PROMISES</h2>
             <p class="text-xl text-gray-600 font-medium">打造安心幸福里</p>
@@ -279,10 +291,9 @@
         </div>
     </section>
 
-
-
     <!-- 新增：走訪回饋列表區塊 -->
-    <section class="py-16 px-6 max-w-6xl mx-auto">
+    <!-- 區塊 2：走訪回饋列表 (加上 id="feedback") -->
+    <section id="feedback" class="py-16 px-6 max-w-6xl mx-auto scroll-mt-8">
         <div class="text-center mb-12">
             <h2 class="text-4xl font-black text-transformative-teal tracking-wider mb-2">COMMUNITY FEEDBACK</h2>
             <p class="text-xl text-gray-600 font-medium">走訪回饋列表</p>
@@ -290,6 +301,7 @@
         </div>
 
         <div class="space-y-4">
+            <!-- 電腦版表頭 -->
             <!-- 電腦版表頭 (手機版會自動隱藏) -->
             <div class="hidden md:grid md:grid-cols-12 gap-4 px-6 py-4 bg-transformative-teal text-cloud-dancer font-bold rounded-t-xl shadow-sm">
                 <div class="col-span-4">提議</div>
@@ -349,6 +361,7 @@
                     <span class="bg-gray-100 px-3 py-1 rounded-full text-gray-600 md:bg-transparent md:p-0 md:rounded-none">改善措施：應比照市區標準、老社區停車空間不足，增設機車停車位。</span>
                 </div>
             </div>			
+            
             <!-- 回饋項目 Item 4 -->
             <div class="bg-white p-6 rounded-xl md:rounded-none md:border-b border-gray-200 shadow-sm md:shadow-none md:grid md:grid-cols-12 gap-4 items-center hover:bg-gray-50 transition-colors">
                 <div class="col-span-4 mb-3 md:mb-0">
@@ -364,6 +377,7 @@
                     <span class="bg-gray-100 px-3 py-1 rounded-full text-gray-600 md:bg-transparent md:p-0 md:rounded-none">過往定期發放老鼠藥（化學防治），確實能快速降低老鼠數量。但近年因為環境生態保護（如老鼠天敵貓狗、猛禽誤食中毒）及公共安全問題，公部門與社區開始減少粗放式投藥，改推行「環境整頓為主、藥劑為輔」的綜合治理策略，食物殘渣、金屬防鼠網、密閉的鼠餌盒...。</span>
                 </div>
             </div>				
+            
             <!-- 回饋項目 Item 5 -->
             <div class="bg-white p-6 rounded-xl md:rounded-none md:border-b border-gray-200 shadow-sm md:shadow-none md:grid md:grid-cols-12 gap-4 items-center hover:bg-gray-50 transition-colors">
                 <div class="col-span-4 mb-3 md:mb-0">
@@ -403,9 +417,8 @@
         </div>
     </section>
 
-
-    
-    <section class="bg-white py-16 px-6 shadow-inner border-y border-gray-200">
+    <!-- 區塊 3：實踐藍圖 具體行動方案 (加上 id="blueprint") -->
+    <section id="blueprint" class="bg-white py-16 px-6 shadow-inner border-y border-gray-200 scroll-mt-8">
         <div class="max-w-5xl mx-auto">
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-black text-transformative-teal tracking-wider mb-2">ACTION BLUEPRINT</h2>
@@ -479,7 +492,8 @@
         </div>
     </section>
 
-    <footer class="bg-transformative-teal-dark text-cloud-dancer pt-16 pb-8 border-t-[12px] border-amber-haze">
+    <!-- 區塊 4：關於我 (加上 id="about") -->
+    <footer id="about" class="bg-transformative-teal-dark text-cloud-dancer pt-16 pb-8 border-t-[12px] border-amber-haze scroll-mt-8">
         <div class="max-w-6xl mx-auto px-6">
             
             <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-12 mb-12">
@@ -505,20 +519,14 @@
                             </p>
                             <p class="flex items-center justify-center md:justify-start gap-3">
                                 <i class="fa-brands fa-line w-6 text-center text-[#00B900] bg-white rounded p-0.5 text-sm"></i> 
-                                
                                 <a href="https://line.me/ti/p/~0928813308" class="hover:text-white transition-colors">LINE ID 0928813308</a>
-
-
-
-                                
                             </p>
                             <p class="flex items-center justify-center md:justify-start gap-3">
                                 <i class="fa-solid fa-envelope w-6 text-center text-amber-haze"></i> 
                                 <a href="mailto:ableshih@gmail.com" class="hover:text-white transition-colors">願景信箱 ableshih@gmail.com</a>
                             </p>
                             <p class="flex items-center justify-center md:justify-start gap-3">
-                                <i class="fa-brands fa-facebook w-6 text-center text-[#1877F2] bg-white rounded p-0.5 text-sm"></i> 
-                                
+                                <i class="fa-brands fa-facebook w-6 text-center text-[#1877F2] bg-white rounded p-0.5 text-sm"></i>
                                 <a href="https://www.facebook.com/ableshih" class="hover:text-white transition-colors">FB/ableshih</a>
                             </p>
                         </div>
@@ -526,7 +534,6 @@
                 </div>
 
                 <!-- QR Codes Area -->
-
                 <div class="md:w-2/5 flex flex-row gap-6 justify-center">
                     
                     <a href="https://line.me/ti/p/~0928813308" target="_blank" rel="noopener noreferrer" class="text-center flex flex-col items-center group cursor-pointer block">
@@ -560,6 +567,25 @@
             </div>
         </div>
     </footer>
+
+    <!-- 新增：浮動「回到最上」按鈕 -->
+    <a href="#top" id="backToTopBtn" class="bg-amber-haze hover:bg-transformative-teal text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl cursor-pointer">
+        <i class="fa-solid fa-chevron-up text-xl"></i>
+    </a>
+
+    <!-- 新增：控制浮動按鈕顯示與隱藏的腳本 -->
+    <script>
+        const backToTopBtn = document.getElementById("backToTopBtn");
+        
+        // 當使用者向下捲動超過 300px 時顯示按鈕
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add("show");
+            } else {
+                backToTopBtn.classList.remove("show");
+            }
+        });
+    </script>
 
 </body>
 </html>
