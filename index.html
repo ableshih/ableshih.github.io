@@ -109,6 +109,29 @@
                 </p>
             </div>
 
+
+
+
+			<!-- 右側：參選人大頭照與浮動標語徽章 -->
+            <div class="md:w-1/3 flex justify-center md:justify-end relative mt-10 md:mt-0">
+                
+                <!-- 1. 候選人主要大頭照 (請將 profile.jpg 替換為您的實際照片檔名) -->
+                <div class="relative w-48 h-48 md:w-64 md:h-64 rounded-full shadow-2xl border-4 border-amber-haze transform transition-transform hover:scale-105 duration-500 z-10 bg-cloud-dancer overflow-hidden">
+                    <img src="profile.jpg" onerror="this.src='https://placehold.co/400x400/F0EEE9/306263?text=照片放這'" alt="施圳溪 參選人" class="w-full h-full object-cover">
+                </div>
+                
+                <!-- 2. 原本的標語變成右下角的精緻小徽章，疊加在照片上 -->
+                <div class="absolute -bottom-4 -right-2 md:-bottom-6 md:-right-6 bg-cloud-dancer text-transformative-teal rounded-full w-28 h-28 md:w-36 md:h-36 flex items-center justify-center flex-col shadow-xl border-[3px] border-white transform rotate-6 transition-transform hover:-rotate-3 duration-300 z-20">
+                    <span class="text-[10px] md:text-xs font-bold leading-tight">支持・服務</span>
+                    <span class="text-xl md:text-3xl font-black mt-0.5 tracking-widest">嘉 仁</span>
+                    <span class="text-[9px] md:text-[11px] font-bold text-amber-haze mt-1 tracking-widest flex items-center gap-1">
+                        <i class="fa-solid fa-house-user"></i> 就是家人
+                    </span>
+                </div>
+                
+            </div>			
+			
+<!-- 
             <div class="md:w-1/3 flex justify-center md:justify-end">
                 <div class="bg-cloud-dancer text-transformative-teal rounded-full w-48 h-48 md:w-64 md:h-64 flex items-center justify-center flex-col shadow-2xl border-4 border-amber-haze transform rotate-3 transition-transform hover:rotate-0 duration-300">
                     <span class="text-base md:text-xl font-bold">支持・服務・安全</span>
@@ -121,6 +144,7 @@
                     <i class="fa-solid fa-leaf mt-2 text-transformative-teal/50 text-xl md:text-2xl"></i>
                 </div>
             </div>
+-->			
         </div>
     </header>
 
