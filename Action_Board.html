@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行動看板 - 施圳溪 | 嘉仁里里長參選人</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        /* 隱藏滾動條以呈現全螢幕沉浸感 */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="antialiased h-screen flex flex-col selection:bg-transformative-teal selection:text-cloud-dancer">
+
+    <!-- 頂部導覽列 -->
+    <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-10">
+        <div>
+            <h1 class="text-2xl font-black tracking-widest">施圳溪 <span class="text-sm font-medium opacity-80 ml-2 tracking-normal">嘉仁里里長參選人</span></h1>
+        </div>
+        <a href="https://ableshih.github.io/" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2">
+            <i class="fa-solid fa-house"></i> 回首頁
+        </a>
+    </header>
+
+    <!-- 輪播展示區 -->
+    <main class="flex-grow relative bg-black flex items-center justify-center overflow-hidden">
+
+        <!-- 👑 背景音樂播放器 (隱藏) -->
+        <audio id="bgm-player" loop>
+            <source src="image/Action_B/sound/BGM208_Lumi.mp3" type="audio/mpeg">
+        </audio>        
+        <!-- 媒體容器 (JS會將圖片或影片放入此處) -->
+        <div id="media-container" class="w-full h-full flex items-center justify-center relative">
+            <!-- 載入中動畫 -->
+            <div class="text-cloud-dancer text-xl animate-pulse"><i class="fa-solid fa-spinner fa-spin"></i> 載入活動紀錄中...</div>
+        </div>
+
+        <!-- 浮動資訊列 -->
+        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-6 text-cloud-dancer flex justify-between items-end">
+            <div>
+                <span class="inline-block bg-transformative-teal text-xs font-bold px-2 py-1 rounded mb-2">ACTION</span>
+                <h2 class="text-2xl font-bold tracking-wider">扎根嘉仁 ‧ 永續躍進</h2>
+                <p class="text-sm opacity-80">您的希望 ‧ 我來行動 ‧ 共同實現</p>
+            </div>
+            
+            <!-- 控制按鈕 -->
+            <div class="flex gap-4">
+                <!-- 👑 新增：音樂開關按鈕 -->
+                <button id="bgm-btn" class="w-10 h-10 rounded-full bg-white/20 hover:bg-amber-haze text-white flex items-center justify-center transition-colors" title="播放/暫停背景音樂">
+                    <i class="fa-solid fa-music"></i>
+                </button>
+                <button id="mute-btn" class="w-10 h-10 rounded-full bg-white/20 hover:bg-amber-haze text-white flex items-center justify-center transition-colors hidden">
+                    <i class="fa-solid fa-volume-xmark"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+
+
+
+
+
+    <!-- 引入 YouTube 官方 API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        // ==========================================
+        // 1. 請在此處填寫您的圖片與 YouTube 影片
+        // ==========================================
+        const mediaFiles = [
+            { type: 'image', src: 'images/Action_B/01.png' },
+            { type: 'image', src: 'images/Action_B/02.png' },
+            { type: 'image', src: 'images/Action_B/03.png' },
+            { type: 'image', src: 'images/Action_B/04.png' },
+            { type: 'image', src: 'images/Action_B/05.png' },
+            { type: 'image', src: 'images/Action_B/06.png' },
+            { type: 'image', src: 'images/Action_B/07.png' },
+            { type: 'image', src: 'images/Action_B/08.png' },
+            { type: 'image', src: 'images/Action_B/09.png' },
+            { type: 'image', src: 'images/Action_B/10.png' },
+            { type: 'image', src: 'images/Action_B/11.png' },
+            { type: 'image', src: 'images/Action_B/12.png' },
+            { type: 'image', src: 'images/Action_B/13.png' },
+            { type: 'image', src: 'images/Action_B/14.png' },
+            { type: 'image', src: 'images/Action_B/15.png' },
+            { type: 'image', src: 'images/Action_B/16.png' },
+            { type: 'image', src: 'images/Action_B/17.png' },
+            { type: 'image', src: 'images/Action_B/18.png' },
+            { type: 'image', src: 'images/Action_B/19.png' },
+            { type: 'image', src: 'images/Action_B/20.png' },
+            { type: 'image', src: 'images/Action_B/21.png' },
+            { type: 'image', src: 'images/Action_B/22.png' },
+            { type: 'image', src: 'images/Action_B/23.png' },
+            { type: 'image', src: 'images/Action_B/24.png' },
+            { type: 'image', src: 'images/Action_B/25.png' },
+            { type: 'image', src: 'images/Action_B/26.png' },
+            { type: 'image', src: 'images/Action_B/27.png' },
+            { type: 'image', src: 'images/Action_B/28.png' },
+            { type: 'image', src: 'images/Action_B/29.png' },
+            { type: 'image', src: 'images/Action_B/30.png' },
+            { type: 'image', src: 'images/Action_B/31.png' },
+            { type: 'image', src: 'images/Action_B/32.png' },
+            { type: 'image', src: 'images/Action_B/33.png' },
+            { type: 'image', src: 'images/Action_B/34.png' },
+            { type: 'image', src: 'images/Action_B/35.png' },
+            { type: 'image', src: 'images/Action_B/37.png' },
+            { type: 'image', src: 'images/Action_B/37.png' }
+        ];
+
+        // 圖片預設停留時間 (毫秒)，8000 = 5秒
+        const IMAGE_DURATION = 8000; 
+
+        // ==========================================
+        // 以下為播放器邏輯
+        // ==========================================
+        let currentIndex = 0;
+        let timer = null;
+        let ytPlayer = null; // 用來控制 YouTube 播放器
+        let isYoutubeReady = false; // 追蹤 API 是否載入完畢
+        
+        const container = document.getElementById('media-container');
+        const muteBtn = document.getElementById('mute-btn');
+        let isMuted = true;
+
+        // 👑 BGM 相關變數與控制邏輯
+        const bgmPlayer = document.getElementById('bgm-player');
+        const bgmBtn = document.getElementById('bgm-btn');
+        let isUserWantsBgm = false; // 紀錄使用者是否手動開啟了音樂
+
+        bgmBtn.onclick = () => {
+            if (isUserWantsBgm) {
+                bgmPlayer.pause();
+                isUserWantsBgm = false;
+                bgmBtn.classList.remove('bg-amber-haze');
+                bgmBtn.classList.add('bg-white/20');
+            } else {
+                bgmPlayer.play();
+                isUserWantsBgm = true;
+                bgmBtn.classList.remove('bg-white/20');
+                bgmBtn.classList.add('bg-amber-haze');
+            }
+        };
+
+
+        // 當 YouTube API 載入完成時，瀏覽器會自動呼叫這個函數
+        function onYouTubeIframeAPIReady() {
+            isYoutubeReady = true;
+        }
+
+        function playNext() {
+            clearTimeout(timer);
+            // 如果當前是 YouTube 影片，跳轉前先把舊的播放器清掉
+            if (ytPlayer) {
+                ytPlayer.destroy();
+                ytPlayer = null;
+            }
+            currentIndex = (currentIndex + 1) % mediaFiles.length;
+            renderMedia();
+        }
+
+        function renderMedia() {
+            if (mediaFiles.length === 0) return;
+            
+            const media = mediaFiles[currentIndex];
+            container.innerHTML = ''; // 清空畫面
+            muteBtn.classList.add('hidden'); // 預設隱藏靜音鍵
+
+            if (media.type === 'image') {
+                // 👑 輪播到圖片時，如果使用者有開音樂，就恢復背景音樂
+                if (isUserWantsBgm) bgmPlayer.play();
+                const img = document.createElement('img');
+                img.src = media.src;
+                img.className = 'w-full h-full object-contain animate-fade-in';
+                
+                img.onerror = () => playNext();
+                
+                container.appendChild(img);
+                timer = setTimeout(playNext, IMAGE_DURATION);
+
+            } else if (media.type === 'youtube') {
+                // 👑 輪播到 YouTube 影片時，自動暫停背景音樂避免聲音重疊
+                bgmPlayer.pause();
+                // 如果 API 還沒準備好，等 0.5 秒再試一次
+                if (!isYoutubeReady) {
+                    timer = setTimeout(renderMedia, 500);
+                    return;
+                }
+
+                // 建立一個 div 讓 YouTube API 掛載影片
+                const ytDiv = document.createElement('div');
+                ytDiv.id = 'yt-player-container';
+                ytDiv.className = 'w-full h-full animate-fade-in';
+                container.appendChild(ytDiv);
+
+                // 初始化 YouTube 播放器
+                ytPlayer = new YT.Player('yt-player-container', {
+                    videoId: media.videoId,
+                    playerVars: {
+                        'autoplay': 1,           // 自動播放
+                        'mute': isMuted ? 1 : 0, // 靜音 (必須靜音才能自動播放)
+                        'controls': 0,           // 隱藏下方進度條與控制列，畫面更乾淨
+                        'rel': 0,                // 播完不顯示其他頻道的推薦影片
+                        'modestbranding': 1,     // 隱藏 YouTube Logo
+                        'playsinline': 1         // 支援手機端網頁內嵌播放
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange,
+                        'onError': () => playNext() // 如果發生錯誤直接跳下一則
+                    }
+                });
+            }
+        }
+
+        // 當 YouTube 準備好開始播放時
+        function onPlayerReady(event) {
+            event.target.playVideo(); // 強制開始播放
+            
+            // 顯示自訂的靜音切換按鈕
+            muteBtn.classList.remove('hidden');
+            muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+            
+            muteBtn.onclick = () => {
+                isMuted = !isMuted;
+                if (isMuted) {
+                    event.target.mute();
+                } else {
+                    event.target.unMute();
+                }
+                muteBtn.innerHTML = isMuted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+            };
+        }
+
+        // 監聽 YouTube 播放狀態
+        function onPlayerStateChange(event) {
+            // YT.PlayerState.ENDED (數值為 0) 代表影片播完了
+            if (event.data === 0) {
+                playNext(); // 播完自動跳下一張圖片/影片
+            }
+        }
+
+        // 啟動輪播
+        window.onload = () => {
+            renderMedia();
+        };
+    </script>
+
+    
+    
+
+    
+</body>
+</html>
