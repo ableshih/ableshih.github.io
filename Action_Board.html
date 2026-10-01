@@ -64,8 +64,11 @@
 
         <!-- 👑 背景音樂播放器 (隱藏) -->
         <audio id="bgm-player" loop>
-            <source src="image/Action_B/sound/BGM208_Lumi.mp3" type="audio/mpeg">
-        </audio>        
+            <!-- 修正：images 必須有 s -->
+            <source src="images/Action_B/sound/BGM208_Lumi.mp3" type="audio/mpeg">
+        </audio>
+        
+                
         <!-- 媒體容器 (JS會將圖片或影片放入此處) -->
         <div id="media-container" class="w-full h-full flex items-center justify-center relative">
             <!-- 載入中動畫 -->
