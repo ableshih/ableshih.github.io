@@ -51,7 +51,26 @@
         .text-shadow-sm {
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
-        
+        /* 動態跑馬燈動畫設定 */
+        .marquee-wrapper {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .marquee-content {
+            display: inline-block;
+            padding-left: 100%; /* 從畫面最右側開始進場 */
+            animation: marquee-scroll 18s linear infinite;
+        }
+        .marquee-content:hover {
+            animation-play-state: paused; /* 滑鼠移過去時暫停跑動，方便閱讀 */
+        }
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
         /* 浮動回到最上按鈕樣式 */
         #backToTopBtn {
             position: fixed;
@@ -164,7 +183,12 @@
             </a>
 		</div>
     </section>
-
+	<!-- 新增：動態大字跑馬燈區塊 -->
+    <section id="dynamic-marquee" class="py-4 border-y-4 border-white/20 shadow-inner transition-colors duration-500 marquee-wrapper relative z-10">
+        <div id="marquee-text" class="marquee-content text-3xl md:text-5xl font-black tracking-widest drop-shadow-sm cursor-default">
+            <!-- JavaScript 會在這裡自動填入文案 -->
+        </div>
+    </section>
     <!-- 區塊 1：打造安心幸福里 (加上 id="promises") -->
     <section id="promises" class="py-16 px-6 max-w-6xl mx-auto scroll-mt-8">
         <div class="text-center mb-12">
@@ -576,6 +600,49 @@
             }
         });
     </script>
+	<!-- 新增：跑馬燈隨機文案與配色腳本 -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // 跑馬燈文案與色彩資料庫 (可無限擴充)
+            const marqueeData = [
+                { 
+                    text: "✨ 2026 扎根嘉仁 永續躍進！施圳溪與您同行 ✨", 
+                    bg: "bg-transformative-teal", 
+                    textColor: "text-cloud-dancer" 
+                },
+                { 
+                    text: "🤝 您的希望・我來行動・共同實現 🤝", 
+                    bg: "bg-amber-haze", 
+                    textColor: "text-transformative-teal-dark" 
+                },
+                { 
+                    text: "🏠 支持・服務・安全 —— 嘉仁就是家人 🏠", 
+                    bg: "bg-transformative-teal-dark", 
+                    textColor: "text-amber-haze" 
+                },
+                { 
+                    text: "💡 創客工坊、敏捷里政、家人行善團、文化創生 💡", 
+                    bg: "bg-cloud-dancer", 
+                    textColor: "text-transformative-teal-dark" 
+                }
+            ];
 
+            // 隨機抽取一筆資料
+            const randomIndex = Math.floor(Math.random() * marqueeData.length);
+            const selectedData = marqueeData[randomIndex];
+
+            // 取得 HTML 元素
+            const marqueeSection = document.getElementById("dynamic-marquee");
+            const marqueeText = document.getElementById("marquee-text");
+
+            // 寫入文字內容
+            // 為了讓跑馬燈看起來連貫，我們把同一句話重複兩次中間加空白
+            marqueeText.innerText = selectedData.text + "     " + selectedData.text;
+
+            // 套用 Tailwind 顏色 Class
+            marqueeSection.classList.add(selectedData.bg);
+            marqueeText.classList.add(selectedData.textColor);
+        });
+    </script>
 </body>
 </html>
