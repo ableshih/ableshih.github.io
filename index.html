@@ -600,49 +600,66 @@
             }
         });
     </script>
-	<!-- 新增：跑馬燈隨機文案與配色腳本 -->
+	
+	<!-- 新增：跑馬燈隨機文案與配色腳本 (包含 30 秒自動變換與淡入淡出特效) -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // 跑馬燈文案與色彩資料庫 (可無限擴充)
+            // 跑馬燈文案與色彩資料庫 (已加入您的 7 段新文案，並配上適合的圖示與顏色)
             const marqueeData = [
-                { 
-                    text: "✨ 2026 扎根嘉仁 永續躍進！施圳溪與您同行 ✨", 
-                    bg: "bg-transformative-teal", 
-                    textColor: "text-cloud-dancer" 
-                },
-                { 
-                    text: "🤝 您的希望・我來行動・共同實現 🤝", 
-                    bg: "bg-amber-haze", 
-                    textColor: "text-transformative-teal-dark" 
-                },
-                { 
-                    text: "🏠 支持・服務・安全 —— 嘉仁就是家人 🏠", 
-                    bg: "bg-transformative-teal-dark", 
-                    textColor: "text-amber-haze" 
-                },
-                { 
-                    text: "💡 創客工坊、敏捷里政、家人行善團、文化創生 💡", 
-                    bg: "bg-cloud-dancer", 
-                    textColor: "text-transformative-teal-dark" 
-                }
+                { text: "✨ 2026 扎根嘉仁 永續躍進！施圳溪與您同行 ✨", bg: "bg-transformative-teal", textColor: "text-cloud-dancer" },
+                { text: "🤝 您的希望・我來行動・共同實現 🤝", bg: "bg-amber-haze", textColor: "text-transformative-teal-dark" },
+                { text: "🏠 支持・服務・安全 —— 嘉仁就是家人 🏠", bg: "bg-transformative-teal-dark", textColor: "text-amber-haze" },
+                { text: "💡 創客工坊、敏捷里政、家人行善團、文化創生 💡", bg: "bg-cloud-dancer", textColor: "text-transformative-teal-dark" },
+                
+                // 以下為新增的 7 段文案
+                { text: "🌱 綠美化：提供季節植栽品種，盛開成為社區特色 🌱", bg: "bg-transformative-teal", textColor: "text-cloud-dancer" },
+                { text: "👴 長者：重心轉移、植栽、信仰、同齡伙伴、老幼共學 👵", bg: "bg-amber-haze", textColor: "text-transformative-teal-dark" },
+                { text: "🎓 學生族：社區服務學習時數，多語地方特色解說員 🎓", bg: "bg-transformative-teal-dark", textColor: "text-cloud-dancer" },
+                { text: "💼 上班族：支持過度時間、協助拿葯、定期葯師說明會、團購 💼", bg: "bg-cloud-dancer", textColor: "text-transformative-teal-dark" },
+                { text: "🙏 不分宗教：人要有信，必將成就，找配合宗教建立資料 🙏", bg: "bg-transformative-teal", textColor: "text-amber-haze" },
+                { text: "💪 不會作、不要作、換我來！ 💪", bg: "bg-amber-haze", textColor: "text-transformative-teal-dark" },
+                { text: "☁️ 雲端 AI 落地鄰里，智慧生活從嘉仁開始 ☁️", bg: "bg-transformative-teal-dark", textColor: "text-amber-haze" }
             ];
 
-            // 隨機抽取一筆資料
-            const randomIndex = Math.floor(Math.random() * marqueeData.length);
-            const selectedData = marqueeData[randomIndex];
-
-            // 取得 HTML 元素
             const marqueeSection = document.getElementById("dynamic-marquee");
             const marqueeText = document.getElementById("marquee-text");
+            
+            // 確保有設定過渡動畫時間，讓變色與淡入淡出更平滑
+            marqueeSection.style.transition = "all 0.8s ease-in-out";
 
-            // 寫入文字內容
-            // 為了讓跑馬燈看起來連貫，我們把同一句話重複兩次中間加空白
-            marqueeText.innerText = selectedData.text + "     " + selectedData.text;
+            function updateMarquee() {
+                // 1. 先將區塊淡出 (透明度變 0)
+                marqueeSection.style.opacity = "0";
 
-            // 套用 Tailwind 顏色 Class
-            marqueeSection.classList.add(selectedData.bg);
-            marqueeText.classList.add(selectedData.textColor);
+                // 2. 等待 800 毫秒 (淡出動畫結束後) 進行內容抽換
+                setTimeout(() => {
+                    const randomIndex = Math.floor(Math.random() * marqueeData.length);
+                    const selectedData = marqueeData[randomIndex];
+
+                    // 寫入文字內容，並重置跑馬燈動畫，讓文字從頭開始跑
+                    marqueeText.style.animation = 'none';
+                    marqueeText.offsetHeight; /* 觸發重繪 (Reflow) */
+                    marqueeText.style.animation = null; 
+                    
+                    marqueeText.innerText = selectedData.text + "     " + selectedData.text;
+
+                    // 清除舊的背景與文字顏色 Class，套用新的
+                    marqueeSection.className = "py-4 border-y-4 border-white/20 shadow-inner marquee-wrapper relative z-10 " + selectedData.bg;
+                    marqueeText.className = "marquee-content text-3xl md:text-5xl font-black tracking-widest drop-shadow-sm cursor-default " + selectedData.textColor;
+
+                    // 3. 將區塊淡入 (透明度變 1)
+                    marqueeSection.style.opacity = "1";
+                }, 800);
+            }
+
+            // 網頁載入時馬上執行一次
+            updateMarquee();
+
+            // 設定每 30 秒 (30000 毫秒) 自動執行一次更新
+            setInterval(updateMarquee, 30000);
         });
     </script>
+	
+	
 </body>
 </html>
