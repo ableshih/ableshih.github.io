@@ -618,9 +618,13 @@
             }
         });
     </script>
-	
 
-	<!-- 新增：雙跑馬燈隨機文案與配色腳本 (包含 30 秒自動變換與淡入淡出特效) -->
+
+
+
+
+
+	<!-- 新增：雙跑馬燈文案與配色腳本 (大字隨機、小字循序，包含 30 秒自動變換與淡入淡出特效) -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             // ==========================================
@@ -644,16 +648,15 @@
             // ==========================================
             // 2. 友軍跑馬燈資料庫 (小字、慢速)
             // ==========================================
-            //   /* { text: "🚀 友軍 俞叁發 | 發發發俞叁發", bg: "bg-amber-haze", textColor: "text-transformative-teal-dark" }, */
-            //   /* { text: "🪖 友軍 秦鉦 | 戰老兵", bg: "bg-transformative-teal", textColor: "text-cloud-dancer" }, */
-            //   /* { text: "☕ 友軍 吳驊珈 | 嘉加珈吳驊珈", bg: "bg-cloud-dancer", textColor: "text-transformative-teal-dark" }, */
-
+            //    { text: "🚀 友軍 俞叁發 | 發發發俞叁發", bg: "bg-amber-haze", textColor: "text-transformative-teal-dark" },
+            //    { text: "🪖 友軍 秦鉦 | 戰老兵", bg: "bg-transformative-teal", textColor: "text-cloud-dancer" },
+            //    { text: "☕ 友軍 吳驊珈 | 嘉加珈吳驊珈", bg: "bg-cloud-dancer", textColor: "text-transformative-teal-dark" },
 			const friendsData = [
                 { text: "🤝 友軍 黃永翔 | 從基層出發，關心每個孩子的教育，守護每位需要幫助的朋友。 十多年來，我堅持說真話、做實事，把公益精神落實在每一天。", bg: "bg-cloud-dancer", textColor: "text-transformative-teal-dark" },
                 { text: "🗣️ 友軍 張之豪 | 議會高品質質詢 「你與我，都要成為『無法對無名小花朵踩踏下去』的男人啊。」", bg: "bg-transformative-teal-dark", textColor: "text-amber-haze" },
-				{ text: "⚓ 友軍 童子瑋 | 里長訓練班導師 [出身港邊，心繫港都] 持續推動基隆成為真正的國際海港城市 ⚓", bg: "bg-transformative-teal-dark", textColor: "text-cloud-dancer" },            
-                { text: "📞 基隆市市長李進勇 電話拜票執行者 📞 | 📞 基隆市市長李進勇 電話拜票執行者 📞", bg: "bg-transformative-teal", textColor: "text-amber-haze" },
-				{ text: "❤️ 陳新松 | 事事關心，關心鄉親生活品質之提昇，關心公益，照顧弱勢。 ❤️", bg: "bg-cloud-dancer", textColor: "text-transformative-teal-dark" }
+                { text: "📞 當年基隆市市長李進勇電話拜票執行者 📞", bg: "bg-transformative-teal", textColor: "text-amber-haze" },
+                { text: "⚓ 友軍 童子瑋 | 里長訓練班導師 [出身港邊，心繫港都] 持續推動基隆成為真正的國際海港城市 ⚓", bg: "bg-transformative-teal-dark", textColor: "text-cloud-dancer" },
+                { text: "❤️ 友軍 陳新松 | 事事關心，關心鄉親生活品質之提昇，關心公益，照顧弱勢。 ❤️", bg: "bg-cloud-dancer", textColor: "text-transformative-teal-dark" }
             ];
 
             const marqueeSection = document.getElementById("dynamic-marquee");
@@ -665,6 +668,9 @@
             marqueeSection.style.transition = "all 0.8s ease-in-out";
             friendsSection.style.transition = "all 0.8s ease-in-out";
 
+            // 👑 僅保留友軍跑馬燈的索引值 (循序播放)
+            let currentFriendsIdx = 0;
+
             function updateMarquees() {
                 // 1. 同時將兩個區塊淡出 (透明度變 0)
                 marqueeSection.style.opacity = "0";
@@ -672,7 +678,7 @@
 
                 // 2. 等待 800 毫秒進行內容抽換
                 setTimeout(() => {
-                    // --- 抽換主跑馬燈 ---
+                    // --- 👑 抽換主跑馬燈 (隨機抽取) ---
                     const randomIndex1 = Math.floor(Math.random() * marqueeData.length);
                     const selectedData1 = marqueeData[randomIndex1];
 
@@ -684,19 +690,16 @@
                     marqueeSection.className = "py-4 border-y-4 border-white/20 shadow-inner marquee-wrapper relative z-10 " + selectedData1.bg;
                     marqueeText.className = "marquee-content text-3xl md:text-5xl font-black tracking-widest drop-shadow-sm cursor-default " + selectedData1.textColor;
 
-                    // --- 抽換友軍跑馬燈 ---
-                    const randomIndex2 = Math.floor(Math.random() * friendsData.length);
-                    const selectedData2 = friendsData[randomIndex2];
+                    // --- 👑 抽換友軍跑馬燈 (依照順序) ---
+                    const selectedData2 = friendsData[currentFriendsIdx];
+                    currentFriendsIdx = (currentFriendsIdx + 1) % friendsData.length; // 播到底自動回歸 0
 
                     friendsText.style.animation = 'none';
                     friendsText.offsetHeight; 
                     friendsText.style.animation = null; 
                     
-                    // 中間加較長空白，避免文字連在一起
                     friendsText.innerText = selectedData2.text + "     " + selectedData2.text;
-                    // 使用 py-2 讓上下間距變窄，凸顯次要層級
                     friendsSection.className = "py-2 border-b-2 border-white/20 shadow-inner marquee-wrapper relative z-10 " + selectedData2.bg;
-                    // 套用較小的文字級別與慢速 class
                     friendsText.className = "marquee-content-small text-lg md:text-2xl font-bold tracking-wide drop-shadow-sm cursor-default " + selectedData2.textColor;
 
                     // 3. 將區塊淡入 (透明度變 1)
@@ -712,6 +715,17 @@
             setInterval(updateMarquees, 30000);
         });
     </script>
+
+
+
+
+
+
+
+
+	
+
+
 	
 	
 </body>
