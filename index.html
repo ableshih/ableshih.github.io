@@ -71,6 +71,15 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
         }
+		/* 友軍專屬：文字較小、跑動速度較慢 (35秒) */
+        .marquee-content-small {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee-scroll 35s linear infinite;
+        }
+        .marquee-content-small:hover {
+            animation-play-state: paused;
+        }
         /* 浮動回到最上按鈕樣式 */
         #backToTopBtn {
             position: fixed;
@@ -183,11 +192,18 @@
             </a>
 		</div>
     </section>
+	
 	<!-- 新增：動態大字跑馬燈區塊 -->
     <section id="dynamic-marquee" class="py-4 border-y-4 border-white/20 shadow-inner transition-colors duration-500 marquee-wrapper relative z-10">
         <div id="marquee-text" class="marquee-content text-3xl md:text-5xl font-black tracking-widest drop-shadow-sm cursor-default">
             <!-- JavaScript 會在這裡自動填入文案 -->
         </div>
+	<!-- 新增：友軍小字慢速跑馬燈區塊 -->
+    <section id="dynamic-marquee-friends" class="py-2 border-b-2 border-white/20 shadow-inner transition-colors duration-500 marquee-wrapper relative z-10">
+        <div id="marquee-text-friends" class="marquee-content-small text-lg md:text-2xl font-bold tracking-wide drop-shadow-sm cursor-default">
+            <!-- JavaScript 會在這裡自動填入友軍文案 -->
+        </div>
+    </section>
     </section>
     <!-- 區塊 1：打造安心幸福里 (加上 id="promises") -->
     <section id="promises" class="py-16 px-6 max-w-6xl mx-auto scroll-mt-8">
@@ -601,17 +617,18 @@
         });
     </script>
 	
-	<!-- 新增：跑馬燈隨機文案與配色腳本 (包含 30 秒自動變換與淡入淡出特效) -->
+
+	<!-- 新增：雙跑馬燈隨機文案與配色腳本 (包含 30 秒自動變換與淡入淡出特效) -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // 跑馬燈文案與色彩資料庫 (已加入您的 7 段新文案，並配上適合的圖示與顏色)
+            // ==========================================
+            // 1. 主跑馬燈資料庫 (大字、一般速度)
+            // ==========================================
             const marqueeData = [
                 { text: "✨ 2026 扎根嘉仁 永續躍進！施圳溪與您同行 ✨", bg: "bg-transformative-teal", textColor: "text-cloud-dancer" },
                 { text: "🤝 您的希望・我來行動・共同實現 🤝", bg: "bg-amber-haze", textColor: "text-transformative-teal-dark" },
                 { text: "🏠 支持・服務・安全 —— 嘉仁就是家人 🏠", bg: "bg-transformative-teal-dark", textColor: "text-amber-haze" },
                 { text: "💡 創客工坊、敏捷里政、家人行善團、文化創生 💡", bg: "bg-cloud-dancer", textColor: "text-transformative-teal-dark" },
-                
-                // 以下為新增的 7 段文案
                 { text: "🌱 綠美化：提供季節植栽品種，盛開成為社區特色 🌱", bg: "bg-transformative-teal", textColor: "text-cloud-dancer" },
                 { text: "👴 長者：重心轉移、植栽、信仰、同齡伙伴、老幼共學 👵", bg: "bg-amber-haze", textColor: "text-transformative-teal-dark" },
                 { text: "🎓 學生族：社區服務學習時數，多語地方特色解說員 🎓", bg: "bg-transformative-teal-dark", textColor: "text-cloud-dancer" },
@@ -622,42 +639,73 @@
                 { text: "☁️ 雲端 AI 落地鄰里，智慧生活從嘉仁開始 ☁️", bg: "bg-transformative-teal-dark", textColor: "text-amber-haze" }
             ];
 
+            // ==========================================
+            // 2. 友軍跑馬燈資料庫 (小字、慢速)
+            // ==========================================
+            const friendsData = [
+                { text: "🤝 友軍 黃永翔 | 從基層出發，關心每個孩子的教育，守護每位需要幫助的朋友。 十多年來，我堅持說真話、做實事，把公益精神落實在每一天。", bg: "bg-cloud-dancer", textColor: "text-transformative-teal-dark" },
+                { text: "🗣️ 友軍 張之豪 | 議會高品質質詢 「你與我，都要成為『無法對無名小花朵踩踏下去』的男人啊。」", bg: "bg-transformative-teal-dark", textColor: "text-amber-haze" },
+                { text: "🚀 友軍 俞叁發 | 發發發俞叁發", bg: "bg-amber-haze", textColor: "text-transformative-teal-dark" },
+                { text: "🪖 友軍 秦鉦 | 戰老兵", bg: "bg-transformative-teal", textColor: "text-cloud-dancer" },
+                { text: "☕ 友軍 吳驊珈 | 嘉加珈吳驊珈", bg: "bg-cloud-dancer", textColor: "text-transformative-teal-dark" },
+                // 👑 新增的文案
+                { text: "📞 當年基隆市市長李進勇電話拜票執行者 📞", bg: "bg-transformative-teal", textColor: "text-amber-haze" }
+            ];
+
             const marqueeSection = document.getElementById("dynamic-marquee");
             const marqueeText = document.getElementById("marquee-text");
+            const friendsSection = document.getElementById("dynamic-marquee-friends");
+            const friendsText = document.getElementById("marquee-text-friends");
             
-            // 確保有設定過渡動畫時間，讓變色與淡入淡出更平滑
+            // 設定過渡動畫時間
             marqueeSection.style.transition = "all 0.8s ease-in-out";
+            friendsSection.style.transition = "all 0.8s ease-in-out";
 
-            function updateMarquee() {
-                // 1. 先將區塊淡出 (透明度變 0)
+            function updateMarquees() {
+                // 1. 同時將兩個區塊淡出 (透明度變 0)
                 marqueeSection.style.opacity = "0";
+                friendsSection.style.opacity = "0";
 
-                // 2. 等待 800 毫秒 (淡出動畫結束後) 進行內容抽換
+                // 2. 等待 800 毫秒進行內容抽換
                 setTimeout(() => {
-                    const randomIndex = Math.floor(Math.random() * marqueeData.length);
-                    const selectedData = marqueeData[randomIndex];
+                    // --- 抽換主跑馬燈 ---
+                    const randomIndex1 = Math.floor(Math.random() * marqueeData.length);
+                    const selectedData1 = marqueeData[randomIndex1];
 
-                    // 寫入文字內容，並重置跑馬燈動畫，讓文字從頭開始跑
                     marqueeText.style.animation = 'none';
-                    marqueeText.offsetHeight; /* 觸發重繪 (Reflow) */
+                    marqueeText.offsetHeight; 
                     marqueeText.style.animation = null; 
                     
-                    marqueeText.innerText = selectedData.text + "     " + selectedData.text;
+                    marqueeText.innerText = selectedData1.text + "     " + selectedData1.text;
+                    marqueeSection.className = "py-4 border-y-4 border-white/20 shadow-inner marquee-wrapper relative z-10 " + selectedData1.bg;
+                    marqueeText.className = "marquee-content text-3xl md:text-5xl font-black tracking-widest drop-shadow-sm cursor-default " + selectedData1.textColor;
 
-                    // 清除舊的背景與文字顏色 Class，套用新的
-                    marqueeSection.className = "py-4 border-y-4 border-white/20 shadow-inner marquee-wrapper relative z-10 " + selectedData.bg;
-                    marqueeText.className = "marquee-content text-3xl md:text-5xl font-black tracking-widest drop-shadow-sm cursor-default " + selectedData.textColor;
+                    // --- 抽換友軍跑馬燈 ---
+                    const randomIndex2 = Math.floor(Math.random() * friendsData.length);
+                    const selectedData2 = friendsData[randomIndex2];
+
+                    friendsText.style.animation = 'none';
+                    friendsText.offsetHeight; 
+                    friendsText.style.animation = null; 
+                    
+                    // 中間加較長空白，避免文字連在一起
+                    friendsText.innerText = selectedData2.text + "     " + selectedData2.text;
+                    // 使用 py-2 讓上下間距變窄，凸顯次要層級
+                    friendsSection.className = "py-2 border-b-2 border-white/20 shadow-inner marquee-wrapper relative z-10 " + selectedData2.bg;
+                    // 套用較小的文字級別與慢速 class
+                    friendsText.className = "marquee-content-small text-lg md:text-2xl font-bold tracking-wide drop-shadow-sm cursor-default " + selectedData2.textColor;
 
                     // 3. 將區塊淡入 (透明度變 1)
                     marqueeSection.style.opacity = "1";
+                    friendsSection.style.opacity = "1";
                 }, 800);
             }
 
             // 網頁載入時馬上執行一次
-            updateMarquee();
+            updateMarquees();
 
-            // 設定每 30 秒 (30000 毫秒) 自動執行一次更新
-            setInterval(updateMarquee, 30000);
+            // 設定每 30 秒自動同步變換兩個跑馬燈
+            setInterval(updateMarquees, 30000);
         });
     </script>
 	
