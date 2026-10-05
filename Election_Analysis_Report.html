@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歷年縣市議員選舉得票統計與選情視覺化分析報告</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 1000px;
+            padding: 40px 20px;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        h2 {
+            color: #2980b9;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #34495e;
+        }
+        p {
+            text-align: justify;
+        }
+        .summary-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f6f8;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .stats-grid {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .stat-item {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            width: 22%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>歷年縣市議員選舉得票統計與選情視覺化分析報告</h1>
+        <p style="text-align: center; color: #7f8c8d;">二十年選情縱深分析：總投票數規模消長、核心候選人演變與地緣偏好統計 (91年-111年)</p>
+
+        <div class="summary-box">
+            <h3>報告提要與核心發現</h3>
+            <p><strong>執行摘要：</strong>本報告深度彙整91年至111年共6屆縣市議員選舉投開票所數據。分析顯示，本選區投票規模在94年達到 <span class="highlight">2,142票最高峰</span>，隨後呈現波浪型起伏，至111年降至1,717票(近年新低)。在候選人實力消長方面，陳志成創下跨屆最高得票(103年739票)，而新秀林沛祥在111年異軍突起躍居第一(334票)。此外，選區內兩大投開票所長期維持 57% : 43% 的固定規模比例，且呈現顯著的候選人地緣支持偏好。</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">2,142 票</div>
+                <div class="stat-label">歷史最高總投票數 (94年)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">739 票</div>
+                <div class="stat-label">單一候選人最高得票 (陳志成)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3 人</div>
+                <div class="stat-label">6屆全勤參選者 (莊/秦/俞)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">0.41%</div>
+                <div class="stat-label">最高得票率穩定度 (林弘和)</div>
+            </div>
+        </div>
+
+        <h2>一、歷年投票總數與選區規模變化分析</h2>
+        <p>從91年至111年的20年選情縱深觀察，選區總投票數歷經兩次高峰與回落：91年開票數為1,607票；94年激增 33.3% 達2,142票最高峰；98年回落至 1,849 票；103年與107 年再次回升並穩定在 2,000 票以上的高檔水平（分別為2,072 票與 2,024 票）；然而到了 111 年總投票數顯著下滑至 1,717 票，相較 94 年高點減少 425 票 (-19.8%)，反應出近年選民投票意願或人口結構轉變。</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>選舉年份</th>
+                    <th>主要投開票所</th>
+                    <th>主要開票數</th>
+                    <th>次要投開票所</th>
+                    <th>次要開票數</th>
+                    <th>選區總投票數</th>
+                    <th>相較前屆增減</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>91年</td><td>第0142 投開票所</td><td>871 票</td><td>第0143 投開票所</td><td>736 票</td><td>1,607 票</td><td>基期</td></tr>
+                <tr><td>94年</td><td>第0145 投開票所</td><td>1,234 票</td><td>第0146 投開票所</td><td>908 票</td><td>2,142 票</td><td><span style="color:#27ae60;">+535票 (+33.3%)</span></td></tr>
+                <tr><td>98年</td><td>第0148 投開票所</td><td>1,051 票</td><td>第0149 投開票所</td><td>798 票</td><td>1,849 票</td><td><span style="color:#c0392b;">-293票 (-13.7%)</span></td></tr>
+                <tr><td>103年</td><td>第0147 投開票所</td><td>1,199 票</td><td>第0148 投開票所</td><td>873 票</td><td>2,072 票</td><td><span style="color:#27ae60;">+223票 (+12.1%)</span></td></tr>
+                <tr><td>107年</td><td>第0153 投開票所</td><td>1,149 票</td><td>第0154 投開票所</td><td>875 票</td><td>2,024 票</td><td><span style="color:#c0392b;">-48票 (-2.3%)</span></td></tr>
+                <tr><td>111年</td><td>第0168 投開票所</td><td>980 票</td><td>第0169 投開票所</td><td>737 票</td><td>1,717 票</td><td><span style="color:#c0392b;">-307票 (-15.2%)</span></td></tr>
+            </tbody>
+        </table>
+
+        <h2>二、核心候選人實力演變與成長爆發力分析</h2>
+        <p>在候選人消長方面，數據呈現出極具代表性的「霸主崛起、長青基本盤、世代交替」三階段格局：</p>
+        <ul>
+            <li><strong>霸主崛起 (陳志成)：</strong>91年得票192票，隨後三屆連續大幅爆發 (+135票 → +173票 → +239票)，於103 年創下 739 票 (35.67%) 的全區歷史最高紀錄。</li>
+            <li><strong>近期爆發力最高 (林沛祥)：</strong>107年初次參選獲196票，至111年狂增138票達到334票 (+70.4%)，躍居當屆最高票。</li>
+            <li><strong>單屆相對成長率最高 (秦鉦與鄭林清良)：</strong>秦鉦於103年由 85 票暴增至197票 (+131.8%)；鄭林清良亦於103年由 52 票翻倍至119票 (+128.8%)。</li>
+        </ul>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>候選人</th>
+                    <th>比較區間</th>
+                    <th>基期得票數</th>
+                    <th>當屆得票數</th>
+                    <th>絕對增加票數</th>
+                    <th>成長率(%)</th>
+                    <th>成長類型與特徵說明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>陳志成</td><td>98年→103年</td><td>500票</td><td>739票</td><td>+239票</td><td>+47.8%</td><td>全區歷史單屆票數增加最高紀錄</td></tr>
+                <tr><td>秦鉦</td><td>98年→103年</td><td>85票</td><td>197票</td><td>+112票</td><td>+131.8%</td><td>比例成長幅度全區最高</td></tr>
+                <tr><td>鄭林清良</td><td>98年→103年</td><td>52票</td><td>119票</td><td>+67票</td><td>+128.8%</td><td>次高比例成長，票數翻倍</td></tr>
+                <tr><td>俞叁發</td><td>98年→103年</td><td>137票</td><td>248票</td><td>+111票</td><td>+81.0%</td><td>顯著雙增長，奠定前三基石</td></tr>
+                <tr><td>林沛祥</td><td>107年→111年</td><td>196票</td><td>334票</td><td>+138票</td><td>+70.4%</td><td>111年爆發力最強、第一高票</td></tr>
+                <tr><td>蔡適應</td><td>98年→103年</td><td>161票</td><td>267票</td><td>+106票</td><td>+65.8%</td><td>穩定大幅成長，躍升主力</td></tr>
+            </tbody>
+        </table>
+
+        <h2>三、投開票所地緣偏好與得票穩定度分析</h2>
+        
+        <h3>1. 投開票所規模與地緣偏好結構</h3>
+        <p>歷屆數據中，選區兩大開票所維持固定的結構比例：主要開票所占 56%-58%，次要開票所占 42%-44%。在候選人支持度上，呈現強烈地緣偏好：</p>
+        <ul>
+            <li><strong>偏向次要開票所：</strong>沈義傳 (94年次要所 18.39% vs 主要所7.13%，高出11.26%)、陳志成 (107年次要所 31.65% vs 主要所 25.84%)、林沛祥 (111年次要所22.93% vs 主要所16.84%)。</li>
+            <li><strong>偏向主要開票所：</strong>蔡適應 (98年主要所11.03% vs 次要所5.63%)、陳建雄 (91年主要所12.17% vs 次要所4.21%)。</li>
+            <li><strong>全區分布均勻：</strong>俞叁發與秦鉦在兩開票所的得票率差距常年維持在1%-3%以內。</li>
+        </ul>
+
+        <h3>2. 候選人得票率穩定度排名</h3>
+        <p>統計參選 3 屆以上候選人的得票率標準差，林弘和 (0.41%) 與 李振銘 (0.50%) 為全區得票最穩定的候選人；而在 6 屆全勤參選的長青候選人中，莊錦田 (平均6.18%，標準差1.61%) 展現極強的基底防禦力。</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>候選人</th>
+                    <th>參選屆數</th>
+                    <th>參選年份歷史紀錄</th>
+                    <th>得票率區間(%)</th>
+                    <th>平均得票率</th>
+                    <th>標準差(%)</th>
+                    <th>穩定度類型評等</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>林弘和</td><td>3屆</td><td>91, 94, 98</td><td>3.13%~3.89%</td><td>3.42%</td><td>0.41%</td><td>全區最穩定(波動極低)</td></tr>
+                <tr><td>李振銘</td><td>3屆</td><td>91, 94, 98</td><td>4.60%~5.60%</td><td>5.13%</td><td>0.50%</td><td>極高穩定度</td></tr>
+                <tr><td>鄭林清良</td><td>4屆</td><td>91, 94, 98, 103</td><td>2.81%~5.74%</td><td>4.50%</td><td>1.42%</td><td>中長期穩定</td></tr>
+                <tr><td>莊錦田</td><td>6屆</td><td>91, 94, 98, 103, 107, 111</td><td>4.01%~8.64%</td><td>6.18%</td><td>1.61%</td><td>6屆全勤最穩定基本盤</td></tr>
+                <tr><td>洪森永</td><td>5屆</td><td>94, 98, 103, 107, 111</td><td>1.88%~5.94%</td><td>4.26%</td><td>1.70%</td><td>小幅波幅穩定</td></tr>
+                <tr><td>俞叁發</td><td>6屆</td><td>91, 94, 98, 103, 107, 111</td><td>5.91%~11.97%</td><td>8.77%</td><td>2.32%</td><td>高得票率兼具穩定</td></tr>
+                <tr><td>蔡適應</td><td>3屆</td><td>94, 98, 103</td><td>8.03%~12.89%</td><td>9.87%</td><td>2.63%</td><td>穩健小幅成長</td></tr>
+                <tr><td>秦鉦</td><td>6屆</td><td>91, 94, 98, 103, 107, 111</td><td>2.61%~9.51%</td><td>6.06%</td><td>2.74%</td><td>中度波動成長</td></tr>
+            </tbody>
+        </table>
+
+        <h2>四、結論與選情關鍵洞察</h2>
+        <div class="summary-box" style="border-left-color: #f39c12; background: #fdf8e3;">
+            <ol>
+                <li><strong>選區總規模收縮警訊：</strong>111年總投票數(1,717票)創下近年新低，較94年高峰減少近兩成。未來參選者必須更精準抓牢基本盤。</li>
+                <li><strong>世代交替與新陣營崛起：</strong>陳志成退場後，原本高度集中的選票(739票)釋出，促成111年林沛祥(334票)與吳驊珈(227票)等新一代候選人的快速崛起。</li>
+                <li><strong>地緣經營仍為勝敗關鍵：</strong>兩大投開票所各有偏好的候選人，具備跨投開票所均衡吸引力的候選人(如俞叁發、秦鉦)更具備長青抗跌屬性。</li>
+            </ol>
+        </div>
+        <p style="font-size: 12px; color: #999; text-align: right;">資料來源：歷年縣市議員選舉得票統計 CSV 數據集</p>
+    </div>
+</body>
+</html>
