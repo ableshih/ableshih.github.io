@@ -3,6 +3,391 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歷年縣市議員選舉得票統計與選情剖析全報告</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'transformative-teal-dark': '#23494A',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        ::-webkit-scrollbar { display: none; }
+        .table-responsive { overflow-x: auto; }
+        /* 針對長表格設定的捲動視窗高度 */
+        .table-scroll-container { max-height: 600px; overflow-y: auto; }
+    </style>
+</head>
+<body class="antialiased selection:bg-transformative-teal selection:text-cloud-dancer">
+
+    <!-- 頂部導覽列與大標題 -->
+    <header class="pattern-bg text-cloud-dancer py-12 px-6 shadow-md relative z-10 text-center">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-black tracking-widest mb-4 text-shadow-sm">歷年縣市議員選舉得票統計與選情剖析全報告</h1>
+            <p class="text-base md:text-lg font-medium opacity-90 mb-6">涵蓋91年至111年(共6屆)37位全體參選人得票數據、消長差額、開票所地理偏好與選情趨勢</p>
+            <a href="https://ableshih.github.io/" class="inline-flex items-center gap-2 bg-cloud-dancer text-transformative-teal-dark px-6 py-2 rounded-full font-bold hover:bg-amber-haze hover:text-white transition-colors duration-300 shadow-sm">
+                <i class="fa-solid fa-house"></i> 回首頁
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-12">
+        
+        <!-- 一、執行摘要與選情整體脈絡 -->
+        <div class="bg-white rounded-2xl shadow-md p-8 border-t-8 border-transformative-teal">
+            <h3 class="text-2xl font-bold text-transformative-teal mb-4">
+                <i class="fa-solid fa-lightbulb text-amber-haze mr-2"></i>一、執行摘要與選情整體脈絡
+            </h3>
+            <p class="text-gray-700 leading-relaxed text-justify text-lg mb-4">
+                本報告綜合分析91年至111年(民國91、94、98、103、107、111年)共6屆縣市議員選舉之投開票數據。 選區整體經歷了『投票規模擴張至萎縮』、『政治強人獨大至新秀崛起分散』以及『地緣基本盤轉移』的三大階段演變。 全區累計有37位候選人參選，其中3位為6屆全勤參選，展現極高之基層組織韌性。
+            </p>
+        </div>
+
+        <!-- 四大關鍵數據 -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border-b-4 border-amber-haze text-center">
+                <div class="text-2xl md:text-3xl font-black text-transformative-teal mb-2">2,142 票</div>
+                <div class="text-sm text-gray-500 font-bold">歷史最高總投票數 (94年)</div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border-b-4 border-amber-haze text-center">
+                <div class="text-2xl md:text-3xl font-black text-transformative-teal mb-2">739 票</div>
+                <div class="text-sm text-gray-500 font-bold">個人最高得票 (103年 陳志成)</div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border-b-4 border-transformative-teal text-center">
+                <div class="text-2xl md:text-3xl font-black text-amber-haze mb-2">3 位</div>
+                <div class="text-sm text-gray-500 font-bold">6屆全勤參選者 (莊錦田/秦鉦/俞叁發)</div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border-b-4 border-transformative-teal text-center">
+                <div class="text-2xl md:text-3xl font-black text-amber-haze mb-2">±0.41%</div>
+                <div class="text-sm text-gray-500 font-bold">得票率最穩定者 (林弘和)</div>
+            </div>
+        </div>
+
+        <!-- 二、全體37位參選人綜合統計排行榜 -->
+        <section>
+            <h2 class="text-2xl md:text-3xl font-black text-transformative-teal tracking-wider mb-6 border-b-2 border-gray-200 pb-2">
+                二、全體37位參選人綜合統計排行榜
+            </h2>
+            <p class="text-gray-700 leading-relaxed text-justify mb-4 text-lg">
+                下表依據平均得票率由高至低完整列出所有37位參選人之統計數據(包含僅參選1屆之候選人)，完整記錄其參選次數、參選年份、累積總得票、最高/最低單屆得票率及選情特徵。
+            </p>
+            
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 table-responsive table-scroll-container">
+                <table class="w-full text-center whitespace-nowrap">
+                    <thead class="bg-transformative-teal/10 text-transformative-teal-dark sticky top-0 bg-white">
+                        <tr>
+                            <th class="py-4 px-3 font-bold border-b">名次</th>
+                            <th class="py-4 px-3 font-bold border-b">姓名</th>
+                            <th class="py-4 px-3 font-bold border-b">次數</th>
+                            <th class="py-4 px-3 font-bold border-b">參選年份</th>
+                            <th class="py-4 px-3 font-bold border-b">總得票</th>
+                            <th class="py-4 px-3 font-bold border-b text-amber-haze">平均得票率</th>
+                            <th class="py-4 px-3 font-bold border-b">最高</th>
+                            <th class="py-4 px-3 font-bold border-b">最低</th>
+                            <th class="py-4 px-3 font-bold border-b text-left">選情特徵與備註</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-gray-700 text-sm">
+                        <!-- 資料來源[cite: 8, 9, 10] -->
+                        <tr class="hover:bg-gray-50 bg-amber-haze/10 font-bold"><td class="py-2 px-3">1</td><td class="text-transformative-teal-dark">陳志成</td><td>5屆</td><td>91,94,98,103,107</td><td>2,332</td><td class="text-amber-haze">23.66%</td><td>35.67%</td><td>11.95%</td><td class="text-left">歷史最高得票,103年達頂峰</td></tr>
+                        <tr class="hover:bg-gray-50 font-bold"><td class="py-2 px-3">2</td><td class="text-transformative-teal-dark">林沛祥</td><td>2屆</td><td>107, 111</td><td>530</td><td class="text-amber-haze">14.57%</td><td>19.45%</td><td>9.68%</td><td class="text-left">111年當屆第一高票,新世代接班</td></tr>
+                        <tr class="hover:bg-gray-50 font-bold"><td class="py-2 px-3">3</td><td class="text-transformative-teal-dark">吳驊珈</td><td>1屆</td><td>111</td><td>227</td><td class="text-amber-haze">13.22%</td><td>13.22%</td><td>13.22%</td><td class="text-left">111年新秀第一高票</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">4</td><td>沈義傳</td><td>4屆</td><td>91, 94, 98, 103</td><td>970</td><td>12.95%</td><td>17.73%</td><td>9.03%</td><td class="text-left">早期主力,次要開票所極強</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">5</td><td>張銘傑</td><td>4屆</td><td>91, 94, 98, 111</td><td>893</td><td>12.47%</td><td>25.89%</td><td>2.74%</td><td class="text-left">91年當屆榜首,跨屆再參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">6</td><td>蔡適應</td><td>3屆</td><td>94, 98, 103</td><td>600</td><td>9.87%</td><td>12.89%</td><td>8.03%</td><td class="text-left">穩健連續成長,主要開票所強</td></tr>
+                        <tr class="hover:bg-gray-50 bg-transformative-teal/5"><td class="py-2 px-3">7</td><td>俞叁發</td><td>6屆</td><td>91,94,98,103,107,111</td><td>1,009</td><td>8.77%</td><td>11.97%</td><td>5.91%</td><td class="text-left font-bold text-transformative-teal">6屆全勤,穩固中高位基本盤</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">8</td><td>陳建雄</td><td>1屆</td><td>91</td><td>137</td><td>8.53%</td><td>8.53%</td><td>8.53%</td><td class="text-left">91年參選,主要開票所顯著強</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">9</td><td>張之豪</td><td>2屆</td><td>107, 111</td><td>279</td><td>8.04%</td><td>8.15%</td><td>6.87%</td><td class="text-left">得票率高度穩定(±0.64%)</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">10</td><td>陳薇仲</td><td>1屆</td><td>107</td><td>156</td><td>7.71%</td><td>7.71%</td><td>7.71%</td><td class="text-left">107年第三勢力新秀</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">11</td><td>鄭愷玲</td><td>2屆</td><td>107, 111</td><td>275</td><td>7.30%</td><td>7.95%</td><td>6.64%</td><td class="text-left">穩定中位基本盤</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">12</td><td>張春雄</td><td>1屆</td><td>94</td><td>150</td><td>7.00%</td><td>7.00%</td><td>7.00%</td><td class="text-left">94年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-transformative-teal/5"><td class="py-2 px-3">13</td><td>莊錦田</td><td>6屆</td><td>91,94,98,103,107,111</td><td>729</td><td>6.18%</td><td>8.64%</td><td>4.01%</td><td class="text-left font-bold text-transformative-teal">6屆全勤,中位穩定組織盤</td></tr>
+                        <tr class="hover:bg-gray-50 bg-transformative-teal/5"><td class="py-2 px-3">14</td><td>秦鉦</td><td>6屆</td><td>91,94,98,103,107,111</td><td>702</td><td>6.06%</td><td>9.51%</td><td>2.61%</td><td class="text-left font-bold text-transformative-teal">6屆全勤,103年大幅翻倍</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">15</td><td>杜張秀鳳</td><td>2屆</td><td>91,94</td><td>204</td><td>5.74%</td><td>7.84%</td><td>3.64%</td><td class="text-left">早期兩屆參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">16</td><td>連淑慧</td><td>1屆</td><td>107</td><td>106</td><td>5.24%</td><td>5.24%</td><td>5.24%</td><td class="text-left">107年參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">17</td><td>李振銘</td><td>3屆</td><td>91,94,98</td><td>286</td><td>5.13%</td><td>5.60%</td><td>4.60%</td><td class="text-left">早期三屆極度穩定基本盤</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">18</td><td>鄭林清良</td><td>4屆</td><td>91, 94, 98, 103</td><td>353</td><td>4.50%</td><td>5.74%</td><td>2.81%</td><td class="text-left">早期四屆參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">19</td><td>洪森永</td><td>5屆</td><td>94,98,103,107,111</td><td>412</td><td>4.26%</td><td>5.94%</td><td>1.88%</td><td class="text-left">連續5屆參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">20</td><td>杜家輝</td><td>2屆</td><td>94,98</td><td>164</td><td>4.07%</td><td>4.58%</td><td>3.57%</td><td class="text-left">94、98年參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">21</td><td>黃永翔</td><td>1屆</td><td>111</td><td>67</td><td>3.90%</td><td>3.90%</td><td>3.90%</td><td class="text-left">111年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">22</td><td>林弘和</td><td>3屆</td><td>91,94,98</td><td>191</td><td>3.42%</td><td>3.89%</td><td>3.13%</td><td class="text-left font-bold text-amber-haze">全選區得票率最穩定(±0.41%)</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">23</td><td>許超勝</td><td>1屆</td><td>111</td><td>56</td><td>3.26%</td><td>3.26%</td><td>3.26%</td><td class="text-left">111年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">24</td><td>張保吉</td><td>2屆</td><td>94,98</td><td>129</td><td>3.21%</td><td>3.45%</td><td>2.97%</td><td class="text-left">94、98年參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">25</td><td>李偉華</td><td>2屆</td><td>107, 111</td><td>114</td><td>3.13%</td><td>4.19%</td><td>2.08%</td><td class="text-left">107、111年參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">26</td><td>游正義</td><td>1屆</td><td>107</td><td>61</td><td>3.01%</td><td>3.01%</td><td>3.01%</td><td class="text-left">107年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">27</td><td>黃紀棠</td><td>1屆</td><td>111</td><td>51</td><td>2.97%</td><td>2.97%</td><td>2.97%</td><td class="text-left">111年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">28</td><td>劉韋巡</td><td>1屆</td><td>111</td><td>47</td><td>2.74%</td><td>2.74%</td><td>2.74%</td><td class="text-left">111年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">29</td><td>江欣怡</td><td>1屆</td><td>111</td><td>45</td><td>2.62%</td><td>2.62%</td><td>2.62%</td><td class="text-left">111年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">30</td><td>蔡信雄</td><td>1屆</td><td>91</td><td>30</td><td>1.87%</td><td>1.87%</td><td>1.87%</td><td class="text-left">91年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">31</td><td>李玉蘭</td><td>1屆</td><td>107</td><td>34</td><td>1.68%</td><td>1.68%</td><td>1.68%</td><td class="text-left">107年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">32</td><td>羅維新</td><td>1屆</td><td>107</td><td>31</td><td>1.53%</td><td>1.53%</td><td>1.53%</td><td class="text-left">107年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">33</td><td>謝偉仁</td><td>1屆</td><td>94</td><td>21</td><td>0.98%</td><td>0.98%</td><td>0.98%</td><td class="text-left">94年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">34</td><td>顏厚廣</td><td>1屆</td><td>98</td><td>15</td><td>0.81%</td><td>0.81%</td><td>0.81%</td><td class="text-left">98年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">35</td><td>袁孔琪</td><td>1屆</td><td>103</td><td>13</td><td>0.63%</td><td>0.63%</td><td>0.63%</td><td class="text-left">103年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="py-2 px-3">36</td><td>郭光能</td><td>1屆</td><td>98</td><td>6</td><td>0.32%</td><td>0.32%</td><td>0.32%</td><td class="text-left">98年單屆參選</td></tr>
+                        <tr class="hover:bg-gray-50 bg-gray-50"><td class="py-2 px-3">37</td><td>劉清波</td><td>1屆</td><td>94</td><td>6</td><td>0.28%</td><td>0.28%</td><td>0.28%</td><td class="text-left">94年單屆參選</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 三、多次參選者歷屆得票數與票數消長差額 -->
+        <section>
+            <h2 class="text-2xl md:text-3xl font-black text-transformative-teal tracking-wider mb-6 border-b-2 border-gray-200 pb-2">
+                三、多次參選者歷屆得票數與票數消長差額
+            </h2>
+            <p class="text-gray-700 leading-relaxed text-justify mb-4 text-lg">
+                本節針對參選2屆以上之18位候選人，詳細追蹤其跨屆得票數消長。『票數差額』計算該屆得票與上一次參選得票數之增減差額(+/-票及增減百分比)。
+            </p>
+            
+            <div class="space-y-4">
+                <!-- Data from[cite: 10, 11] -->
+                <div class="bg-white p-4 rounded-xl border-l-4 border-transformative-teal shadow-sm"><strong class="text-lg text-transformative-teal-dark">俞叁發(6屆)：</strong> <span class="text-gray-600">91年:95票(5.91%) → 94年:155票(7.24%,+60票/+63.2%) → 98年:137票(7.41%,-18票/-11.6%) → 103年:248票(11.97%,+111票/+81.0%) → 107年:189票(9.34%,-59票/-23.8%) → 111年:185票(10.77%,-4票/-2.1%)</span></div>
+                
+                <div class="bg-white p-4 rounded-xl border-l-4 border-transformative-teal shadow-sm"><strong class="text-lg text-transformative-teal-dark">莊錦田(6屆)：</strong> <span class="text-gray-600">91年:80票(4.98%) → 94年:86票(4.01%,+6票/+7.5%) → 98年:124票(6.71%,+38票/+44.2%) → 103年:179票(8.64%,+55票/+44.4%) → 107年:139票(6.87%,-40票/-22.3%) → 111年:101票(5.88%,-38票/-27.3%)</span></div>
+                
+                <div class="bg-white p-4 rounded-xl border-l-4 border-transformative-teal shadow-sm"><strong class="text-lg text-transformative-teal-dark">秦鉦(6屆)：</strong> <span class="text-gray-600">91年:42票(2.61%) → 94年:83票(3.87%,+41票/+97.6%) → 98年:85票(4.60%,+2票/+2.4%) → 103年:197票(9.51%,+112票/+131.8%) → 107年:158票(7.81%,-39票/-19.8%) → 111年:137票(7.98%,-21票/-13.3%)</span></div>
+                
+                <div class="bg-white p-4 rounded-xl border-l-4 border-transformative-teal shadow-sm"><strong class="text-lg text-amber-haze">陳志成(5屆)：</strong> <span class="text-gray-600">91年:192票(11.95%) → 94年:327票(15.27%,+135票/+70.3%) → 98年:500票(27.04%,+173票/+52.9%) → 103年:739票(35.67%,+239票/+47.8%) → 107年:574票(28.36%,-165票/-22.3%)</span></div>
+
+                <div class="bg-white p-4 rounded-xl border-l-4 border-gray-300 shadow-sm"><strong class="text-lg text-gray-700">洪森永(5屆)：</strong> <span class="text-gray-600">94年:67票(3.13%) → 98年:90票(4.87%,+23票/+34.3%) → 103年:123票(5.94%,+33票/+36.7%) → 107年:38票(1.88%,-85票/-69.1%) → 111年:94票(5.47%,+56票/+147.4%)</span></div>
+
+                <div class="bg-white p-4 rounded-xl border-l-4 border-gray-300 shadow-sm"><strong class="text-lg text-gray-700">沈義傳(4屆)：</strong> <span class="text-gray-600">91年:285票(17.73%) → 94年:255票(11.90%,-30票/-10.5%) → 98年:243票(13.14%,-12票/-4.7%) → 103年:187票(9.03%,-56票/-23.0%)</span></div>
+
+                <div class="bg-white p-4 rounded-xl border-l-4 border-gray-300 shadow-sm"><strong class="text-lg text-gray-700">張銘傑(4屆)：</strong> <span class="text-gray-600">91年:416票(25.89%) → 94年:272票(12.70%,-144票/-34.6%) → 98年:158票(8.55%,-114票/-41.9%) → 111年:47票(2.74%,-111票/-70.3%)</span></div>
+
+                <div class="bg-white p-4 rounded-xl border-l-4 border-gray-300 shadow-sm"><strong class="text-lg text-gray-700">鄭林清良(4屆)：</strong> <span class="text-gray-600">91年:62票(3.86%) → 94年:120票(5.60%,+58票/+93.5%) → 98年:(2.81%,-68票/-56.7%) → 103年:119票(5.74%,+67票/+128.8%)</span></div>
+
+                <div class="bg-white p-4 rounded-xl border-l-4 border-gray-300 shadow-sm"><strong class="text-lg text-gray-700">蔡適應(3屆)：</strong> <span class="text-gray-600">94年:172票(8.03%) → 98年:161票(8.71%,-11票/-6.4%) → 103年:267票(12.89%,+106票/+65.8%)</span></div>
+
+                <div class="bg-white p-4 rounded-xl border-l-4 border-amber-haze shadow-sm"><strong class="text-lg text-transformative-teal-dark">林沛祥(2屆)：</strong> <span class="text-gray-600">107年:196票(9.68%) → 111年:334票(19.45%,+138票/+70.4%)</span></div>
+            </div>
+            <p class="text-sm text-gray-400 mt-2 text-right">* 完整消長紀錄請參照原始報告。</p>
+        </section>
+
+        <!-- 四、歷屆各屆全參選人完整開票結果明細 -->
+        <section>
+            <h2 class="text-2xl md:text-3xl font-black text-transformative-teal tracking-wider mb-6 border-b-2 border-gray-200 pb-2">
+                四、歷屆各屆全參選人完整開票結果明細
+            </h2>
+            <p class="text-gray-700 leading-relaxed text-justify mb-4 text-lg">
+                本節按年份順序，完整呈現91年、94年、98年、103年、107年及111年共6屆選舉中，每一位參選人的號次、得票數、得票率及當屆名次。
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- 111年 -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+                    <h3 class="bg-transformative-teal text-white py-3 px-4 font-bold text-center">111年縣市議員選舉 (總有效票:1,717票)</h3>
+                    <div class="table-responsive table-scroll-container">
+                        <table class="w-full text-center whitespace-nowrap text-sm">
+                            <thead class="bg-gray-100 text-gray-700 sticky top-0"><tr><th class="py-2 px-2">名次</th><th class="py-2 px-2">姓名</th><th class="py-2 px-2">得票數</th><th class="py-2 px-2">得票率</th></tr></thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr><td>1</td><td class="font-bold text-amber-haze">林沛祥</td><td>334</td><td>19.45%</td></tr>
+                                <tr><td>2</td><td class="font-bold text-amber-haze">吳驊珈</td><td>227</td><td>13.22%</td></tr>
+                                <tr><td>3</td><td class="font-bold">俞叁發</td><td>185</td><td>10.77%</td></tr>
+                                <tr><td>4</td><td>張之豪</td><td>140</td><td>8.15%</td></tr>
+                                <tr><td>5</td><td>秦鉦</td><td>137</td><td>7.98%</td></tr>
+                                <tr><td>6</td><td>鄭愷玲</td><td>114</td><td>6.64%</td></tr>
+                                <tr><td>7</td><td>莊錦田</td><td>101</td><td>5.88%</td></tr>
+                                <tr><td>8</td><td>洪森永</td><td>94</td><td>5.47%</td></tr>
+                                <tr><td>9</td><td>李偉華</td><td>72</td><td>4.19%</td></tr>
+                                <tr><td>10</td><td>黃永翔</td><td>67</td><td>3.90%</td></tr>
+                                <tr><td>11</td><td>許超勝</td><td>56</td><td>3.26%</td></tr>
+                                <tr><td>12</td><td>黃紀業</td><td>51</td><td>2.97%</td></tr>
+                                <tr><td>13</td><td>劉韋巡</td><td>47</td><td>2.74%</td></tr>
+                                <tr><td>14</td><td>張銘傑</td><td>47</td><td>2.74%</td></tr>
+                                <tr><td>15</td><td>江欣怡</td><td>45</td><td>2.62%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 107年 -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+                    <h3 class="bg-transformative-teal text-white py-3 px-4 font-bold text-center">107年縣市議員選舉 (總有效票:2,024票)</h3>
+                    <div class="table-responsive table-scroll-container">
+                        <table class="w-full text-center whitespace-nowrap text-sm">
+                            <thead class="bg-gray-100 text-gray-700 sticky top-0"><tr><th class="py-2 px-2">名次</th><th class="py-2 px-2">姓名</th><th class="py-2 px-2">得票數</th><th class="py-2 px-2">得票率</th></tr></thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr><td>1</td><td class="font-bold text-amber-haze">陳志成</td><td>574</td><td>28.36%</td></tr>
+                                <tr><td>2</td><td class="font-bold text-amber-haze">林沛祥</td><td>196</td><td>9.68%</td></tr>
+                                <tr><td>3</td><td class="font-bold">俞叁發</td><td>189</td><td>9.34%</td></tr>
+                                <tr><td>4</td><td>鄭愷玲</td><td>161</td><td>7.95%</td></tr>
+                                <tr><td>5</td><td>秦鉦</td><td>158</td><td>7.81%</td></tr>
+                                <tr><td>6</td><td>陳薇仲</td><td>156</td><td>7.71%</td></tr>
+                                <tr><td>7</td><td>莊錦田</td><td>139</td><td>6.87%</td></tr>
+                                <tr><td>8</td><td>張之豪</td><td>139</td><td>6.87%</td></tr>
+                                <tr><td>9</td><td>連淑慧</td><td>106</td><td>5.24%</td></tr>
+                                <tr><td>10</td><td>游正義</td><td>61</td><td>3.01%</td></tr>
+                                <tr><td>11</td><td>李偉華</td><td>42</td><td>2.08%</td></tr>
+                                <tr><td>12</td><td>洪森永</td><td>38</td><td>1.88%</td></tr>
+                                <tr><td>13</td><td>李玉蘭</td><td>34</td><td>1.68%</td></tr>
+                                <tr><td>14</td><td>羅維新</td><td>31</td><td>1.53%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 103年 -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+                    <h3 class="bg-transformative-teal-dark text-white py-3 px-4 font-bold text-center">103年縣市議員選舉 (總有效票:2,072票)</h3>
+                    <div class="table-responsive table-scroll-container">
+                        <table class="w-full text-center whitespace-nowrap text-sm">
+                            <thead class="bg-gray-100 text-gray-700 sticky top-0"><tr><th class="py-2 px-2">名次</th><th class="py-2 px-2">姓名</th><th class="py-2 px-2">得票數</th><th class="py-2 px-2">得票率</th></tr></thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr><td>1</td><td class="font-bold text-amber-haze">陳志成</td><td>739</td><td>35.67%</td></tr>
+                                <tr><td>2</td><td class="font-bold">蔡適應</td><td>267</td><td>12.89%</td></tr>
+                                <tr><td>3</td><td class="font-bold">俞叁發</td><td>248</td><td>11.97%</td></tr>
+                                <tr><td>4</td><td>秦鉦</td><td>197</td><td>9.51%</td></tr>
+                                <tr><td>5</td><td>沈義傳</td><td>187</td><td>9.03%</td></tr>
+                                <tr><td>6</td><td>莊錦田</td><td>179</td><td>8.64%</td></tr>
+                                <tr><td>7</td><td>洪森永</td><td>123</td><td>5.94%</td></tr>
+                                <tr><td>8</td><td>鄭林清良</td><td>119</td><td>5.74%</td></tr>
+                                <tr><td>9</td><td>袁孔琪</td><td>13</td><td>0.63%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 98年 -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+                    <h3 class="bg-transformative-teal-dark text-white py-3 px-4 font-bold text-center">98年縣市議員選舉 (總有效票:1,849票)</h3>
+                    <div class="table-responsive table-scroll-container">
+                        <table class="w-full text-center whitespace-nowrap text-sm">
+                            <thead class="bg-gray-100 text-gray-700 sticky top-0"><tr><th class="py-2 px-2">名次</th><th class="py-2 px-2">姓名</th><th class="py-2 px-2">得票數</th><th class="py-2 px-2">得票率</th></tr></thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr><td>1</td><td class="font-bold text-amber-haze">陳志成</td><td>500</td><td>27.04%</td></tr>
+                                <tr><td>2</td><td class="font-bold">沈義傳</td><td>243</td><td>13.14%</td></tr>
+                                <tr><td>3</td><td class="font-bold">蔡適應</td><td>161</td><td>8.71%</td></tr>
+                                <tr><td>4</td><td>張銘傑</td><td>158</td><td>8.55%</td></tr>
+                                <tr><td>5</td><td>俞叁發</td><td>137</td><td>7.41%</td></tr>
+                                <tr><td>6</td><td>莊錦田</td><td>124</td><td>6.71%</td></tr>
+                                <tr><td>7</td><td>洪森永</td><td>90</td><td>4.87%</td></tr>
+                                <tr><td>8</td><td>秦鉦</td><td>85</td><td>4.60%</td></tr>
+                                <tr><td>9</td><td>李振銘</td><td>85</td><td>4.60%</td></tr>
+                                <tr><td>10</td><td>林弘和</td><td>72</td><td>3.89%</td></tr>
+                                <tr><td>11</td><td>杜家輝</td><td>66</td><td>3.57%</td></tr>
+                                <tr><td>12</td><td>張保吉</td><td>55</td><td>2.97%</td></tr>
+                                <tr><td>13</td><td>鄭林清良</td><td>52</td><td>2.81%</td></tr>
+                                <tr><td>14</td><td>顏厚廣</td><td>15</td><td>0.81%</td></tr>
+                                <tr><td>15</td><td>郭光能</td><td>6</td><td>0.32%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 94年 -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+                    <h3 class="bg-gray-500 text-white py-3 px-4 font-bold text-center">94年縣市議員選舉 (總有效票:2,142票)</h3>
+                    <div class="table-responsive table-scroll-container">
+                        <table class="w-full text-center whitespace-nowrap text-sm">
+                            <thead class="bg-gray-100 text-gray-700 sticky top-0"><tr><th class="py-2 px-2">名次</th><th class="py-2 px-2">姓名</th><th class="py-2 px-2">得票數</th><th class="py-2 px-2">得票率</th></tr></thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr><td>1</td><td class="font-bold text-amber-haze">陳志成</td><td>327</td><td>15.27%</td></tr>
+                                <tr><td>2</td><td class="font-bold">張銘傑</td><td>272</td><td>12.70%</td></tr>
+                                <tr><td>3</td><td class="font-bold">沈義傳</td><td>255</td><td>11.90%</td></tr>
+                                <tr><td>4</td><td>蔡適應</td><td>172</td><td>8.03%</td></tr>
+                                <tr><td>5</td><td>俞叁發</td><td>155</td><td>7.24%</td></tr>
+                                <tr><td>6</td><td>張春雄</td><td>150</td><td>7.00%</td></tr>
+                                <tr><td>7</td><td>鄭林清良</td><td>120</td><td>5.60%</td></tr>
+                                <tr><td>8</td><td>李振銘</td><td>111</td><td>5.18%</td></tr>
+                                <tr><td>9</td><td>杜家輝</td><td>98</td><td>4.58%</td></tr>
+                                <tr><td>10</td><td>莊錦田</td><td>86</td><td>4.01%</td></tr>
+                                <tr><td>11</td><td>秦鉦</td><td>83</td><td>3.87%</td></tr>
+                                <tr><td>12</td><td>杜張秀鳳</td><td>78</td><td>3.64%</td></tr>
+                                <tr><td>13</td><td>張保吉</td><td>74</td><td>3.45%</td></tr>
+                                <tr><td>14</td><td>洪森永</td><td>67</td><td>3.13%</td></tr>
+                                <tr><td>15</td><td>林弘和</td><td>67</td><td>3.13%</td></tr>
+                                <tr><td>16</td><td>謝偉仁</td><td>21</td><td>0.98%</td></tr>
+                                <tr><td>17</td><td>劉清波</td><td>6</td><td>0.28%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 91年 -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+                    <h3 class="bg-gray-500 text-white py-3 px-4 font-bold text-center">91年縣市議員選舉 (總有效票:1,607票)</h3>
+                    <div class="table-responsive table-scroll-container">
+                        <table class="w-full text-center whitespace-nowrap text-sm">
+                            <thead class="bg-gray-100 text-gray-700 sticky top-0"><tr><th class="py-2 px-2">名次</th><th class="py-2 px-2">姓名</th><th class="py-2 px-2">得票數</th><th class="py-2 px-2">得票率</th></tr></thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr><td>1</td><td class="font-bold text-amber-haze">張銘傑</td><td>416</td><td>25.89%</td></tr>
+                                <tr><td>2</td><td class="font-bold">沈義傳</td><td>285</td><td>17.73%</td></tr>
+                                <tr><td>3</td><td class="font-bold">陳志成</td><td>192</td><td>11.95%</td></tr>
+                                <tr><td>4</td><td>陳建雄</td><td>137</td><td>8.53%</td></tr>
+                                <tr><td>5</td><td>杜張秀鳳</td><td>126</td><td>7.84%</td></tr>
+                                <tr><td>6</td><td>俞叁發</td><td>95</td><td>5.91%</td></tr>
+                                <tr><td>7</td><td>李振銘</td><td>90</td><td>5.60%</td></tr>
+                                <tr><td>8</td><td>莊錦田</td><td>80</td><td>4.98%</td></tr>
+                                <tr><td>9</td><td>鄭林清良</td><td>62</td><td>3.86%</td></tr>
+                                <tr><td>10</td><td>林弘和</td><td>52</td><td>3.24%</td></tr>
+                                <tr><td>11</td><td>秦鉦</td><td>42</td><td>2.61%</td></tr>
+                                <tr><td>12</td><td>蔡信雄</td><td>30</td><td>1.87%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 五、深層選情結構與政治趨勢剖析 -->
+        <section>
+            <h2 class="text-2xl md:text-3xl font-black text-transformative-teal tracking-wider mb-6 border-b-2 border-gray-200 pb-2">
+                五、深層選情結構與政治趨勢剖析
+            </h2>
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold text-transformative-teal-dark mb-3"><i class="fa-solid fa-chart-line mr-2 text-amber-haze"></i>1. 赫芬達爾-赫希曼指數(HHI)與競爭分散度：</h3>
+                    <p class="text-gray-700 text-lg leading-relaxed">
+                        94年參選人數高達17人，HHI指數僅0.0884(有效候選人數ENP 11.32)，呈現極度分散競爭； 103年參選人數縮減至9人，HHI飆升至0.1837 (ENP 5.44)，陳志成單人獨攬35.67%，形成高度集中強人效應； 111年參選人數回升至15人，HHI降至0.1033 (ENP 9.68)，票源重新向新秀與中堅候選人擴散。
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold text-transformative-teal-dark mb-3"><i class="fa-solid fa-layer-group mr-2 text-amber-haze"></i>2. 選票金字塔三層結構：</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 text-lg ml
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>歷年縣市議員選舉得票統計與選情視覺化分析報告</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
