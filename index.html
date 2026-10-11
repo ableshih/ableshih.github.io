@@ -183,7 +183,7 @@
 	
 	<!-- 動態大字跑馬燈區塊 -->
     <section id="dynamic-marquee" class="py-4 border-y-4 border-white/20 shadow-inner transition-colors duration-500 marquee-wrapper relative z-10">
-        <div id="marquee-text" class="marquee-content text-3xl md:text-5xl font-black tracking-widest drop-shadow-sm cursor-default"></div>
+        <div id="marquee-text" class="marquee-content text-2xl md:text-4xl font-black tracking-widest drop-shadow-sm cursor-default"></div>
     </section>
 
 	<!-- 友軍小字慢速跑馬燈區塊 -->
@@ -802,7 +802,8 @@
 				"里長不分藍白綠，因為都是我里民！", "全面大翻盤，未來換我擔！"
             ];
 
-            // 設定您的主題色彩組合 (背景色, 文字色)
+
+			// 設定您的主題色彩組合 (背景色, 文字色)
             const colorThemes = [
                 { bg: "bg-amber-haze", text: "text-transformative-teal-dark" },
                 { bg: "bg-transformative-teal", text: "text-cloud-dancer" },
@@ -813,6 +814,9 @@
             const container = document.getElementById("flash-slogan-container");
             const textElement = document.getElementById("flash-slogan-text");
 
+            // 👑 新增：建立一個抽籤筒，用來確保不重複
+            let availableSlogans = [];
+
             function changeSlogan() {
                 // 1. 先 Fade Out (淡出、並往下沉一點點)
                 container.classList.remove("opacity-100", "translate-y-0");
@@ -820,20 +824,25 @@
 
                 // 2. 等待 800 毫秒(淡出動畫結束)後，抽換文字與顏色
                 setTimeout(() => {
-                    // 亂數抽取口號
-                    const randomSlogan = slogans[Math.floor(Math.random() * slogans.length)];
-                    // 亂數抽取顏色組合
+                    // 👑 檢查抽籤筒是否空了？如果是，就把 90 句重新裝進去並「洗牌」
+                    if (availableSlogans.length === 0) {
+                        availableSlogans = [...slogans].sort(() => Math.random() - 0.5);
+                    }
+                    
+                    // 👑 從抽籤筒抽出最後一句 (保證這一輪絕對不會重複)
+                    const randomSlogan = availableSlogans.pop();
+                    
+                    // 顏色依然維持隨機
                     const randomColor = colorThemes[Math.floor(Math.random() * colorThemes.length)];
 
                     // 清除舊顏色，套用新顏色
                     container.className = `mt-6 inline-block px-4 py-2 rounded-lg shadow-lg border-2 border-white/20 transition-all duration-1000 ease-in-out opacity-0 translate-y-2 ${randomColor.bg}`;
                     textElement.className = `text-2xl md:text-3xl font-black tracking-widest drop-shadow-md ${randomColor.text}`;
                     
-                    // 寫入新口號
+                    // 寫入新口號 (已移除圖示)
                     textElement.innerText = randomSlogan;
 
                     // 3. 觸發重繪後 Fade In (淡入、浮現上來)
-                    // 使用 setTimeout 0 確保 DOM 更新後才執行 CSS 變化
                     setTimeout(() => {
                         container.classList.remove("opacity-0", "translate-y-2");
                         container.classList.add("opacity-100", "translate-y-0");
@@ -841,6 +850,8 @@
 
                 }, 800); // 配合 CSS transition-duration-1000 的時間
             }
+            
+			
 
             // 網頁載入時立刻執行第一次
             changeSlogan();
