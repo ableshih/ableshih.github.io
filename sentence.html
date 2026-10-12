@@ -2,17 +2,18 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1080, height=1920, initial-scale=1.0">
-    <title>嘉仁里競選看板 - 全螢幕文字版</title>
+    <!-- 【關鍵修改 1】讓畫面自動適應設備寬度，而不是寫死 1080x1920 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>嘉仁里競選看板 - 自動適應版</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            width: 1080px;
-            height: 1920px;
+            /* 【關鍵修改 2】改用 vw 和 vh，代表 100% 的螢幕寬度與高度 */
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
-            /* 建議使用深色背景搭配亮色文字，戶外抗光性最佳 */
-            background-color: #0b2242; /* 深藍色，可依您的競選主色替換 */
+            background-color: #0b2242;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -20,21 +21,26 @@
         }
 
         #slogan-container {
-            width: 90%; /* 左右保留一點安全邊距，避免字體太貼邊 */
+            width: 90vw;
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
         }
 
         #slogan-text {
-            /* 超大字體，遠距觀看專用 */
-            font-size: 180px; 
-            font-weight: 900; /* 最粗體 */
-            color: #ffcc00; /* 亮黃色，在深底上最醒目 */
-            line-height: 1.4;
-            /* 加上文字陰影，增加立體感與對比度 */
-            text-shadow: 8px 8px 15px rgba(0, 0, 0, 0.7);
+            /* 【關鍵修改 3】改用 vmin 當作字體單位。
+               16vmin 代表「螢幕較短那一邊的 16%」。
+               在直立 LG 螢幕上大約是 170px，在 iPhone 上則會自動按比例縮小，橫直都適用！ */
+            font-size: 16vmin; 
+            font-weight: 900;
+            color: #ffcc00;
+            line-height: 1.5;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.7);
             
-            /* 淡入淡出動畫時間加長一點，讓長輩視覺轉換更舒適 */
             transition: opacity 0.8s ease-in-out;
+            word-break: keep-all; /* 防止中文字被不自然切斷 */
         }
     </style>
 </head>
@@ -45,19 +51,12 @@
     </div>
 
     <script>
-        // 您的 100 句標語陣列
         const slogans = [
-            "用心傾聽\n服務嘉仁", // 使用 \n 可以強迫換行
+            "用心傾聽\n服務嘉仁",
             "路平 燈亮 水溝通",
             "守護社區安全\n提升居住品質",
             "活力嘉仁\n與您攜手向前",
-            // ... 貼上其餘標語 ...
             "懇請支持\n為您做事的人",
-			"終結無奈，換人做看麥！", // 使用 \n 可以強迫換行
-			"麥擱忍耐，用票來表態！",
-			"拒絕再四年，改變趁現在！",
-			"四年又四年，不能再受騙！",
-			"毋願擱無奈，自己救未來！",
 			"四年過四年，嘟蘭變無奈！",
 			"年青等政策，中年在嘟蘭，老人欲按怎！",
 			"青年要未來，中年免嘟蘭，長輩有靠山！",
@@ -197,26 +196,16 @@
         const sloganElement = document.getElementById('slogan-text');
 
         function updateSlogan() {
-            // 先淡出
             sloganElement.style.opacity = 0;
             
             setTimeout(() => {
-                // 更換文字，將 \n 轉換為網頁換行標籤 <br>
                 sloganElement.innerHTML = slogans[currentIndex].replace(/\n/g, '<br>');
-                
-                // 淡入
                 sloganElement.style.opacity = 1;
-                
-                // 跳至下一句
                 currentIndex = (currentIndex + 1) % slogans.length;
-            }, 800); // 等待 0.8 秒完全淡出後再換字
+            }, 800); 
         }
 
-        // 初始執行一次
         updateSlogan();
-        
-        // 輪播速度設定：目前設為 7000 毫秒 (7秒) 切換一次
-        // 如果標語字數較多，建議調長至 8-10 秒，讓路過民眾有時間讀完
         setInterval(updateSlogan, 7000);
     </script>
 </body>
