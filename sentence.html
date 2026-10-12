@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>嘉仁里競選看板 - 極大字體版</title>
+    <title>嘉仁里競選看板 - 極大字體亂數洗牌版</title>
     <style>
         body {
             margin: 0;
@@ -183,14 +183,32 @@
 			"全面大翻盤\n未來換我擔！"
         ];
 
+        let shuffledSlogans = [];
         let currentIndex = 0;
         const sloganElement = document.getElementById('slogan-text');
 
+        // 【關鍵加入】洗牌函數 (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            let newArray = array.slice(); // 複製陣列避免動到原資料
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
         function updateSlogan() {
+            // 如果這是第一次執行，或是已經把這輪洗好的牌播完了，就重新洗牌
+            if (currentIndex >= shuffledSlogans.length) {
+                shuffledSlogans = shuffleArray(originalSlogans);
+                currentIndex = 0; // 重置索引
+            }
+
             sloganElement.style.opacity = 0;
             
             setTimeout(() => {
-                const currentText = slogans[currentIndex];
+                // 從洗好的陣列中取出一句
+                const currentText = shuffledSlogans[currentIndex];
                 sloganElement.innerHTML = currentText.replace(/\n/g, '<br>');
 
                 const charCount = currentText.replace(/\n/g, '').length;
@@ -209,7 +227,9 @@
 
                 sloganElement.style.fontSize = calculatedFontSize + 'vmin';
                 sloganElement.style.opacity = 1;
-                currentIndex = (currentIndex + 1) % slogans.length;
+                
+                // 推進到下一句
+                currentIndex++;
             }, 800); 
         }
 
