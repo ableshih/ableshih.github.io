@@ -47,6 +47,12 @@
     <script>
         // 您的 100 句標語陣列
         const slogans = [
+            "用心傾聽\n服務嘉仁", // 使用 \n 可以強迫換行
+            "路平 燈亮 水溝通",
+            "守護社區安全\n提升居住品質",
+            "活力嘉仁\n與您攜手向前",
+            // ... 貼上其餘標語 ...
+            "懇請支持\n為您做事的人",
 			"終結無奈，換人做看麥！", // 使用 \n 可以強迫換行
 			"麥擱忍耐，用票來表態！",
 			"拒絕再四年，改變趁現在！",
@@ -191,7 +197,7 @@
         const sloganElement = document.getElementById('slogan-text');
 
         function updateSlogan() {
-            // 先將透明度設為 0 (淡出)
+            // 先淡出
             sloganElement.style.opacity = 0;
             
             setTimeout(() => {
