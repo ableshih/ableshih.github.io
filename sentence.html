@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>嘉仁里競選看板 - 極大字體亂數洗牌版</title>
+    <title>嘉仁里競選看板 - 極大字體橫直自適應版</title>
     <style>
         body {
             margin: 0;
@@ -213,16 +213,22 @@
 
                 const charCount = currentText.replace(/\n/g, '').length;
                 
-                // 【關鍵修改】：字體比例放大將近一倍
+                // 【關鍵修改】：動態偵測螢幕是「橫式」還是「直式」
+                const isLandscape = window.innerWidth > window.innerHeight;
                 let calculatedFontSize;
-                if (charCount <= 8) {
-                    calculatedFontSize = 40; // 極短句，極大字 (單行約2-3字)
-                } else if (charCount <= 14) {
-                    calculatedFontSize = 30; // 短句，特大字
-                } else if (charCount <= 20) {
-                    calculatedFontSize = 24; // 中等長度，大字
+
+                if (isLandscape) {
+                    // 橫式螢幕專用比例：將 vmin 數值大幅縮小，確保七個字以上的長句不會超出兩側邊界
+                    if (charCount <= 8) calculatedFontSize = 22; 
+                    else if (charCount <= 14) calculatedFontSize = 18; 
+                    else if (charCount <= 20) calculatedFontSize = 14; 
+                    else calculatedFontSize = 11; 
                 } else {
-                    calculatedFontSize = 18; // 長句，維持足夠辨識度
+                    // 直式螢幕專用比例：維持原本為 32 吋直立看板設計的極大字體
+                    if (charCount <= 8) calculatedFontSize = 40; 
+                    else if (charCount <= 14) calculatedFontSize = 30; 
+                    else if (charCount <= 20) calculatedFontSize = 24; 
+                    else calculatedFontSize = 18; 
                 }
 
                 sloganElement.style.fontSize = calculatedFontSize + 'vmin';
@@ -235,6 +241,29 @@
 
         updateSlogan();
         setInterval(updateSlogan, 7000);
+        
+        // 加入螢幕翻轉時的即時重算機制，讓您在手機上測試翻轉時能立即看到變化
+        window.addEventListener('resize', () => {
+            // 由於設定了過渡動畫，直接重新呼叫 updateSlogan 會導致換字，因此這裡僅重新計算當前文字大小
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const currentText = shuffledSlogans[currentIndex === 0 ? shuffledSlogans.length - 1 : currentIndex - 1];
+            if (!currentText) return;
+            const charCount = currentText.replace(/\n/g, '').length;
+            
+            let calculatedFontSize;
+            if (isLandscape) {
+                if (charCount <= 8) calculatedFontSize = 22; 
+                else if (charCount <= 14) calculatedFontSize = 18; 
+                else if (charCount <= 20) calculatedFontSize = 14; 
+                else calculatedFontSize = 11; 
+            } else {
+                if (charCount <= 8) calculatedFontSize = 40; 
+                else if (charCount <= 14) calculatedFontSize = 30; 
+                else if (charCount <= 20) calculatedFontSize = 24; 
+                else calculatedFontSize = 18; 
+            }
+            sloganElement.style.fontSize = calculatedFontSize + 'vmin';
+        });
     </script>
 </body>
 </html>
