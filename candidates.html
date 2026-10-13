@@ -115,9 +115,9 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- 新增：市議員參選人資訊區塊 -->
+        <!-- 市議員參選人資訊區塊 -->
         <!-- ========================================== -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-8 border-transformative-teal">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-8 border-transformative-teal mb-16">
             <div class="p-6 md:p-10">
                 
                 <!-- 標題與選舉摘要 -->
@@ -291,7 +291,71 @@
                             <div class="flex justify-between items-center bg-[#f8f5f0] p-2 px-3 rounded shadow-sm"><span class="font-bold text-gray-800 text-sm">高李茂俊</span><span class="text-xs font-bold bg-gray-200 text-gray-700 px-2 py-1 rounded">無黨籍</span></div>
                         </div>
                     </div>
-                    
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 新增：歷屆安樂區市議員選舉結果查詢 -->
+        <!-- ========================================== -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-8 border-transformative-teal mt-16">
+            <div class="p-6 md:p-8">
+                
+                <div class="mb-8 text-center md:text-left border-b border-gray-200 pb-6">
+                    <div class="inline-block bg-transformative-teal text-cloud-dancer font-bold px-3 py-1 rounded-full text-sm mb-4 tracking-widest shadow-sm">
+                        HISTORICAL DATA
+                    </div>
+                    <h3 class="text-3xl font-black text-transformative-teal-dark mb-2">98-111年 基隆安樂區市議員選舉結果</h3>
+                    <p class="text-gray-600 font-medium">歷屆參選人得票數與政黨分佈查詢</p>
+                </div>
+
+                <!-- 篩選選單區 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 bg-[#f8f5f0] p-6 rounded-xl border border-gray-200">
+                    <div>
+                        <label class="block text-sm font-bold text-transformative-teal-dark mb-2">選舉年份</label>
+                        <select id="councilorYearFilter" class="w-full border border-gray-300 rounded-lg p-3 text-gray-700 focus:ring-2 focus:ring-transformative-teal focus:border-transformative-teal outline-none transition-shadow">
+                            <option value="all">顯示所有年份</option>
+                            <option value="111">111年</option>
+                            <option value="107">107年</option>
+                            <option value="103">103年</option>
+                            <option value="98">98年</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-transformative-teal-dark mb-2">政黨</label>
+                        <select id="councilorPartyFilter" class="w-full border border-gray-300 rounded-lg p-3 text-gray-700 focus:ring-2 focus:ring-transformative-teal focus:border-transformative-teal outline-none transition-shadow">
+                            <option value="all">顯示所有政黨</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-transformative-teal-dark mb-2">得票數排序</label>
+                        <select id="councilorSort" class="w-full border border-gray-300 rounded-lg p-3 text-gray-700 focus:ring-2 focus:ring-transformative-teal focus:border-transformative-teal outline-none transition-shadow">
+                            <option value="desc">得票數：由高至低</option>
+                            <option value="asc">得票數：由低至高</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 資料列表區 -->
+                <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+                    <table class="w-full text-left border-collapse min-w-[600px]">
+                        <thead class="bg-transformative-teal-dark text-cloud-dancer">
+                            <tr>
+                                <th class="p-4 border-b border-transformative-teal font-bold w-1/6">年份</th>
+                                <th class="p-4 border-b border-transformative-teal font-bold w-1/6">號次</th>
+                                <th class="p-4 border-b border-transformative-teal font-bold w-1/4">姓名</th>
+                                <th class="p-4 border-b border-transformative-teal font-bold w-1/4">政黨</th>
+                                <th class="p-4 border-b border-transformative-teal font-bold w-1/6 text-right">得票數</th>
+                            </tr>
+                        </thead>
+                        <tbody id="councilorTable" class="text-gray-800 divide-y divide-gray-200 bg-white">
+                            <!-- JavaScript 將動態填入資料 -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-4 text-right text-transformative-teal-dark text-sm font-bold">
+                    查詢結果：<span id="councilorDataCount" class="text-amber-haze text-lg mx-1">0</span> 筆
                 </div>
             </div>
         </div>
@@ -303,8 +367,9 @@
         <p class="text-sm opacity-80">2026 施圳溪競選團隊・扎根嘉仁 永續躍進</p>
     </footer>
 
-    <!-- 資料處理腳本 (維持原樣) -->
+    <!-- 資料處理腳本 -->
     <script>
+        // ---------------- 里長參選人資料 (維持原樣) ----------------
         const rawData = `基隆市中正區 正砂里 曾思容 無
 基隆市中正區 正砂里 陳枋菱 無
 基隆市中正區 港通里 林政宏 無
@@ -712,6 +777,132 @@
 
         initSelects();
         renderTable();
+
+        // ---------------- 新增：歷屆安樂區市議員資料處理 ----------------
+        const councilorRawData = [
+            { year: 111, name: '林沛祥', party: '中國國民黨', votes: 6527, no: 5 },
+            { year: 111, name: '鄭愷玲', party: '中國國民黨', votes: 5993, no: 11 },
+            { year: 111, name: '俞叁發', party: '中國國民黨', votes: 3895, no: 6 },
+            { year: 111, name: '吳驊珈', party: '民主進步黨', votes: 3369, no: 8 },
+            { year: 111, name: '張之豪', party: '民主進步黨', votes: 3257, no: 9 },
+            { year: 111, name: '洪森永', party: '民主進步黨', votes: 3090, no: 1 },
+            { year: 111, name: '秦鉦', party: '中國國民黨', votes: 2983, no: 3 },
+            { year: 111, name: '莊錦田', party: '親民黨', votes: 2178, no: 4 },
+            { year: 111, name: '李偉華', party: '無黨籍', votes: 1815, no: 10 },
+            { year: 111, name: '許超勝', party: '無黨籍', votes: 1605, no: 7 },
+            { year: 111, name: '江欣怡', party: '時代力量', votes: 1391, no: 2 },
+            { year: 111, name: '黃永翔', party: '無黨籍', votes: 1315, no: 15 },
+            { year: 111, name: '劉韋巡', party: '台灣民眾黨', votes: 1039, no: 14 },
+            { year: 111, name: '黃紀棠', party: '無黨籍', votes: 967, no: 12 },
+            { year: 111, name: '張銘傑', party: '無黨籍', votes: 462, no: 13 },
+            
+            { year: 107, name: '林沛祥', party: '中國國民黨', votes: 6174, no: 2 },
+            { year: 107, name: '鄭愷玲', party: '中國國民黨', votes: 6159, no: 6 },
+            { year: 107, name: '俞叁發', party: '中國國民黨', votes: 4151, no: 7 },
+            { year: 107, name: '陳薇仲', party: '時代力量', votes: 3732, no: 14 },
+            { year: 107, name: '秦鉦', party: '中國國民黨', votes: 3482, no: 5 },
+            { year: 107, name: '張之豪', party: '民主進步黨', votes: 2904, no: 10 },
+            { year: 107, name: '莊錦田', party: '親民黨', votes: 2794, no: 8 },
+            { year: 107, name: '陳志成', party: '民主進步黨', votes: 2742, no: 11 },
+            { year: 107, name: '洪森永', party: '民主進步黨', votes: 2426, no: 9 },
+            { year: 107, name: '連淑慧', party: '民主進步黨', votes: 2096, no: 13 },
+            { year: 107, name: '李偉華', party: '無黨籍', votes: 1456, no: 3 },
+            { year: 107, name: '游正義', party: '無黨籍', votes: 1057, no: 12 },
+            { year: 107, name: '李玉蘭', party: '無黨籍', votes: 898, no: 1 },
+            { year: 107, name: '羅維新', party: '無黨籍', votes: 630, no: 4 },
+            
+            { year: 103, name: '蔡適應', party: '民主進步黨', votes: 7010, no: 8 },
+            { year: 103, name: '秦鉦', party: '中國國民黨', votes: 5434, no: 3 },
+            { year: 103, name: '俞叁發', party: '中國國民黨', votes: 5383, no: 9 },
+            { year: 103, name: '鄭林清良', party: '中國國民黨', votes: 4647, no: 7 },
+            { year: 103, name: '洪森永', party: '民主進步黨', votes: 4621, no: 4 },
+            { year: 103, name: '陳志成', party: '民主進步黨', votes: 4472, no: 1 },
+            { year: 103, name: '莊錦田', party: '親民黨', votes: 4040, no: 5 },
+            { year: 103, name: '沈義傳', party: '中國國民黨', votes: 3824, no: 6 },
+            { year: 103, name: '袁孔琪', party: '人民民主陣線', votes: 350, no: 2 },
+            
+            { year: 98, name: '蔡適應', party: '民主進步黨', votes: 3767, no: 9 },
+            { year: 98, name: '沈義傳', party: '中國國民黨', votes: 3687, no: 10 },
+            { year: 98, name: '陳志成', party: '民主進步黨', votes: 3529, no: 11 },
+            { year: 98, name: '莊錦田', party: '親民黨', votes: 3099, no: 7 },
+            { year: 98, name: '洪森永', party: '民主進步黨', votes: 3081, no: 3 },
+            { year: 98, name: '秦鉦', party: '中國國民黨', votes: 2929, no: 2 },
+            { year: 98, name: '俞叁發', party: '中國國民黨', votes: 2690, no: 4 },
+            { year: 98, name: '鄭林清良', party: '中國國民黨', votes: 2683, no: 12 },
+            { year: 98, name: '林弘和', party: '中國國民黨', votes: 2603, no: 8 },
+            { year: 98, name: '張保吉', party: '中國國民黨', votes: 1538, no: 1 },
+            { year: 98, name: '李振銘', party: '中國國民黨', votes: 1193, no: 13 },
+            { year: 98, name: '杜家輝', party: '無黨籍', votes: 1185, no: 14 },
+            { year: 98, name: '張銘傑', party: '中國國民黨', votes: 1116, no: 15 },
+            { year: 98, name: '顏厚廣', party: '無黨籍', votes: 748, no: 6 },
+            { year: 98, name: '郭光能', party: '無黨籍', votes: 317, no: 5 }
+        ];
+
+        const councilorParties = [...new Set(councilorRawData.map(c => c.party))];
+        const cYearSelect = document.getElementById('councilorYearFilter');
+        const cPartySelect = document.getElementById('councilorPartyFilter');
+        const cSortSelect = document.getElementById('councilorSort');
+        const cTable = document.getElementById('councilorTable');
+        const cCount = document.getElementById('councilorDataCount');
+
+        // 載入政黨選項
+        councilorParties.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p;
+            option.textContent = p;
+            cPartySelect.appendChild(option);
+        });
+
+        const renderCouncilorTable = () => {
+            const sYear = cYearSelect.value;
+            const sParty = cPartySelect.value;
+            const sSort = cSortSelect.value;
+
+            // 進行篩選
+            let filtered = councilorRawData.filter(c => {
+                return (sYear === 'all' || c.year == sYear) &&
+                       (sParty === 'all' || c.party === sParty);
+            });
+
+            // 進行得票數排序
+            if (sSort === 'desc') {
+                filtered.sort((a, b) => b.votes - a.votes); // 由高至低
+            } else {
+                filtered.sort((a, b) => a.votes - b.votes); // 由低至高
+            }
+
+            // 清空並重新渲染表格
+            cTable.innerHTML = '';
+            filtered.forEach(c => {
+                let partyClass = 'bg-gray-100 text-gray-700';
+                if (c.party === '中國國民黨') partyClass = 'bg-blue-100 text-blue-800';
+                else if (c.party === '民主進步黨') partyClass = 'bg-green-100 text-green-800';
+                else if (c.party === '時代力量') partyClass = 'bg-yellow-100 text-yellow-800';
+                else if (c.party === '親民黨') partyClass = 'bg-orange-100 text-orange-800';
+                else if (c.party === '台灣民眾黨') partyClass = 'bg-cyan-100 text-cyan-800';
+                else if (c.party === '人民民主陣線') partyClass = 'bg-red-100 text-red-800';
+                
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-[#f8f5f0] transition-colors';
+                tr.innerHTML = `
+                    <td class="p-4 border-b border-gray-100 font-bold text-gray-600">${c.year}年</td>
+                    <td class="p-4 border-b border-gray-100 text-transformative-teal font-bold">${c.no} 號</td>
+                    <td class="p-4 border-b border-gray-100 text-lg font-bold">${c.name}</td>
+                    <td class="p-4 border-b border-gray-100"><span class="px-2 py-1 rounded text-sm font-bold ${partyClass}">${c.party}</span></td>
+                    <td class="p-4 border-b border-gray-100 font-black text-amber-haze text-right text-lg">${c.votes.toLocaleString()}</td>
+                `;
+                cTable.appendChild(tr);
+            });
+            cCount.textContent = filtered.length;
+        };
+
+        // 綁定事件監聽器
+        cYearSelect.addEventListener('change', renderCouncilorTable);
+        cPartySelect.addEventListener('change', renderCouncilorTable);
+        cSortSelect.addEventListener('change', renderCouncilorTable);
+
+        // 初始化渲染
+        renderCouncilorTable();
     </script>
 </body>
 </html>
