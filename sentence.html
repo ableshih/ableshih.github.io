@@ -49,6 +49,13 @@
     </div>
 
     <script>
+        // ==========================================
+        // 【控制開關】
+        // true  = 啟用亂數洗牌 (正式上線用)
+        // false = 關閉亂數，按照陣列順序播放 (測試排版用)
+        // ==========================================
+        let useRandomShuffle = false; 
+
         const originalSlogans = [
             "用心傾聽\n服務嘉仁",
             "路平 燈亮\n水溝通",
@@ -185,7 +192,7 @@
 			"全面大翻盤\n未來換我擔！"
         ];
 
-        let shuffledSlogans = [];
+        let playList = [];
         let currentIndex = 0;
         const container = document.getElementById('slogan-container');
         const sloganElement = document.getElementById('slogan-text');
@@ -200,7 +207,16 @@
             return newArray;
         }
 
-        // 【終極解決方案】: 二元搜尋法找出絕對不會破版的「最大極限字體」
+        // 根據開關決定播放列表
+        function preparePlayList() {
+            if (useRandomShuffle) {
+                playList = shuffleArray(originalSlogans);
+            } else {
+                playList = originalSlogans.slice(); // 複製原陣列，保持順序
+            }
+            currentIndex = 0;
+        }
+
         function autoFitFontSize() {
             let min = 10;   // 最小字體
             let max = 1000; // 最大字體
@@ -226,17 +242,16 @@
         }
 
         function updateSlogan(isFirst = false) {
-            if (currentIndex >= shuffledSlogans.length) {
-                shuffledSlogans = shuffleArray(originalSlogans);
-                currentIndex = 0; // 重置索引
+            // 播放完一輪後重新準備播放列表
+            if (currentIndex >= playList.length) {
+                preparePlayList();
             }
 
             sloganElement.style.opacity = 0;
             
             // 如果是第一次載入，不需要等待淡出動畫；其餘則等待 0.8 秒淡出
             setTimeout(() => {
-                // 從洗好的陣列中取出一句
-                const currentText = shuffledSlogans[currentIndex];
+                const currentText = playList[currentIndex];
                 sloganElement.innerHTML = currentText.replace(/\n/g, '<br>');
 
                 // 【關鍵】：文字換上去的瞬間，自動計算最大字體
@@ -254,7 +269,8 @@
             autoFitFontSize();
         });
 
-        // 初始啟動
+        // 初始準備與啟動
+        preparePlayList();
         updateSlogan(true);
         setInterval(() => updateSlogan(false), 7000);
     </script>
