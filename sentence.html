@@ -19,8 +19,9 @@
         }
 
         #slogan-container {
-            width: 95vw; /* 稍微擴大可用寬度，讓大字更好排版 */
-            height: 95vh;
+            /* 預留 10% 的安全邊距，確保大字不會完全貼死螢幕邊緣 */
+            width: 90vw; 
+            height: 90vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -30,9 +31,10 @@
         #slogan-text {
             font-weight: 900;
             color: #ffcc00;
-            line-height: 1.3; /* 字變大後，行距稍微縮緊會更好看 */
+            line-height: 1.25; 
             text-shadow: 6px 6px 15px rgba(0, 0, 0, 0.8);
-            transition: opacity 0.8s ease-in-out, font-size 0.5s ease;
+            /* 拿掉 font-size 的過渡效果，讓系統可以瞬間精準計算尺寸 */
+            transition: opacity 0.8s ease-in-out; 
             
             /* 【關鍵修改】讓大字體遇到螢幕邊緣時，中文字能自動換行往下排 */
             word-break: break-all; 
@@ -67,29 +69,29 @@
 			"說到做到\n用票表態！",
 			"改變要實現\n請您站出來！",
 			"選票投給妳\n凡事推給乾兒子",
-			"自己的里民親自顧\n麥哥找乾兒來應付",
+			"自己的里民親自顧\n麥哥找乾兒來應付！",
 			"大官擺架子\n服務丟給乾兒子",
 			"小事都不做\n只拿乾兒當藉口",
 			"里內小事不去作\n乾兒子會去作嗎?",
 			"無薪不是藉口\n代誌還是要做",
-			"做里長免推拖\n沒薪水也得照起工",
-			"既然當選要承擔\n無薪不是擋箭牌",
-			"不領薪水免邀功\n里內代誌不能空",
-			"里長本來就沒薪水\n莫在講妳無愛薪水",
+			"做里長免推拖\n沒薪水也得照起工！",
+			"既然當選要承擔\n無薪不是擋箭牌！",
+			"不領薪水免邀功\n里內代誌不能空！",
+			"里長本來就沒薪水\n莫在講妳無愛薪水！",
 			"沒薪水是常識\n不做事是事實",
 			"無薪本是規定\n免拿來做人情",
-			"里長本來無薪水\n莫擱假仙騙選票",
-			"免拿無薪來邀功\n里民要的是做工",
-			"無薪不是擋箭牌\n做袂來就換我來",
+			"里長本來無薪水\n莫擱假仙騙選票！",
+			"免拿無薪來邀功\n里民要的是做工！",
+			"無薪不是擋箭牌\n做袂來就換我來！",
 			"錢花去哪裡？\n明細請踹共！",
 			"里民是頭家\n帳目全公開！",
 			"不敢公開明細\n到底在怕啥？",
 			"拒絕里政黑箱\n明細攤在陽光下",
-			"帳目要透明\n對里民有交代",
+			"帳目要透明\n對里民有交代！",
 			"長輩挺新人\n新人顧老人！",
 			"牽成少年家\n作伙拚未來！",
 			"新人有衝勁\n顧老尚有力！",
-			"長輩來疼惜\n乎少年來打拚",
+			"長輩來疼惜\n乎少年來打拚！",
 			"交棒新世代\n長輩有依賴！",
 			"還我里民客廳\n開門開課大家用",
 			"會堂不是私有產\n打開大門還里民",
@@ -107,8 +109,8 @@
 			"嗆聲不能解題\n溝通才能雙贏！",
 			"少一點口水嗆聲\n多一點理性溝通",
 			"拒絕惡意嗆聲\n作伙好好溝通",
-			"要了解要溝通\n嗆聲沒啥小路用",
-			"有事作伙參詳\n麥動不動叫環保",
+			"要了解要溝通\n嗆聲沒啥小路用！",
+			"有事作伙參詳\n麥動不動叫環保！",
 			"里政需要人情味\n麥叫環保太鴨霸",
 			"有事好好講\n別拿開單當日常",
 			"傾聽取代檢舉\n溝通解決問題！",
@@ -185,6 +187,7 @@
 
         let shuffledSlogans = [];
         let currentIndex = 0;
+        const container = document.getElementById('slogan-container');
         const sloganElement = document.getElementById('slogan-text');
 
         // 【關鍵加入】洗牌函數 (Fisher-Yates Shuffle)
@@ -197,8 +200,32 @@
             return newArray;
         }
 
-        function updateSlogan() {
-            // 如果這是第一次執行，或是已經把這輪洗好的牌播完了，就重新洗牌
+        // 【終極解決方案】: 二元搜尋法找出絕對不會破版的「最大極限字體」
+        function autoFitFontSize() {
+            let min = 10;   // 最小字體
+            let max = 1000; // 最大字體
+            let best = min;
+
+            // 在背景極速測試不同字體大小
+            while (min <= max) {
+                let mid = Math.floor((min + max) / 2);
+                sloganElement.style.fontSize = mid + 'px';
+
+                // 檢查這個字體大小有沒有讓文字超出容器的寬度或高度
+                if (sloganElement.offsetWidth <= container.clientWidth && 
+                    sloganElement.offsetHeight <= container.clientHeight) {
+                    best = mid;    // 沒超出，記錄起來
+                    min = mid + 1; // 繼續嘗試放更大
+                } else {
+                    max = mid - 1; // 超出了，縮小一點
+                }
+            }
+
+            // 抓到極限尺寸後，稍微縮小 5%，確保畫面邊緣有一點呼吸空間
+            sloganElement.style.fontSize = Math.floor(best * 0.95) + 'px';
+        }
+
+        function updateSlogan(isFirst = false) {
             if (currentIndex >= shuffledSlogans.length) {
                 shuffledSlogans = shuffleArray(originalSlogans);
                 currentIndex = 0; // 重置索引
@@ -206,64 +233,30 @@
 
             sloganElement.style.opacity = 0;
             
+            // 如果是第一次載入，不需要等待淡出動畫；其餘則等待 0.8 秒淡出
             setTimeout(() => {
                 // 從洗好的陣列中取出一句
                 const currentText = shuffledSlogans[currentIndex];
                 sloganElement.innerHTML = currentText.replace(/\n/g, '<br>');
 
-                const charCount = currentText.replace(/\n/g, '').length;
+                // 【關鍵】：文字換上去的瞬間，自動計算最大字體
+                autoFitFontSize();
                 
-                // 【關鍵修改】：動態偵測螢幕是「橫式」還是「直式」
-                const isLandscape = window.innerWidth > window.innerHeight;
-                let calculatedFontSize;
-
-                if (isLandscape) {
-                    // 橫式螢幕專用比例：將 vmin 數值大幅縮小，確保七個字以上的長句不會超出兩側邊界
-                    if (charCount <= 8) calculatedFontSize = 22; 
-                    else if (charCount <= 14) calculatedFontSize = 18; 
-                    else if (charCount <= 20) calculatedFontSize = 14; 
-                    else calculatedFontSize = 11; 
-                } else {
-                    // 直式螢幕專用比例：維持原本為 32 吋直立看板設計的極大字體
-                    if (charCount <= 8) calculatedFontSize = 40; 
-                    else if (charCount <= 14) calculatedFontSize = 30; 
-                    else if (charCount <= 20) calculatedFontSize = 24; 
-                    else calculatedFontSize = 18; 
-                }
-
-                sloganElement.style.fontSize = calculatedFontSize + 'vmin';
                 sloganElement.style.opacity = 1;
                 
                 // 推進到下一句
                 currentIndex++;
-            }, 800); 
+            }, isFirst ? 0 : 800); 
         }
 
-        updateSlogan();
-        setInterval(updateSlogan, 7000);
-        
-        // 加入螢幕翻轉時的即時重算機制，讓您在手機上測試翻轉時能立即看到變化
+        // 當你在手機上把直式翻轉成橫式時，會觸發這個事件重新計算字體大小
         window.addEventListener('resize', () => {
-            // 由於設定了過渡動畫，直接重新呼叫 updateSlogan 會導致換字，因此這裡僅重新計算當前文字大小
-            const isLandscape = window.innerWidth > window.innerHeight;
-            const currentText = shuffledSlogans[currentIndex === 0 ? shuffledSlogans.length - 1 : currentIndex - 1];
-            if (!currentText) return;
-            const charCount = currentText.replace(/\n/g, '').length;
-            
-            let calculatedFontSize;
-            if (isLandscape) {
-                if (charCount <= 8) calculatedFontSize = 22; 
-                else if (charCount <= 14) calculatedFontSize = 18; 
-                else if (charCount <= 20) calculatedFontSize = 14; 
-                else calculatedFontSize = 11; 
-            } else {
-                if (charCount <= 8) calculatedFontSize = 40; 
-                else if (charCount <= 14) calculatedFontSize = 30; 
-                else if (charCount <= 20) calculatedFontSize = 24; 
-                else calculatedFontSize = 18; 
-            }
-            sloganElement.style.fontSize = calculatedFontSize + 'vmin';
+            autoFitFontSize();
         });
+
+        // 初始啟動
+        updateSlogan(true);
+        setInterval(() => updateSlogan(false), 7000);
     </script>
 </body>
 </html>
