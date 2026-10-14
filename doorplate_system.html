@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘉仁里 門牌查訪系統 - 施圳溪</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- CSV 解析庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- 座標轉換庫 (處理 EPSG:3826 轉 Google Maps 的 WGS84) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'] },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'transformative-teal-dark': '#23494A',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    }
+                }
+            }
+        }
+        
+        // 定義台灣 TWD97 (EPSG:3826) 座標系統
+        proj4.defs("EPSG:3826","+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+    </script>
+
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        /* 隱藏滾動條 */
+        ::-webkit-scrollbar { display: none; }
+        
+        /* 列印專用樣式 */
+        @media print {
+            body { background-color: #fff; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            
+            /* 列印時表格樣式最佳化 */
+            @page { size: A4 landscape; margin: 10mm; }
+            .print-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+            .print-table th, .print-table td { border: 1px solid #4a5568 !important; padding: 6px !important; color: #000; }
+            .print-table th { background-color: #f7fafc !important; -webkit-print-color-adjust: exact; }
+            
+            /* 紙本勾選框樣式 */
+            .check-box-group { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; font-weight: bold; }
+            .check-box-item { display: inline-flex; items-center; gap: 2px; }
+            .check-box-item::before { content: "▢"; font-size: 16px; position: relative; top: 1px; }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- 頂部導覽列 (列印時隱藏) -->
+    <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-20 sticky top-0 no-print">
+        <div>
+            <h1 class="text-xl md:text-2xl font-black tracking-widest"><i class="fa-solid fa-map-location-dot mr-2 text-amber-haze"></i>門牌查訪系統</h1>
+        </div>
+        <div class="flex gap-3">
+            <a href="index.html" class="bg-white text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-gray-100 transition-colors flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-house"></i> 回首頁
+            </a>
+            <button onclick="window.print()" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-print"></i> 列印紙本查訪單
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-6">
+        
+        <!-- 自動載入狀態提示區 (列印時隱藏) -->
+        <div id="loadingStatus" class="bg-white rounded-2xl shadow-md border-t-8 border-amber-haze mb-6 p-6 no-print">
+            <h2 id="loadingTitle" class="text-xl font-bold text-transformative-teal-dark mb-2">
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i>系統初始化中
+            </h2>
+            <p id="loadingDesc" class="text-gray-600 font-medium">正在自動載入門牌資料 (嘉仁里門牌.csv)...</p>
+            <p class="text-sm text-red-500 font-bold mt-4 hidden bg-red-50 p-4 rounded-lg border border-red-200" id="errorMsg"></p>
+        </div>
+
+        <!-- 控制面板 (列印時隱藏) -->
+        <div id="controlPanel" class="bg-white rounded-2xl shadow-md border-t-8 border-transformative-teal mb-6 p-6 no-print hidden">
+            <div class="flex justify-between items-center mb-4 border-b pb-4">
+                <h2 class="text-xl font-bold text-transformative-teal-dark"><i class="fa-solid fa-filter mr-2"></i>門牌篩選與過濾</h2>
+                <div class="bg-[#f8f5f0] border border-amber-haze/30 px-4 py-2 rounded-lg shadow-sm flex items-center gap-3">
+                    <div class="text-gray-600 font-bold text-sm">篩選後總筆數</div>
+                    <div class="text-2xl font-black text-amber-haze" id="totalCount">0</div>
+                </div>
+            </div>
+
+            <!-- 下拉選單區 -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">鄰</label>
+                    <select id="filterLin" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-transformative-teal outline-none"><option value="all">全部</option></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">街、路段</label>
