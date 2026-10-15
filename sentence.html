@@ -28,15 +28,14 @@
             text-align: center;
         }
 
-        #slogan-text {
-            font-weight: 900;
+		#slogan-text {
+            /* 將 900 改為 bold (一般粗體) 或 normal (標準體) */
+            font-weight: bold; 
             color: #ffcc00;
             line-height: 1.25; 
-            text-shadow: 6px 6px 15px rgba(0, 0, 0, 0.8);
-            /* 拿掉 font-size 的過渡效果，讓系統可以瞬間精準計算尺寸 */
+            /* 稍微調小陰影的擴散範圍，避免黑色陰影讓字邊緣看起來糊糊的 */
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8); 
             transition: opacity 0.8s ease-in-out; 
-            
-            /* 【關鍵修改】讓大字體遇到螢幕邊緣時，中文字能自動換行往下排 */
             word-break: break-all; 
             overflow-wrap: break-word;
         }
