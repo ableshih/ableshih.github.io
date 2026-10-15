@@ -36,7 +36,22 @@
         // 定義台灣 TWD97 (EPSG:3826) 座標系統
         proj4.defs("EPSG:3826","+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
     </script>
-
+        /* 浮動回到最上按鈕樣式 */
+        #backToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+            transform: translateY(20px);
+        }
+        #backToTopBtn.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
     <style>
         body { background-color: #F0EEE9; color: #1F2937; }
         .pattern-bg {
@@ -351,6 +366,34 @@
 
             tableBody.innerHTML = htmlString;
         }
+    </script>
+
+    <!-- 👑 新增：回到最上按鈕 (列印時自動隱藏) -->
+    <a href="#" id="backToTopBtn" class="no-print bg-amber-haze hover:bg-transformative-teal text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl cursor-pointer transition-all duration-300 transform" title="回到頂部">
+        <i class="fa-solid fa-chevron-up text-xl"></i>
+    </a>
+
+    <!-- 控制浮動按鈕顯示與隱藏的腳本 -->
+    <script>
+        const backToTopBtn = document.getElementById("backToTopBtn");
+        
+        // 當使用者向下捲動超過 300px 時顯示按鈕
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add("show");
+            } else {
+                backToTopBtn.classList.remove("show");
+            }
+        });
+
+        // 點擊平滑回到最上方
+        backToTopBtn.addEventListener("click", (e) => {
+            e.preventDefault(); // 防止預設的錨點跳躍
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth" // 平滑滾動特效
+            });
+        });
     </script>
 </body>
 </html>
