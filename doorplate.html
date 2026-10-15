@@ -36,7 +36,18 @@
         // 定義台灣 TWD97 (EPSG:3826) 座標系統
         proj4.defs("EPSG:3826","+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
     </script>
-        /* 浮動回到最上按鈕樣式 */
+
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        /* 隱藏滾動條 */
+        ::-webkit-scrollbar { display: none; }
+        
+        /* 👑 浮動回到最上按鈕樣式 */
         #backToTopBtn {
             position: fixed;
             bottom: 30px;
@@ -52,16 +63,7 @@
             visibility: visible;
             transform: translateY(0);
         }
-    <style>
-        body { background-color: #F0EEE9; color: #1F2937; }
-        .pattern-bg {
-            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
-            background-size: 20px 20px;
-            background-color: #306263;
-        }
-        /* 隱藏滾動條 */
-        ::-webkit-scrollbar { display: none; }
-        
+
         /* 列印專用樣式 */
         @media print {
             body { background-color: #fff; }
@@ -86,33 +88,33 @@
     <!-- 頂部導覽列 (列印時隱藏) -->
     <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-20 sticky top-0 no-print">
         <div>
-            <h1 class="text-xl md:text-2xl font-black tracking-widest"><i class="fa-solid fa-map-location-dot mr-2 text-amber-haze"></i>門牌查訪系統</h1>
+            <h1 class="text-xl md:text-2xl font-black tracking-widest"><i class="fa-solid fa-map-location-dot mr-2 text-amber-haze"></i>門牌查訪與列印系統</h1>
         </div>
-        <button onclick="window.print()" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
-            <i class="fa-solid fa-print"></i> 列印紙本查訪單
-        </button>
+        <div class="flex gap-3">
+            <a href="index.html" class="bg-white text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-gray-100 transition-colors flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-house"></i> 回首頁
+            </a>
+            <button onclick="window.print()" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-print"></i> 列印紙本查訪單
+            </button>
+        </div>
     </header>
 
     <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-6">
         
-        <!-- 檔案載入區 (列印時隱藏) -->
-        <div class="bg-white rounded-2xl shadow-md border-t-8 border-amber-haze mb-6 p-6 no-print">
-            <h2 class="text-xl font-bold text-transformative-teal-dark mb-4"><i class="fa-solid fa-file-csv mr-2"></i>1. 載入嘉仁里門牌資料</h2>
-            <div class="flex flex-col md:flex-row gap-4 items-center">
-                <input type="file" id="csvFileInput" accept=".csv" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-transformative-teal/10 file:text-transformative-teal hover:file:bg-transformative-teal/20 cursor-pointer">
-                
-                <select id="encodingSelect" class="border border-gray-300 rounded-lg p-2 text-sm text-gray-600 focus:outline-none">
-                    <option value="big5">編碼: Big5 (政府CSV預設)</option>
-                    <option value="utf-8">編碼: UTF-8</option>
-                </select>
-            </div>
-            <p class="text-sm text-red-500 font-bold mt-2 hidden" id="errorMsg"></p>
+        <!-- 自動載入狀態提示區 (列印時隱藏) -->
+        <div id="loadingStatus" class="bg-white rounded-2xl shadow-md border-t-8 border-amber-haze mb-6 p-6 no-print">
+            <h2 id="loadingTitle" class="text-xl font-bold text-transformative-teal-dark mb-2">
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i>系統初始化中
+            </h2>
+            <p id="loadingDesc" class="text-gray-600 font-medium">正在自動載入門牌資料 (嘉仁里門牌.csv)...</p>
+            <p class="text-sm text-red-500 font-bold mt-4 hidden bg-red-50 p-4 rounded-lg border border-red-200" id="errorMsg"></p>
         </div>
 
         <!-- 控制面板 (列印時隱藏) -->
         <div id="controlPanel" class="bg-white rounded-2xl shadow-md border-t-8 border-transformative-teal mb-6 p-6 no-print hidden">
             <div class="flex justify-between items-center mb-4 border-b pb-4">
-                <h2 class="text-xl font-bold text-transformative-teal-dark"><i class="fa-solid fa-filter mr-2"></i>2. 篩選與過濾</h2>
+                <h2 class="text-xl font-bold text-transformative-teal-dark"><i class="fa-solid fa-filter mr-2"></i>門牌篩選與過濾</h2>
                 <div class="bg-[#f8f5f0] border border-amber-haze/30 px-4 py-2 rounded-lg shadow-sm flex items-center gap-3">
                     <div class="text-gray-600 font-bold text-sm">篩選後總筆數</div>
                     <div class="text-2xl font-black text-amber-haze" id="totalCount">0</div>
@@ -171,7 +173,7 @@
                     </thead>
                     <tbody id="dataTable" class="text-gray-800 divide-y divide-gray-200">
                         <!-- JS 動態生成 -->
-                        <tr><td colspan="8" class="text-center py-12 text-gray-400 font-bold">請先於上方載入「嘉仁里門牌.csv」</td></tr>
+                        <tr id="emptyRow"><td colspan="8" class="text-center py-12 text-gray-400 font-bold">等待資料載入中...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -179,43 +181,67 @@
 
     </main>
 
+    <!-- 👑 新增：回到最上按鈕 (列印時自動隱藏) -->
+    <a href="#" id="backToTopBtn" class="no-print bg-amber-haze hover:bg-transformative-teal text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl cursor-pointer transition-all duration-300 transform" title="回到頂部">
+        <i class="fa-solid fa-chevron-up text-xl"></i>
+    </a>
+
     <script>
         let allData = [];
         const filters = { lin: 'all', street: 'all', lane: 'all', number: 'all', floor: 'all' };
 
-        // 綁定檔案上傳事件
-        document.getElementById('csvFileInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const buffer = event.target.result;
-                const encoding = document.getElementById('encodingSelect').value;
-                const decoder = new TextDecoder(encoding); 
-                const text = decoder.decode(buffer);
-                
-                Papa.parse(text, {
-                    header: true,
-                    skipEmptyLines: true,
-                    complete: function(results) {
-                        processData(results.data);
-                    },
-                    error: function() {
-                        document.getElementById('errorMsg').textContent = "檔案解析失敗，請確認檔案格式或切換編碼。";
-                        document.getElementById('errorMsg').classList.remove('hidden');
-                    }
-                });
-            };
-            reader.readAsArrayBuffer(file);
+        // 網頁載入完成後，自動去抓取 CSV 檔案
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchCSVData();
         });
+
+        function fetchCSVData() {
+            // 指定 CSV 檔案名稱
+            const csvFilePath = '嘉仁里門牌.csv';
+            
+            fetch(csvFilePath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`無法讀取檔案 (HTTP 狀態碼: ${response.status})`);
+                    }
+                    return response.arrayBuffer();
+                })
+                .then(buffer => {
+                    // 政府門牌資料集通常採用 Big5 編碼
+                    const decoder = new TextDecoder('big5'); 
+                    const text = decoder.decode(buffer);
+                    
+                    Papa.parse(text, {
+                        header: true,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            document.getElementById('loadingStatus').classList.add('hidden');
+                            processData(results.data);
+                        },
+                        error: function(err) {
+                            showError("檔案解析失敗：" + err.message);
+                        }
+                    });
+                })
+                .catch(err => {
+                    showError("無法自動載入檔案。請確認「嘉仁里門牌.csv」是否與網頁放在同一個資料夾內，並使用伺服器環境 (如 GitHub Pages 或 Live Server) 開啟網頁。詳細錯誤：" + err.message);
+                });
+        }
+
+        function showError(msg) {
+            const errorEl = document.getElementById('errorMsg');
+            errorEl.textContent = msg;
+            errorEl.classList.remove('hidden');
+            
+            document.getElementById('loadingTitle').innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2"></i>載入失敗';
+            document.getElementById('loadingTitle').classList.replace('text-transformative-teal-dark', 'text-red-600');
+            document.getElementById('loadingDesc').textContent = '自動讀取 CSV 檔案時發生錯誤。';
+            document.getElementById('emptyRow').innerHTML = '<td colspan="8" class="text-center py-12 text-red-500 font-bold">資料載入失敗，無法顯示門牌。</td>';
+        }
 
         // 處理並清洗資料
         function processData(rawData) {
-            document.getElementById('errorMsg').classList.add('hidden');
-            
             allData = rawData.map(row => {
-                // 從「號」中拆解出號碼與樓層 (例如 "30號二樓" -> number="30號", floor="二樓")
                 let rawNum = row['號'] || '';
                 let parsedNum = rawNum;
                 let floor = '一樓'; 
@@ -236,7 +262,6 @@
                 let lat = null, lng = null;
                 
                 if (!isNaN(x) && !isNaN(y)) {
-                    // 使用 Proj4js 轉換
                     let coords = proj4("EPSG:3826", "EPSG:4326", [x, y]);
                     lng = coords[0];
                     lat = coords[1];
@@ -251,10 +276,9 @@
                     x: x,
                     y: y,
                     lat: lat,
-                    lng: lng,
-                    originalNumber: rawNum
+                    lng: lng
                 };
-            }).filter(item => item.street !== ''); // 過濾空行
+            }).filter(item => item.street !== '');
 
             document.getElementById('controlPanel').classList.remove('hidden');
             
@@ -366,15 +390,8 @@
 
             tableBody.innerHTML = htmlString;
         }
-    </script>
 
-    <!-- 👑 新增：回到最上按鈕 (列印時自動隱藏) -->
-    <a href="#" id="backToTopBtn" class="no-print bg-amber-haze hover:bg-transformative-teal text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl cursor-pointer transition-all duration-300 transform" title="回到頂部">
-        <i class="fa-solid fa-chevron-up text-xl"></i>
-    </a>
-
-    <!-- 控制浮動按鈕顯示與隱藏的腳本 -->
-    <script>
+        // 👑 回到頂部按鈕邏輯
         const backToTopBtn = document.getElementById("backToTopBtn");
         
         // 當使用者向下捲動超過 300px 時顯示按鈕
