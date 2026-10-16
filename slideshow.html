@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全螢幕相片輪播系統</title>
+    <style>
+        /* 基礎重置與全螢幕設定 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000; /* 背景全黑，避免圖片切換時閃爍白光 */
+            overflow: hidden;
+            font-family: "Noto Sans TC", sans-serif;
+        }
+
+        /* 輪播圖片容器 */
+        #slideshow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        /* 單張圖片設定 */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 讓圖片完美填滿螢幕，自動裁切不變形 */
+            opacity: 0; /* 預設透明隱藏 */
+            transition: opacity 1.5s ease-in-out; /* 1.5秒平滑淡入淡出特效 */
+            z-index: 1;
+        }
+
+        /* 當前播放的圖片 */
+        .slide.active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        /* 控制面板 UI */
+        #ui-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            z-index: 10;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 { margin-top: 0; color: #23494A; font-size: 24px; }
+        
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn {
+            border: none;
+            color: white;
+            background-color: #306263; /* 變革藍綠 */
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.3s;
+        }
+
+        .btn:hover { background-color: #D9A441; /* 琥珀金 */ color: #23494A; }
+
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* 提示文字 */
+        .hint {
+            color: #666;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .floating-exit {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+            z-index: 99;
+            font-size: 12px;
+            display: none;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .floating-exit:hover { background: rgba(255,0,0,0.7); }
+    </style>
+</head>
+<body>
+
+    <!-- 圖片輪播區 -->
+    <div id="slideshow-container"></div>
+
+    <!-- 退出提示按鈕 -->
+    <div id="exitBtn" class="floating-exit" onclick="stopSlideshow()">
+        停止播放 (或雙擊螢幕)
+    </div>
+
+    <!-- 開始選單 UI -->
+    <div id="ui-container">
+        <h1>電視牆輪播系統</h1>
+        <p style="color: #666; font-size: 15px;">請選擇您要輪播的圖片<br>(按住 Ctrl 或在手機上滑動可多選)</p>
+        
+        <div class="upload-btn-wrapper">
+            <button class="btn">📁 選擇圖片並開始</button>
+            <input type="file" id="imageInput" accept="image1/*" multiple onchange="startSlideshow(this.files)" />
+        </div>
+        
+        <div class="hint">
+            預設每張停留 <strong>4 秒</strong><br>
+            播放中「雙擊螢幕」即可暫停並重新選擇
+        </div>
+    </div>
+
+    <script>
+        let slides = [];
+        let currentIndex = 0;
+        let intervalId = null;
+        const DURATION = 4000; // 每張圖片停留時間 (毫秒)
+
+        function startSlideshow(files) {
+            if (files.length === 0) return;
+
+            const container = document.getElementById('slideshow-container');
+            container.innerHTML = ''; // 清除舊圖片
+            slides = [];
+            currentIndex = 0;
+
+            // 建立圖片元素
+            Array.from(files).forEach((file, index) => {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file); // 將本機檔案轉為網頁可讀取的 URL
+                img.className = 'slide ' + (index === 0 ? 'active' : ''); // 第一張預設顯示
+                container.appendChild(img);
+                slides.push(img);
+            });
+
+            // 隱藏設定面板，顯示退出按鈕
+            document.getElementById('ui-container').style.display = 'none';
+            document.getElementById('exitBtn').style.display = 'block';
+
+            // 嘗試進入瀏覽器全螢幕模式
+            try {
+                document.documentElement.requestFullscreen().catch(err => console.log("全螢幕請求被阻擋:", err));
+            } catch (e) {}
+
+            // 清除之前的計時器並重新啟動
+            if (intervalId) clearInterval(intervalId);
+            
+            // 如果只有一張圖片就不需要輪播
+            if (slides.length > 1) {
+                intervalId = setInterval(nextSlide, DURATION);
+            }
+        }
+
+        function nextSlide() {
+            // 將當前圖片淡出
+            slides[currentIndex].classList.remove('active');
+            
+            // 計算下一張的索引 (到底了就回到 0)
+            currentIndex = (currentIndex + 1) % slides.length;
+            
+            // 將下一張圖片淡入
+            slides[currentIndex].classList.add('active');
+        }
+
+        function stopSlideshow() {
+            // 停止計時器
+            if (intervalId) clearInterval(intervalId);
+            
+            // 退出全螢幕
+            try {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                }
+            } catch (e) {}
+
+            // 隱藏圖片與退出按鈕，叫出主選單
+            document.getElementById('slideshow-container').innerHTML = '';
+            document.getElementById('exitBtn').style.display = 'none';
