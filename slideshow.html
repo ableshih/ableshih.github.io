@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>電視牆輪播系統 - 嘉仁里</title>
+    <title>電視牆輪播系統 (防烙印保護) - 嘉仁里</title>
     <style>
         /* 基礎重置與全螢幕設定 */
         body, html {
@@ -11,19 +11,23 @@
             padding: 0; 
             width: 100%; 
             height: 100%;
-            background-color: #000; /* 背景全黑，避免圖片切換時閃爍白光 */
+            background-color: #000;
             overflow: hidden; 
             font-family: sans-serif;
         }
 
-        /* 輪播圖片容器 */
+        /* 輪播圖片容器 (加入防烙印的平移過渡效果) */
         #slideshow-container {
             position: absolute; 
             top: 0; 
             left: 0; 
-            width: 100vw; 
-            height: 100vh; 
+            /* 故意做大一點點，避免像素偏移時露出黑邊 */
+            width: calc(100vw + 10px); 
+            height: calc(100vh + 10px);
+            margin-top: -5px;
+            margin-left: -5px;
             z-index: 1;
+            transition: transform 2s ease-in-out; 
         }
 
         /* 單張圖片設定 */
@@ -33,33 +37,44 @@
             left: 0; 
             width: 100%; 
             height: 100%;
-            object-fit: cover; /* 自動裁切不變形 */
-            opacity: 0; /* 預設透明隱藏 */
-            transition: opacity 1.5s ease-in-out; /* 1.5秒平滑淡入淡出特效 */
+            object-fit: cover; 
+            opacity: 0; 
+            transition: opacity 1.5s ease-in-out; 
             z-index: 1;
+            transform: scale(1); /* 預設大小 */
+            transform-origin: center center;
         }
 
-        /* 當前播放的圖片 */
+        /* 當前播放的圖片 - 啟用防烙印動態縮放特效 */
         .slide.active { 
             opacity: 1; 
             z-index: 2; 
+            /* 15秒內緩慢放大至 1.08 倍，完美消除靜態像素 */
+            animation: subtleZoom 15s linear forwards;
         }
 
-        /* 👑 Debug 模式顯示框樣式 */
+        /* 👑 防烙印專用：平滑動態縮放動畫 */
+        @keyframes subtleZoom {
+            0% { transform: scale(1.0); }
+            100% { transform: scale(1.08); }
+        }
+
+        /* Debug 模式顯示框樣式 */
         #debug-info {
             position: absolute;
             top: 20px;
             left: 20px;
-            background: rgba(220, 38, 38, 0.85); /* 半透明紅色 */
+            background: rgba(220, 38, 38, 0.85); 
             color: white;
             padding: 8px 16px;
             border-radius: 8px;
             font-family: monospace;
             font-size: 16px;
             font-weight: bold;
-            z-index: 9999; /* 確保浮在最上層 */
-            display: none; /* 預設隱藏 */
+            z-index: 9999; 
+            display: none; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            pointer-events: none; /* 避免干擾雙擊全螢幕 */
         }
     </style>
 </head>
@@ -75,12 +90,13 @@
         // ==========================================
         // 🔧 系統設定區
         // ==========================================
-        const DURATION = 4000; // 每張圖片停留時間 (4000毫秒 = 4秒)
-        const DEBUG_MODE = true; // 👑 Debug 開關：設為 true 開啟左上角檔名顯示，正式上線時可改為 false
+        const DURATION = 5000; // 每張圖片停留時間 (5000毫秒 = 5秒，建議稍微加長讓縮放特效更明顯)
+        const DEBUG_MODE = false; // Debug 開關：true=開啟左上角檔名，false=關閉
+        const ANTI_BURN_IN_SHIFT = true; // 👑 防烙印像素偏移開關
         
         let slideElements = [];
         let currentIndex = 0;
-        let tryIndex = 1; // 從檔名 1 開始抓
+        let tryIndex = 1; 
         let intervalId = null;
 
         const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.jpeg', '.JPEG', '.webp', '.gif'];
@@ -89,7 +105,22 @@
         window.onload = () => {
             if (DEBUG_MODE) console.log("系統啟動，開始自動抓取圖片...");
             autoFetchImages();
+            
+            // 啟動防烙印定時像素偏移 (每 60 秒執行一次)
+            if (ANTI_BURN_IN_SHIFT) {
+                setInterval(pixelShift, 60000);
+            }
         };
+
+        // 👑 防螢幕烙印：全域像素微調 (Pixel Shifting)
+        function pixelShift() {
+            const container = document.getElementById('slideshow-container');
+            // 隨機產生 -3 到 +3 像素的位移
+            const shiftX = Math.floor(Math.random() * 7) - 3;
+            const shiftY = Math.floor(Math.random() * 7) - 3;
+            container.style.transform = `translate(${shiftX}px, ${shiftY}px)`;
+            if (DEBUG_MODE) console.log(`🛡️ 執行防烙印像素位移: X=${shiftX}px, Y=${shiftY}px`);
+        }
 
         function autoFetchImages() {
             const container = document.getElementById('slideshow-container');
@@ -102,17 +133,15 @@
                 if (DEBUG_MODE) console.log(`✅ 成功載入: ${currentFileName}`);
                 
                 img.className = 'slide ' + (slideElements.length === 0 ? 'active' : '');
-                img.dataset.filename = currentFileName; // 記錄這張圖片的實際檔名
+                img.dataset.filename = currentFileName;
                 
                 container.appendChild(img);
                 slideElements.push(img);
 
-                // 如果是抓到的第一張圖片，且開啟了 Debug，就立刻顯示在畫面上
                 if (slideElements.length === 1 && DEBUG_MODE) {
                     updateDebugUI(0);
                 }
 
-                // 當成功抓到 2 張以上的圖片時，啟動輪播計時器
                 if (slideElements.length === 2 && !intervalId) {
                     intervalId = setInterval(nextSlide, DURATION);
                 }
@@ -123,16 +152,13 @@
             };
 
             img.onerror = function() {
-                if (DEBUG_MODE) console.log(`❌ 找不到: ${currentFileName}`);
                 extIndex++;
-                
                 if (extIndex < extensions.length) {
                     autoFetchImages();
                 } else {
                     if (DEBUG_MODE) console.log(`🛑 自動抓取完畢，共載入 ${slideElements.length} 張圖片。`);
-                    
                     if (slideElements.length === 0) {
-                        container.innerHTML = '<div style="color: white; text-align: center; margin-top: 20%; font-size: 24px;">找不到圖片！<br>請確認 image1 資料夾與網頁放在一起，且圖片命名為 1, 2, 3...</div>';
+                        container.innerHTML = '<div style="color: white; text-align: center; margin-top: 20%; font-size: 24px;">找不到圖片！<br>請確認 image1 資料夾內有命名為 1.jpg, 2.jpg... 的檔案。</div>';
                     }
                 }
             };
@@ -141,24 +167,26 @@
         function nextSlide() {
             if (slideElements.length <= 1) return;
             
+            // 移除舊圖片的 active 狀態 (這會自動重置它的放大動畫)
             slideElements[currentIndex].classList.remove('active');
+            
             currentIndex = (currentIndex + 1) % slideElements.length;
+            
+            // 賦予新圖片 active 狀態 (觸發緩慢放大動畫)
             slideElements[currentIndex].classList.add('active');
 
-            // 如果開啟 Debug 模式，在切換圖片時更新左上角的檔名
             if (DEBUG_MODE) {
                 updateDebugUI(currentIndex);
             }
         }
 
-        // 👑 更新畫面上的 Debug 檔名顯示
         function updateDebugUI(index) {
             const debugEl = document.getElementById('debug-info');
             debugEl.style.display = 'block';
             debugEl.innerText = '📄 正在播放: ' + slideElements[index].dataset.filename;
         }
 
-        // 隱藏功能：雙擊螢幕可進入/退出全螢幕
+        // 雙擊螢幕進入/退出全螢幕
         document.addEventListener('dblclick', () => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(e => {});
