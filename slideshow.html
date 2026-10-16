@@ -1,10 +1,67 @@
-<script>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電視牆輪播系統 - 嘉仁里</title>
+    <style>
+        /* 基礎重置與全螢幕設定 */
+        body, html {
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%;
+            background-color: #000; /* 背景全黑，避免圖片切換時閃爍白光 */
+            overflow: hidden; 
+            font-family: sans-serif;
+        }
+
+        /* 輪播圖片容器 */
+        #slideshow-container {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            z-index: 1;
+        }
+
+        /* 單張圖片設定 */
+        .slide {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            object-fit: cover; /* 讓圖片完美填滿螢幕，自動裁切不變形 */
+            opacity: 0; /* 預設透明隱藏 */
+            transition: opacity 1.5s ease-in-out; /* 1.5秒平滑淡入淡出特效 */
+            z-index: 1;
+        }
+
+        /* 當前播放的圖片 */
+        .slide.active { 
+            opacity: 1; 
+            z-index: 2; 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 輪播圖片區 -->
+    <div id="slideshow-container"></div>
+
+    <script>
         const DURATION = 4000; // 每張圖片停留時間 (4000毫秒 = 4秒)
         
         let slideElements = [];
         let currentIndex = 0;
-        let tryIndex = 1; // 從 1.jpg 開始抓
+        let tryIndex = 1; // 從檔名 1 開始抓
         let intervalId = null;
+
+        // 💡 定義我們允許程式去猜測的副檔名清單
+        const extensions = ['.jpg', '.png', '.jpeg', '.webp', '.gif'];
+        let extIndex = 0; // 用來記錄現在猜到哪一個副檔名
 
         // 網頁一打開就開始自動抓取圖片
         window.onload = () => {
@@ -15,8 +72,8 @@
             const container = document.getElementById('slideshow-container');
             const img = new Image();
             
-            // 設定要抓取的圖片路徑 (假設都命名為 1.jpg, 2.jpg...)
-            img.src = `image1/${tryIndex}.*`;
+            // 設定要抓取的圖片路徑 (例如先試 1.jpg，失敗再試 1.png...)
+            img.src = `image1/${tryIndex}${extensions[extIndex]}`;
 
             img.onload = function() {
                 // 如果圖片存在（載入成功），就加到畫面上
@@ -29,14 +86,28 @@
                     intervalId = setInterval(nextSlide, DURATION);
                 }
 
-                // 繼續挑戰抓下一張 (2.jpg, 3.jpg...)
+                // 成功抓到後，繼續挑戰下一張 (tryIndex+1)，並且把副檔名重置回第一個 (.jpg) 開始猜
                 tryIndex++;
+                extIndex = 0; 
                 autoFetchImages();
             };
 
             img.onerror = function() {
-                // 當圖片不存在（報錯），代表已經抓到底了，自動停止抓取
-                console.log(`自動抓取完畢，共載入 ${slideElements.length} 張圖片。`);
+                // 當圖片不存在（報錯），換下一個副檔名試試看
+                extIndex++;
+                
+                if (extIndex < extensions.length) {
+                    // 如果還有副檔名沒猜完，就繼續猜同一張
+                    autoFetchImages();
+                } else {
+                    // 如果所有副檔名 (.jpg, .png...) 都猜過一輪還是沒有，代表真的到底了！
+                    console.log(`自動抓取完畢，共載入 ${slideElements.length} 張圖片。`);
+                    
+                    // 如果連一張圖片都沒抓到，在畫面上顯示提示
+                    if (slideElements.length === 0) {
+                        container.innerHTML = '<div style="color: white; text-align: center; margin-top: 20%; font-size: 24px;">找不到圖片！<br>請確認 image1 資料夾內是否有命名為 1.jpg, 2.jpg... 的檔案。</div>';
+                    }
+                }
             };
         }
 
@@ -57,3 +128,6 @@
             }
         });
     </script>
+
+</body>
+</html>
