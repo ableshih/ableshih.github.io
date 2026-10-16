@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘉仁里 門牌路段筆數統計 - 施圳溪</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'] },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'transformative-teal-dark': '#23494A',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- 頂部導覽列 -->
+    <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-20 sticky top-0">
+        <div>
+            <h1 class="text-xl md:text-2xl font-black tracking-widest"><i class="fa-solid fa-chart-pie mr-2 text-amber-haze"></i>門牌路段筆數統計</h1>
+        </div>
+        <a href="https://ableshih.github.io/" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-house"></i> 回首頁
+        </a>
+    </header>
+
+    <main class="flex-grow max-w-4xl mx-auto w-full px-4 py-8">
+        
+        <!-- 控制面板 -->
+        <div class="bg-white rounded-2xl shadow-md border-t-8 border-transformative-teal mb-6 p-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                <h2 class="text-xl font-bold text-transformative-teal-dark"><i class="fa-solid fa-filter mr-2"></i>路名篩選與統計</h2>
+                
+                <!-- 總筆數加總顯示 -->
+                <div class="bg-[#f8f5f0] border border-amber-haze/30 px-5 py-3 rounded-xl shadow-sm flex items-center gap-4">
+                    <div class="text-gray-600 font-bold text-sm" id="sumLabel">合計總筆數</div>
+                    <div class="text-3xl font-black text-amber-haze" id="totalSum">0</div>
+                </div>
+            </div>
+
+            <!-- 路名下拉選單 -->
+            <div class="mt-2">
+                <label class="block text-sm font-bold text-gray-500 mb-2">請選擇路段：</label>
+                <select id="streetFilter" class="w-full md:w-1/2 border border-gray-300 rounded-lg p-3 text-base font-bold text-transformative-teal-dark focus:ring-2 focus:ring-transformative-teal outline-none cursor-pointer shadow-sm">
+                    <option value="all">顯示全區所有路段</option>
+                    <!-- 選項將由 JS 動態生成 -->
+                </select>
+            </div>
+        </div>
+
+        <!-- 資料表格清單 -->
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[500px]">
+                    <thead class="bg-transformative-teal text-cloud-dancer">
+                        <tr>
+                            <th class="p-4 border-b border-transformative-teal-dark font-bold w-16 text-center">鄰別</th>
+                            <th class="p-4 border-b border-transformative-teal-dark font-bold w-24 text-center">該鄰筆數</th>
+                            <th class="p-4 border-b border-transformative-teal-dark font-bold w-32">路名</th>
+                            <th class="p-4 border-b border-transformative-teal-dark font-bold">號碼 / 巷弄區間</th>
+                        </tr>
+                    </thead>
+                    <!-- 每行斑馬紋: odd:bg-white even:bg-[#f8f5f0] -->
+                    <tbody id="dataTable" class="text-gray-800 divide-y divide-gray-200">
+                        <!-- JS 動態生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // 您提供的原始資料
+        const rawCSVData = `鄰,筆數,路名,號碼
+1,58,樂一路,76巷 2-5 78-96
+2,34,崇德路,81-85 76巷6-41
+3,8,樂一路,76巷16-42
+4,58,崇德路,85-87 76巷30-32
+5,178,安樂路一段,150
+6,56,安樂路一段,154-182
+7,85,安樂路一段,232-272
+8,73,安樂路一段,147-181
+9,23,安樂路一段,73-94
+10,40,安樂路一段,52-72
+11,67,安樂路一段,71-103
+12,50,安樂路一段,15-37
+13,43,崇德路,87-124
+14,21,樂一路,112-140
+15,59,崇德路,84-140
+16,35,崇德路,106-142
+17,40,崇德路,89-111
+18,38,崇德路,168巷1-57 170-174
+19,56,崇德路,176-178巷1-13
+20,52,崇德路,180-200
+21,68,崇德路,216-236
+22,53,安樂路一段,186-208
+23,42,崇德路,113-256
+24,32,崇德路,82巷1-18
+25,19,崇德路,82巷19-42
+26,61,崇德路,82巷29-63
+27,20,崇德路,146-168
+28,38,安樂路一段,117-135
+29,67,安樂路一段,69巷38-51
+30,57,崇德路,82巷60-115
+31,51,崇德路,178巷14-30
+32,43,安樂路一段,197-280
+33,47,安樂路一段,137-145之5
+34,34,崇德路,202-212之97
+35,45,樂一路,105-148`;
+
+        let parsedData = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // 解析 CSV 字串
+            const lines = rawCSVData.trim().split('\n');
+            const headers = lines[0].split(',');
+            
+            for (let i = 1; i < lines.length; i++) {
+                const parts = lines[i].split(',');
+                if (parts.length >= 4) {
+                    parsedData.push({
+                        lin: parseInt(parts[0], 10),
+                        count: parseInt(parts[1], 10),
+                        street: parts[2].trim(),
+                        number: parts.slice(3).join(',').trim()
+                    });
+                }
+            }
+
+            initFilter();
+            renderTable();
+        });
+
+        function initFilter() {
+            const streetFilter = document.getElementById('streetFilter');
+            // 取出所有不重複的路名
+            const uniqueStreets = [...new Set(parsedData.map(item => item.street))];
+            
+            uniqueStreets.forEach(street => {
+                const option = document.createElement('option');
+                option.value = street;
+                option.textContent = street;
+                streetFilter.appendChild(option);
+            });
+
+            // 綁定切換事件
+            streetFilter.addEventListener('change', renderTable);
+        }
+
+        function renderTable() {
+            const filterVal = document.getElementById('streetFilter').value;
+            const tableBody = document.getElementById('dataTable');
+            const totalSumEl = document.getElementById('totalSum');
+            const sumLabelEl = document.getElementById('sumLabel');
+
+            let filteredData = parsedData;
+            
+            if (filterVal !== 'all') {
+                filteredData = parsedData.filter(item => item.street === filterVal);
+                sumLabelEl.textContent = `${filterVal} 總筆數`;
+            } else {
+                sumLabelEl.textContent = `全區合計總筆數`;
+            }
+
+            // 計算加總筆數
+            const sum = filteredData.reduce((acc, curr) => acc + curr.count, 0);
+            totalSumEl.textContent = sum.toLocaleString(); // 加上千分位逗號
+
+            tableBody.innerHTML = '';
+
+            filteredData.forEach((item, index) => {
+                // 利用 Tailwind 的 odd/even 來做到斑馬紋跳色
+                const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-[#f8f5f0]';
+                
+                const tr = document.createElement('tr');
+                tr.className = `${rowClass} hover:bg-transformative-teal/10 transition-colors`;
+                tr.innerHTML = `
+                    <td class="p-4 border-b border-gray-100 text-center font-bold text-gray-500">${item.lin} 鄰</td>
+                    <td class="p-4 border-b border-gray-100 text-center font-black text-amber-haze text-xl">${item.count}</td>
+                    <td class="p-4 border-b border-gray-100 font-bold text-transformative-teal-dark text-lg">${item.street}</td>
+                    <td class="p-4 border-b border-gray-100 font-medium text-gray-700">${item.number}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
