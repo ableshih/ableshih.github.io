@@ -33,7 +33,7 @@
             left: 0; 
             width: 100%; 
             height: 100%;
-            object-fit: cover; /* 讓圖片完美填滿螢幕，自動裁切不變形 */
+            object-fit: cover; /* 自動裁切不變形 */
             opacity: 0; /* 預設透明隱藏 */
             transition: opacity 1.5s ease-in-out; /* 1.5秒平滑淡入淡出特效 */
             z-index: 1;
@@ -44,26 +44,50 @@
             opacity: 1; 
             z-index: 2; 
         }
+
+        /* 👑 Debug 模式顯示框樣式 */
+        #debug-info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(220, 38, 38, 0.85); /* 半透明紅色 */
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 9999; /* 確保浮在最上層 */
+            display: none; /* 預設隱藏 */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
 
     <!-- 輪播圖片區 -->
     <div id="slideshow-container"></div>
+    
+    <!-- Debug 資訊顯示區 -->
+    <div id="debug-info"></div>
 
-<script>
-        const DURATION = 4000; 
+    <script>
+        // ==========================================
+        // 🔧 系統設定區
+        // ==========================================
+        const DURATION = 4000; // 每張圖片停留時間 (4000毫秒 = 4秒)
+        const DEBUG_MODE = true; // 👑 Debug 開關：設為 true 開啟左上角檔名顯示，正式上線時可改為 false
         
         let slideElements = [];
         let currentIndex = 0;
-        let tryIndex = 1; 
+        let tryIndex = 1; // 從檔名 1 開始抓
         let intervalId = null;
 
-        // 👑 升級：加入大寫副檔名偵測，避免相機原檔漏抓
         const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.jpeg', '.JPEG', '.webp', '.gif'];
         let extIndex = 0; 
 
         window.onload = () => {
+            if (DEBUG_MODE) console.log("系統啟動，開始自動抓取圖片...");
             autoFetchImages();
         };
 
@@ -71,13 +95,24 @@
             const container = document.getElementById('slideshow-container');
             const img = new Image();
             
-            img.src = `image1/${tryIndex}${extensions[extIndex]}`;
+            const currentFileName = `image1/${tryIndex}${extensions[extIndex]}`;
+            img.src = currentFileName;
 
             img.onload = function() {
+                if (DEBUG_MODE) console.log(`✅ 成功載入: ${currentFileName}`);
+                
                 img.className = 'slide ' + (slideElements.length === 0 ? 'active' : '');
+                img.dataset.filename = currentFileName; // 記錄這張圖片的實際檔名
+                
                 container.appendChild(img);
                 slideElements.push(img);
 
+                // 如果是抓到的第一張圖片，且開啟了 Debug，就立刻顯示在畫面上
+                if (slideElements.length === 1 && DEBUG_MODE) {
+                    updateDebugUI(0);
+                }
+
+                // 當成功抓到 2 張以上的圖片時，啟動輪播計時器
                 if (slideElements.length === 2 && !intervalId) {
                     intervalId = setInterval(nextSlide, DURATION);
                 }
@@ -88,11 +123,14 @@
             };
 
             img.onerror = function() {
+                if (DEBUG_MODE) console.log(`❌ 找不到: ${currentFileName}`);
                 extIndex++;
+                
                 if (extIndex < extensions.length) {
                     autoFetchImages();
                 } else {
-                    console.log(`自動抓取完畢，共載入 ${slideElements.length} 張圖片。`);
+                    if (DEBUG_MODE) console.log(`🛑 自動抓取完畢，共載入 ${slideElements.length} 張圖片。`);
+                    
                     if (slideElements.length === 0) {
                         container.innerHTML = '<div style="color: white; text-align: center; margin-top: 20%; font-size: 24px;">找不到圖片！<br>請確認 image1 資料夾與網頁放在一起，且圖片命名為 1, 2, 3...</div>';
                     }
@@ -102,11 +140,25 @@
 
         function nextSlide() {
             if (slideElements.length <= 1) return;
+            
             slideElements[currentIndex].classList.remove('active');
             currentIndex = (currentIndex + 1) % slideElements.length;
             slideElements[currentIndex].classList.add('active');
+
+            // 如果開啟 Debug 模式，在切換圖片時更新左上角的檔名
+            if (DEBUG_MODE) {
+                updateDebugUI(currentIndex);
+            }
         }
 
+        // 👑 更新畫面上的 Debug 檔名顯示
+        function updateDebugUI(index) {
+            const debugEl = document.getElementById('debug-info');
+            debugEl.style.display = 'block';
+            debugEl.innerText = '📄 正在播放: ' + slideElements[index].dataset.filename;
+        }
+
+        // 隱藏功能：雙擊螢幕可進入/退出全螢幕
         document.addEventListener('dblclick', () => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(e => {});
@@ -115,5 +167,6 @@
             }
         });
     </script>
+
 </body>
 </html>
