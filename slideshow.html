@@ -16,7 +16,7 @@
             const img = new Image();
             
             // 設定要抓取的圖片路徑 (假設都命名為 1.jpg, 2.jpg...)
-            img.src = `image1/${tryIndex}.jpg`;
+            img.src = `image1/${tryIndex}.*`;
 
             img.onload = function() {
                 // 如果圖片存在（載入成功），就加到畫面上
