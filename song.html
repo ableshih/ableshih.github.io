@@ -171,6 +171,36 @@
         <p class="text-lg opacity-90 mb-8">懇請鄉親牽成 —— 愛你來鬥支持！</p>
         <p class="text-sm opacity-60">2026 施圳溪競選團隊・扎根嘉仁 永續躍進</p>
     </footer>
+    
+    <!-- 隱藏的背景音樂播放器 -->
+    <audio id="bg-music" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const audio = document.getElementById("bg-music");
+            
+            // 嘗試載入後直接播放
+            const playPromise = audio.play();
+            
+            // 現代瀏覽器嚴格禁止網頁在沒有互動的情況下「自動發出聲音」
+            // 若自動播放被阻擋，則設定在使用者「第一次點擊、滑動或觸控螢幕」時，立刻無縫啟動音樂
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    const startAudio = () => {
+                        audio.play();
+                        // 播放成功後移除監聽器，避免耗費效能
+                        document.removeEventListener("click", startAudio);
+                        document.removeEventListener("touchstart", startAudio);
+                        document.removeEventListener("scroll", startAudio);
+                    };
+                    document.addEventListener("click", startAudio);
+                    document.addEventListener("touchstart", startAudio);
+                    document.addEventListener("scroll", startAudio, { passive: true });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
