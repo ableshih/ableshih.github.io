@@ -51,19 +51,18 @@
     <!-- 輪播圖片區 -->
     <div id="slideshow-container"></div>
 
-    <script>
-        const DURATION = 4000; // 每張圖片停留時間 (4000毫秒 = 4秒)
+<script>
+        const DURATION = 4000; 
         
         let slideElements = [];
         let currentIndex = 0;
-        let tryIndex = 1; // 從檔名 1 開始抓
+        let tryIndex = 1; 
         let intervalId = null;
 
-        // 💡 定義我們允許程式去猜測的副檔名清單
-        const extensions = ['.jpg', '.png', '.jpeg', '.webp', '.gif'];
-        let extIndex = 0; // 用來記錄現在猜到哪一個副檔名
+        // 👑 升級：加入大寫副檔名偵測，避免相機原檔漏抓
+        const extensions = ['.jpg', '.JPG', '.png', '.PNG', '.jpeg', '.JPEG', '.webp', '.gif'];
+        let extIndex = 0; 
 
-        // 網頁一打開就開始自動抓取圖片
         window.onload = () => {
             autoFetchImages();
         };
@@ -72,46 +71,35 @@
             const container = document.getElementById('slideshow-container');
             const img = new Image();
             
-            // 設定要抓取的圖片路徑 (例如先試 1.jpg，失敗再試 1.png...)
             img.src = `image1/${tryIndex}${extensions[extIndex]}`;
 
             img.onload = function() {
-                // 如果圖片存在（載入成功），就加到畫面上
                 img.className = 'slide ' + (slideElements.length === 0 ? 'active' : '');
                 container.appendChild(img);
                 slideElements.push(img);
 
-                // 當成功抓到 2 張以上的圖片時，就啟動輪播計時器
                 if (slideElements.length === 2 && !intervalId) {
                     intervalId = setInterval(nextSlide, DURATION);
                 }
 
-                // 成功抓到後，繼續挑戰下一張 (tryIndex+1)，並且把副檔名重置回第一個 (.jpg) 開始猜
                 tryIndex++;
                 extIndex = 0; 
                 autoFetchImages();
             };
 
             img.onerror = function() {
-                // 當圖片不存在（報錯），換下一個副檔名試試看
                 extIndex++;
-                
                 if (extIndex < extensions.length) {
-                    // 如果還有副檔名沒猜完，就繼續猜同一張
                     autoFetchImages();
                 } else {
-                    // 如果所有副檔名 (.jpg, .png...) 都猜過一輪還是沒有，代表真的到底了！
                     console.log(`自動抓取完畢，共載入 ${slideElements.length} 張圖片。`);
-                    
-                    // 如果連一張圖片都沒抓到，在畫面上顯示提示
                     if (slideElements.length === 0) {
-                        container.innerHTML = '<div style="color: white; text-align: center; margin-top: 20%; font-size: 24px;">找不到圖片！<br>請確認 image1 資料夾內是否有命名為 1.jpg, 2.jpg... 的檔案。</div>';
+                        container.innerHTML = '<div style="color: white; text-align: center; margin-top: 20%; font-size: 24px;">找不到圖片！<br>請確認 image1 資料夾與網頁放在一起，且圖片命名為 1, 2, 3...</div>';
                     }
                 }
             };
         }
 
-        // 切換到下一張圖片
         function nextSlide() {
             if (slideElements.length <= 1) return;
             slideElements[currentIndex].classList.remove('active');
@@ -119,7 +107,6 @@
             slideElements[currentIndex].classList.add('active');
         }
 
-        // 隱藏功能：雙擊螢幕可進入/退出全螢幕
         document.addEventListener('dblclick', () => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(e => {});
@@ -128,6 +115,5 @@
             }
         });
     </script>
-
 </body>
 </html>
