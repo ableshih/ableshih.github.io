@@ -1,120 +1,59 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全螢幕電視牆輪播</title>
-    <style>
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #000; overflow: hidden; font-family: sans-serif;
-        }
-
-        #slideshow-container {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1;
-        }
-
-        .slide {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; /* 自動裁切填滿螢幕 */
-            opacity: 0; 
-            transition: opacity 1.5s ease-in-out; /* 淡入淡出時間 */
-            z-index: 1;
-        }
-
-        .slide.active { opacity: 1; z-index: 2; }
-
-        /* 開始按鈕畫面 */
-        #start-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(48, 98, 99, 0.9); /* 變革藍綠底色 */
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 10; color: white; cursor: pointer;
-        }
-
-        .start-btn {
-            background-color: #D9A441; /* 琥珀金 */
-            color: #23494A; border: none; padding: 15px 40px; font-size: 24px;
-            font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            transition: transform 0.2s; pointer-events: none;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- 輪播圖片區 -->
-    <div id="slideshow-container"></div>
-
-    <!-- 啟動畫面 (由於瀏覽器限制，全螢幕必須由使用者點擊觸發) -->
-    <div id="start-screen" onclick="startSlideshow()">
-        <h1 style="margin-bottom: 30px;">嘉仁里 總部電視牆系統</h1>
-        <button class="start-btn">點擊畫面開始播放</button>
-    </div>
-
-    <script>
-        // ==========================================
-        // 1. 在這裡填入 image1 資料夾裡的圖片完整檔名
-        // ==========================================
-        const images = [
-            'image1/1.jpg',
-            'image1/2.jpg',
-            'image1/3.jpg',
-            'image1/4.png'  // 可支援 png, jpg 等格式
-        ];
-
-        const DURATION = 4000; // 每張圖片停留時間 (毫秒，4000 = 4秒)
-
-        let currentIndex = 0;
+<script>
+        const DURATION = 4000; // 每張圖片停留時間 (4000毫秒 = 4秒)
+        
         let slideElements = [];
+        let currentIndex = 0;
+        let tryIndex = 1; // 從 1.jpg 開始抓
         let intervalId = null;
 
-        // 預先載入圖片並建立 HTML 元素
-        function initSlides() {
+        // 網頁一打開就開始自動抓取圖片
+        window.onload = () => {
+            autoFetchImages();
+        };
+
+        function autoFetchImages() {
             const container = document.getElementById('slideshow-container');
-            images.forEach((src, index) => {
-                const img = document.createElement('img');
-                img.src = src;
-                img.className = 'slide ' + (index === 0 ? 'active' : '');
+            const img = new Image();
+            
+            // 設定要抓取的圖片路徑 (假設都命名為 1.jpg, 2.jpg...)
+            img.src = `image1/${tryIndex}.jpg`;
+
+            img.onload = function() {
+                // 如果圖片存在（載入成功），就加到畫面上
+                img.className = 'slide ' + (slideElements.length === 0 ? 'active' : '');
                 container.appendChild(img);
                 slideElements.push(img);
-            });
-        }
 
-        // 開始輪播與全螢幕
-        function startSlideshow() {
-            // 隱藏啟動畫面
-            document.getElementById('start-screen').style.display = 'none';
+                // 當成功抓到 2 張以上的圖片時，就啟動輪播計時器
+                if (slideElements.length === 2 && !intervalId) {
+                    intervalId = setInterval(nextSlide, DURATION);
+                }
 
-            // 要求進入全螢幕模式
-            try {
-                document.documentElement.requestFullscreen().catch(e => {});
-            } catch (e) {}
+                // 繼續挑戰抓下一張 (2.jpg, 3.jpg...)
+                tryIndex++;
+                autoFetchImages();
+            };
 
-            // 開始計時器切換圖片
-            if (slideElements.length > 1) {
-                intervalId = setInterval(nextSlide, DURATION);
-            }
+            img.onerror = function() {
+                // 當圖片不存在（報錯），代表已經抓到底了，自動停止抓取
+                console.log(`自動抓取完畢，共載入 ${slideElements.length} 張圖片。`);
+            };
         }
 
         // 切換到下一張圖片
         function nextSlide() {
+            if (slideElements.length <= 1) return;
             slideElements[currentIndex].classList.remove('active');
             currentIndex = (currentIndex + 1) % slideElements.length;
             slideElements[currentIndex].classList.add('active');
         }
 
-        // 雙擊螢幕可退出全螢幕並停止
+        // 隱藏功能：雙擊螢幕可進入/退出全螢幕
         document.addEventListener('dblclick', () => {
-            if (document.fullscreenElement) {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(e => {});
+            } else {
                 document.exitFullscreen();
             }
-            document.getElementById('start-screen').style.display = 'flex';
-            clearInterval(intervalId);
         });
-
-        // 網頁載入時先準備好圖片
-        window.onload = initSlides;
     </script>
-
-</body>
-</html>
