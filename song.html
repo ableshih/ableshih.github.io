@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>好料理 - 嘉仁里服務願景 | 施圳溪</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'] },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'transformative-teal-dark': '#23494A',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        .lyrics-box {
+            background: linear-gradient(145deg, #ffffff, #f8f5f0);
+            box-shadow: 0 10px 30px rgba(48, 98, 99, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-transformative-teal selection:text-cloud-dancer">
+
+    <!-- 頂部導覽列 -->
+    <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-20 sticky top-0">
+        <div>
+            <h1 class="text-xl md:text-2xl font-black tracking-widest"><i class="fa-solid fa-bullhorn mr-2 text-amber-haze"></i>嘉仁里服務願景</h1>
+        </div>
+        <a href="index.html" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-house"></i> 回首頁
+        </a>
+    </header>
+
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-10">
+        
+        <!-- 標題與 Slogan 區塊 -->
+        <div class="text-center mb-12">
+            <div class="inline-block bg-amber-haze text-transformative-teal-dark font-black px-6 py-2 rounded-full text-lg mb-6 tracking-widest shadow-md border-2 border-white">
+                📢 骨力做，為嘉仁！
+            </div>
+            <h2 class="text-4xl md:text-6xl font-black text-transformative-teal-dark mb-4">嘉仁里服務願景</h2>
+            <p class="text-xl text-transformative-teal font-bold mb-2">大菜一盤一盤捧出來 ｜ 一項一項順利行落去</p>
+            <p class="text-gray-600 font-medium">這是我對嘉仁里的承諾，實實在在，說到做到！</p>
+        </div>
+
+        <!-- 競選歌曲：好料理 -->
+        <div class="lyrics-box rounded-3xl p-8 md:p-12 mb-16 border-t-8 border-transformative-teal relative overflow-hidden">
+            <i class="fa-solid fa-music absolute text-9xl text-transformative-teal opacity-5 -right-4 -top-4"></i>
+            <div class="text-center mb-8">
+                <span class="bg-gray-800 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">AI 創作台語歌</span>
+                <h3 class="text-3xl font-black text-transformative-teal-dark">歌名：好料理</h3>
+            </div>
+            
+            <div class="text-center text-lg md:text-xl leading-loose font-medium text-gray-700 space-y-2">
+                <p>大菜一盤一盤捧出來<br>一項一項 順利行落去</p>
+                <p class="text-transformative-teal font-bold text-2xl my-4">愛嘉仁 愛子兒 愛你來鬥支持<br>服務、支援、安全 我挺你</p>
+                <p>手機仔拍開 逐項知<br>做回收趁的 奉獻嘉仁里</p>
+                <p>顧長輩 學東西 學會展厝邊<br>去上班 若有代誌 找里長鬥處理</p>
+                <p>讀冊囡仔 學 English<br>用英語佮外國人 開講來來去去</p>
+                <p class="text-amber-haze font-black text-2xl mt-6">嘉仁里 嘉仁里 大家 大步走出去</p>
+            </div>
+        </div>
+
+        <!-- 👑 新增：社群推廣圖片區塊 -->
+        <div class="mb-16 max-w-2xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+            <img src="images/好料理.jpg" alt="骨力做，為嘉仁！ 115年里長參選人施圳溪" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500">
+        </div>
+
+        <!-- 五大暖心政見 -->
+        <div class="mb-16">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-black text-transformative-teal-dark inline-block relative">
+                    🌟 五大暖心政見 🌟
+                    <div class="absolute w-full h-3 bg-amber-haze/30 bottom-1 left-0 -z-10"></div>
+                </h3>
+                <p class="text-gray-600 font-bold mt-3">顧好咱的厝邊頭尾</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 政見 1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex gap-4">
+                    <div class="w-16 h-16 rounded-full bg-transformative-teal/10 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-mobile-screen-button text-2xl text-transformative-teal"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-transformative-teal-dark mb-2">科技便民・資訊透明</h4>
+                        <p class="text-amber-haze font-bold text-sm mb-2">「手機仔拍開 逐項知」</p>
+                        <p class="text-gray-600 leading-relaxed text-sm">推動里民群組與資訊數位化，社區大小事、福利通知，讓鄉親一機在手，消息不漏接！</p>
+                    </div>
+                </div>
+
+                <!-- 政見 2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex gap-4">
+                    <div class="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-recycle text-2xl text-green-600"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-transformative-teal-dark mb-2">環保公益・回饋鄉里</h4>
+                        <p class="text-amber-haze font-bold text-sm mb-2">「做回收趁的 奉獻嘉仁里」</p>
+                        <p class="text-gray-600 leading-relaxed text-sm">組織環保志工隊，將資源回收的收益，全數轉為建設里內與照顧弱勢的愛心基金。</p>
+                    </div>
+                </div>
+
+                <!-- 政見 3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex gap-4">
+                    <div class="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-hands-holding-child text-2xl text-amber-500"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-transformative-teal-dark mb-2">長照樂活・陪伴長者</h4>
+                        <p class="text-amber-haze font-bold text-sm mb-2">「顧長輩 學物件 展予厝邊看」</p>
+                        <p class="text-gray-600 leading-relaxed text-sm">辦理長青學苑與樂齡活動，讓阿公阿嬤活到老學到老，開心出門交朋友，展現活力！</p>
+                    </div>
+                </div>
+
+                <!-- 政見 4 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex gap-4">
+                    <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-briefcase text-2xl text-blue-500"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-transformative-teal-dark mb-2">青年後盾・安心打拚</h4>
+                        <p class="text-amber-haze font-bold text-sm mb-2">「去上班 若有代誌 揣里長鬥處理」</p>
+                        <p class="text-gray-600 leading-relaxed text-sm">年輕人安心去上班！家裡周遭的疑難雜症、社區安全維護，交給里長團隊幫你「鬥跤手」。</p>
+                    </div>
+                </div>
+
+                <!-- 政見 5 (佔滿兩格) -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex gap-4 md:col-span-2">
+                    <div class="w-16 h-16 rounded-full bg-purple-50 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-earth-americas text-2xl text-purple-500"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-transformative-teal-dark mb-2">雙語教育・接軌國際</h4>
+                        <p class="text-amber-haze font-bold text-sm mb-2">「讀冊囡仔 學 English，用英語佮外國人 開講來來去去」</p>
+                        <p class="text-gray-600 leading-relaxed text-sm">爭取教育資源，推動社區兒童外語互動環境，讓咱嘉仁里的孩子勇敢開口，自信走向世界！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 底部行動呼籲 -->
+    <footer class="bg-transformative-teal-dark text-cloud-dancer py-12 text-center border-t-8 border-amber-haze mt-auto">
+        <h3 class="text-3xl font-black mb-4">💪 服務 ‧ 支援 ‧ 安全 ｜ 我挺你！ 💪</h3>
+        <p class="text-xl text-amber-haze font-bold mb-6">愛嘉仁 ❤️ 愛子兒 ❤️ 愛厝邊</p>
+        <p class="text-lg opacity-90 mb-8">懇請鄉親牽成 —— 愛你來鬥支持！</p>
+        <p class="text-sm opacity-60">2026 施圳溪競選團隊・扎根嘉仁 永續躍進</p>
+    </footer>
+
+</body>
+</html>
