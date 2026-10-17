@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安樂區 垃圾車時刻表 (依時間查詢)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'] },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'transformative-teal-dark': '#23494A',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; scroll-behavior: smooth; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        
+        ::-webkit-scrollbar { display: none; }
+        
+        #backToTopBtn {
+            position: fixed; bottom: 30px; right: 30px; z-index: 99;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease-in-out; transform: translateY(20px);
+        }
+        #backToTopBtn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        /* 時段按鈕啟用狀態 */
+        .time-btn.active {
+            background-color: #D9A441; /* amber-haze */
+            color: #23494A;
+            border-color: #D9A441;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- 頂部導覽列 -->
+    <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-20 sticky top-0">
+        <div>
+            <h1 class="text-xl md:text-2xl font-black tracking-widest"><i class="fa-solid fa-clock mr-2 text-amber-haze"></i>安樂區 垃圾車時刻表</h1>
+        </div>
+        <a href="index.html" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2 shadow-sm shrink-0">
+            <i class="fa-solid fa-house"></i> 首頁
+        </a>
+    </header>
+
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-6 md:py-8">
+        
+        <!-- 說明與過濾面板 -->
+        <div class="bg-white rounded-2xl shadow-md border-t-8 border-transformative-teal mb-6 p-5 md:p-6 sticky top-[72px] z-10">
+            <h2 class="text-lg md:text-xl font-bold text-transformative-teal-dark mb-3"><i class="fa-solid fa-filter mr-2"></i>您想尋找哪個時段的垃圾車？</h2>
+            
+            <!-- 時段過濾按鈕 -->
+            <div class="flex flex-wrap gap-2 md:gap-3" id="timeFilters">
+                <button class="time-btn active px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-bold text-sm transition-colors hover:bg-gray-50" data-hour="all">全部時間</button>
+                <button class="time-btn px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-bold text-sm transition-colors hover:bg-gray-50" data-hour="16">16:00 時段</button>
+                <button class="time-btn px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-bold text-sm transition-colors hover:bg-gray-50" data-hour="17">17:00 時段</button>
+                <button class="time-btn px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-bold text-sm transition-colors hover:bg-gray-50" data-hour="18">18:00 時段</button>
+                <button class="time-btn px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-bold text-sm transition-colors hover:bg-gray-50" data-hour="19">19:00 時段</button>
+                <button class="time-btn px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-bold text-sm transition-colors hover:bg-gray-50" data-hour="20">20:00 時段</button>
+                <button class="time-btn px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-bold text-sm transition-colors hover:bg-gray-50" data-hour="21">21:00 時段</button>
+            </div>
+            
+            <div class="mt-4 flex items-center justify-between text-sm text-gray-500 font-bold">
+                <span id="resultCount">共載入 0 筆停靠資訊</span>
+            </div>
+        </div>
+
+        <!-- 綜合時間軸 -->
+        <div class="bg-white rounded-2xl shadow-md p-4 md:p-6 border border-gray-200">
+            <div id="timelineContainer" class="space-y-4">
+                <!-- JS 動態生成 timeline items -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 回到最上按鈕 -->
+    <a href="#" id="backToTopBtn" class="bg-amber-haze hover:bg-transformative-teal text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl cursor-pointer transition-all duration-300 transform" title="回到頂部">
+        <i class="fa-solid fa-chevron-up text-xl"></i>
+    </a>
+
+    <script>
+        // 原始路線資料
+        const routeData = {"25-1 - 安樂區崇德路": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=25-1%E5%AE%89%E6%A8%82%E5%8D%80%E5%B4%87%E5%BE%B7%E8%B7%AF&routeId=65fab3f3d8d36e9688b82f86", "stops": [{"location": "崇德路212號路口", "time": "17:00 ~ 17:02"}, {"location": "崇德路178巷22之5號", "time": "17:02 ~ 17:03"}, {"location": "崇德路82巷100之1號", "time": "17:03 ~ 17:04"}, {"location": "崇德路82之54號", "time": "17:04 ~ 17:05"}, {"location": "崇德路82之30號", "time": "17:05 ~ 17:06"}, {"location": "崇德路142號", "time": "17:06 ~ 17:07"}, {"location": "崇德路112號", "time": "17:07 ~ 17:08"}, {"location": "安一路284巷口", "time": "17:09 ~ 17:10"}, {"location": "安一路310號", "time": "17:11 ~ 17:12"}, {"location": "安一路316號", "time": "17:12 ~ 17:13"}, {"location": "安一路318號", "time": "17:13 ~ 17:14"}, {"location": "安一路328號", "time": "17:14 ~ 17:15"}, {"location": "安一路340號", "time": "17:15 ~ 17:16"}, {"location": "安一路348之16號19號22號", "time": "17:16 ~ 17:17"}, {"location": "安一路352號", "time": "17:17 ~ 17:18"}, {"location": "安一路義勇寺", "time": "17:18 ~ 17:19"}, {"location": "定國街176號31之6號", "time": "17:19 ~ 17:20"}, {"location": "定國街119巷66號(迴轉道)", "time": "17:21 ~ 17:25"}, {"location": "定國街83巷54之2號", "time": "17:25 ~ 17:26"}, {"location": "定國街83巷23號路口", "time": "17:26 ~ 17:27"}, {"location": "定國街11巷43之3號", "time": "17:27 ~ 17:28"}, {"location": "定國街53號", "time": "17:28 ~ 17:29"}, {"location": "定國街11巷35之1號", "time": "17:29 ~ 17:30"}, {"location": "安一路311號", "time": "17:30 ~ 17:31"}, {"location": "安一路311之21號", "time": "17:31 ~ 17:32"}, {"location": "安一路安定所", "time": "17:32 ~ 17:33"}, {"location": "安一路229號", "time": "17:33 ~ 17:34"}, {"location": "安一路221號", "time": "17:34 ~ 17:35"}, {"location": "安一路175號童里長", "time": "17:35 ~ 17:37"}, {"location": "安一路115號屈臣氏", "time": "17:37 ~ 17:39"}, {"location": "樂一路43巷口(安樂市場內)", "time": "17:39 ~ 17:50"}]}, "25-2 - 安樂區崇德路10巷": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=25-2%E5%AE%89%E6%A8%82%E5%8D%80%E5%B4%87%E5%BE%B7%E8%B7%AF10%E5%B7%B7&routeId=65fab3f3d8d36e9688b82f87", "stops": [{"location": "崇德路10巷70號", "time": "18:47 ~ 18:48"}, {"location": "崇德路10巷40號", "time": "18:48 ~ 18:49"}, {"location": "崇德路10巷63號", "time": "18:49 ~ 18:50"}, {"location": "崇德路10巷34號", "time": "18:50 ~ 18:51"}, {"location": "崇德路10巷25號", "time": "18:51 ~ 18:52"}, {"location": "崇德路36巷26~31號", "time": "18:52 ~ 18:53"}, {"location": "崇德路10巷2-1號", "time": "18:53 ~ 18:54"}, {"location": "崇德路14號", "time": "18:54 ~ 18:55"}, {"location": "崇德路30號", "time": "18:55 ~ 18:56"}, {"location": "崇德路40號", "time": "18:56 ~ 18:57"}, {"location": "崇德路50號", "time": "18:57 ~ 18:58"}, {"location": "崇德路64號", "time": "18:58 ~ 18:59"}, {"location": "崇德路76號", "time": "18:59 ~ 19:00"}, {"location": "崇德路83號", "time": "19:00 ~ 19:01"}, {"location": "崇德路94號", "time": "19:01 ~ 19:02"}, {"location": "崇德路嘉仁新杶路口", "time": "19:02 ~ 19:03"}, {"location": "崇德路146號", "time": "19:03 ~ 19:04"}, {"location": "崇德路168號", "time": "19:04 ~ 19:05"}, {"location": "崇德路178號", "time": "19:05 ~ 19:06"}, {"location": "崇德路190號", "time": "19:06 ~ 19:07"}, {"location": "崇德路218號", "time": "19:07 ~ 19:08"}, {"location": "崇德路234號", "time": "19:08 ~ 19:09"}, {"location": "崇德路125號", "time": "19:09 ~ 19:10"}, {"location": "樂一路107號", "time": "19:11 ~ 19:12"}, {"location": "麥金路715巷17號", "time": "19:20 ~ 19:21"}, {"location": "麥金路715巷8號", "time": "19:22 ~ 19:23"}, {"location": "麥金路750號", "time": "19:25 ~ 19:27"}, {"location": "武聖街16號至248號(慢行)", "time": "19:37 ~ 19:47"}, {"location": "基金三路196巷3號", "time": "19:50 ~ 19:51"}, {"location": "基金三路196巷22號", "time": "19:51 ~ 19:52"}, {"location": "基金三路196巷33號", "time": "19:52 ~ 19:53"}, {"location": "基金三路80巷2號", "time": "19:54 ~ 19:55"}, {"location": "武隆街(陽光加樂比)", "time": "19:57 ~ 20:07"}, {"location": "武隆街103巷270號", "time": "20:07 ~ 20:08"}, {"location": "武隆街14號", "time": "20:19 ~ 20:20"}, {"location": "基金三路新加坡社區", "time": "20:22 ~ 20:25"}]}, "26-2 - 安樂區基金一路": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=26-2%E5%AE%89%E6%A8%82%E5%8D%80%E5%9F%BA%E9%87%91%E4%B8%80%E8%B7%AF&routeId=65fab3f3d8d36e9688b82f89", "stops": [{"location": "基金一路116號前", "time": "19:35 ~ 19:40"}, {"location": "基金一路146號前", "time": "19:40 ~ 19:42"}, {"location": "基金一路172號前", "time": "19:42 ~ 19:44"}, {"location": "基金一路176號前", "time": "19:45 ~ 19:50"}, {"location": "基金一路214號前", "time": "19:50 ~ 19:55"}, {"location": "基金一路216號前", "time": "19:55 ~ 19:56"}, {"location": "基金一路248號前", "time": "19:56 ~ 20:00"}, {"location": "基金二路一巷176號前", "time": "20:00 ~ 20:05"}, {"location": "基金二路一巷174號前", "time": "20:05 ~ 20:14"}, {"location": "基金一路135巷陽光故鄉", "time": "20:20 ~ 20:30"}, {"location": "武嶺街181號巷內", "time": "20:30 ~ 20:32"}, {"location": "武嶺街275號巷內", "time": "20:32 ~ 20:34"}, {"location": "武嶺街249號", "time": "20:34 ~ 20:36"}, {"location": "武嶺街台北大國社區305號", "time": "20:36 ~ 20:40"}, {"location": "武嶺街264號前", "time": "20:40 ~ 20:43"}, {"location": "武嶺街117號前", "time": "20:43 ~ 20:45"}, {"location": "武嶺街115號前", "time": "20:45 ~ 20:47"}, {"location": "武嶺街60號前", "time": "20:47 ~ 20:50"}, {"location": "基金一路131號前", "time": "20:50 ~ 20:52"}, {"location": "基金一路131號之23", "time": "20:52 ~ 20:55"}, {"location": "基金一路129巷36號同心園", "time": "20:55 ~ 21:00"}]}, "27-1 - 安樂區八德路": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=27-1%E5%AE%89%E6%A8%82%E5%8D%80%E5%85%AB%E5%BE%B7%E8%B7%AF&routeId=65fab3f3d8d36e9688b82f8a", "stops": [{"location": "八德路76巷1-5號附近", "time": "17:00 ~ 17:01"}, {"location": "八德路67巷43號", "time": "17:01 ~ 17:02"}, {"location": "八德路67巷53號", "time": "17:02 ~ 17:03"}, {"location": "八德路(空軍基地)", "time": "17:03 ~ 17:05"}, {"location": "麥金路70號富景天下", "time": "17:08 ~ 17:15"}, {"location": "麥金路80號轟動天廈", "time": "17:15 ~ 17:18"}, {"location": "麥金路160號", "time": "17:18 ~ 17:20"}, {"location": "麥金路186號", "time": "17:20 ~ 17:21"}, {"location": "麥金路200號", "time": "17:21 ~ 17:23"}, {"location": "麥金路214號", "time": "17:23 ~ 17:24"}, {"location": "安和一街4巷口前", "time": "17:26 ~ 17:30"}, {"location": "安和一街6巷90號前", "time": "17:30 ~ 17:33"}, {"location": "安和一街6巷84號(停車場前)", "time": "17:33 ~ 17:34"}, {"location": "安和一街6巷63號", "time": "17:34 ~ 17:35"}, {"location": "安和一街6巷28號", "time": "17:35 ~ 17:37"}, {"location": "安和一街6巷24號", "time": "17:37 ~ 17:39"}, {"location": "安和一街6巷10號", "time": "17:39 ~ 17:41"}, {"location": "安和一街6巷2號", "time": "17:41 ~ 17:45"}, {"location": "安和一街2巷30號", "time": "17:45 ~ 17:47"}, {"location": "安和一街4巷29號", "time": "17:47 ~ 17:50"}, {"location": "安和一街136號(櫻花)", "time": "17:50 ~ 17:53"}, {"location": "安和一街150號(櫻花)", "time": "17:53 ~ 17:56"}, {"location": "安和一路330巷口", "time": "17:56 ~ 18:00"}, {"location": "安和一街209號前", "time": "18:00 ~ 18:01"}, {"location": "安和一街137巷口", "time": "18:01 ~ 18:02"}, {"location": "安和一街135巷口", "time": "18:02 ~ 18:03"}, {"location": "安和一街133巷口", "time": "18:03 ~ 18:04"}, {"location": "安和一街131巷口", "time": "18:04 ~ 18:05"}, {"location": "安和一街129巷口", "time": "18:05 ~ 18:07"}, {"location": "安和一街125巷口", "time": "18:07 ~ 18:09"}, {"location": "安和一街123巷口", "time": "18:09 ~ 18:11"}, {"location": "安和一街121巷口", "time": "18:11 ~ 18:13"}]}, "27-2 - 安樂區安樂路一段": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=27-2%E5%AE%89%E6%A8%82%E5%8D%80%E5%AE%89%E6%A8%82%E8%B7%AF%E4%B8%80%E6%AE%B5&routeId=65fab3f3d8d36e9688b82f8b", "stops": [{"location": "安樂路一段150號前", "time": "19:50 ~ 20:03"}, {"location": "安樂路一段178號前", "time": "20:03 ~ 20:05"}, {"location": "安樂路一段208號前", "time": "20:05 ~ 20:07"}, {"location": "安樂路一段232號前", "time": "20:07 ~ 20:08"}, {"location": "安樂路一段252號前", "time": "20:08 ~ 20:09"}, {"location": "安樂路二段270號前", "time": "20:09 ~ 20:10"}, {"location": "安樂路二段100號前", "time": "20:10 ~ 20:12"}, {"location": "安樂路二段108號前", "time": "20:12 ~ 20:14"}, {"location": "安樂路二段118號前", "time": "20:14 ~ 20:16"}, {"location": "安樂路二段128號前", "time": "20:16 ~ 20:21"}, {"location": "安和一街330巷8號前", "time": "20:25 ~ 20:38"}, {"location": "安和一街237號前", "time": "20:38 ~ 20:39"}, {"location": "安和一街257號前", "time": "20:39 ~ 20:40"}, {"location": "安和一街261號前", "time": "20:40 ~ 20:41"}, {"location": "安和一街269號前", "time": "20:41 ~ 20:42"}, {"location": "安樂路二段166巷(四合院)", "time": "20:42 ~ 20:47"}, {"location": "安樂路二段231號前", "time": "20:47 ~ 20:49"}, {"location": "安樂路二段161號前", "time": "20:49 ~ 20:50"}, {"location": "安樂路二段155號前", "time": "20:50 ~ 20:52"}, {"location": "安樂路二段147號前", "time": "20:52 ~ 20:53"}, {"location": "安樂路二段139號前", "time": "20:53 ~ 20:55"}, {"location": "安樂路一段197號前", "time": "21:00 ~ 21:01"}, {"location": "安樂路一段175號前", "time": "21:01 ~ 21:02"}, {"location": "安樂路一段153號前", "time": "21:02 ~ 21:03"}, {"location": "安樂路一段145號前", "time": "21:03 ~ 21:04"}, {"location": "安樂路一段143號前", "time": "21:04 ~ 21:05"}, {"location": "安樂路一段131號前", "time": "21:05 ~ 21:06"}, {"location": "安樂路一段103號前", "time": "21:06 ~ 21:07"}, {"location": "安樂路一段95號前", "time": "21:07 ~ 21:08"}, {"location": "安樂路一段77號前", "time": "21:08 ~ 21:09"}, {"location": "安樂路一段63號前", "time": "21:09 ~ 21:10"}]}, "29-2 - 安樂區麥金路": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=29-2%E5%AE%89%E6%A8%82%E5%8D%80%E9%BA%A5%E9%87%91%E8%B7%AF&routeId=65fab3f3d8d36e9688b82f8f", "stops": [{"location": "麥金路11巷61之1號", "time": "20:17 ~ 20:22"}, {"location": "麥金路513號新東區大門口", "time": "20:26 ~ 20:28"}, {"location": "樂利二街62巷10號", "time": "20:37 ~ 20:43"}, {"location": "樂利二街62巷59號", "time": "20:43 ~ 20:45"}, {"location": "樂利二街62巷47號", "time": "20:45 ~ 20:47"}, {"location": "樂利二街62巷19號", "time": "20:47 ~ 20:48"}, {"location": "樂利二街62巷1號", "time": "20:48 ~ 20:50"}, {"location": "樂利二街62巷246號", "time": "20:53 ~ 20:55"}, {"location": "樂利二街62巷212號", "time": "20:55 ~ 21:00"}, {"location": "樂利二街62巷311號莫內", "time": "21:01 ~ 21:05"}, {"location": "樂利二街62巷601號維也納", "time": "21:06 ~ 21:08"}]}, "31-1 - 安樂區安一路100號": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=31-1%E5%AE%89%E6%A8%82%E5%8D%80%E5%AE%89%E4%B8%80%E8%B7%AF100%E8%99%9F&routeId=65fab3f3d8d36e9688b82f92", "stops": [{"location": "安一路100號", "time": "17:10 ~ 17:19"}, {"location": "安一路152號", "time": "17:20 ~ 17:24"}, {"location": "安一路180號", "time": "17:25 ~ 17:26"}, {"location": "安一路210號", "time": "17:27 ~ 17:29"}, {"location": "安一路252號", "time": "17:30 ~ 17:31"}, {"location": "安一路268號", "time": "17:32 ~ 17:34"}, {"location": "新西街2巷60-24號", "time": "17:37 ~ 17:38"}, {"location": "新西街57巷45之2號", "time": "17:39 ~ 17:40"}, {"location": "安一路370巷14號", "time": "17:41 ~ 17:42"}, {"location": "安一路370巷8號", "time": "17:42 ~ 17:43"}, {"location": "安一路370巷2號", "time": "17:43 ~ 17:44"}, {"location": "基金一路34號", "time": "17:44 ~ 17:45"}, {"location": "基金一路40號", "time": "17:45 ~ 17:46"}, {"location": "基金一路56號", "time": "17:46 ~ 17:47"}, {"location": "基金一路72號", "time": "17:47 ~ 17:48"}, {"location": "基金一路96號", "time": "17:48 ~ 17:49"}, {"location": "基金一路108-1號", "time": "17:49 ~ 17:53"}, {"location": "基金一路110-1號", "time": "17:54 ~ 17:55"}, {"location": "基金一路110-82號", "time": "17:55 ~ 17:58"}, {"location": "基金一路112巷87號", "time": "17:59 ~ 18:01"}, {"location": "基金一路112巷16號", "time": "18:01 ~ 18:02"}, {"location": "基金一路210巷(國花社區慢行)", "time": "18:05 ~ 18:20"}]}, "31-2 - 安樂區基金一路208巷": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=31-2%E5%AE%89%E6%A8%82%E5%8D%80%E5%9F%BA%E9%87%91%E4%B8%80%E8%B7%AF208%E5%B7%B7&routeId=65fab3f3d8d36e9688b82f93", "stops": [{"location": "基金一路208巷78號", "time": "19:40 ~ 19:43"}, {"location": "基金一路208巷186號(長庚宿舍)", "time": "19:44 ~ 19:47"}, {"location": "基金一路208巷182-1號(長庚宿舍)", "time": "19:47 ~ 19:49"}, {"location": "基金一路208巷172號(台北大鎮)", "time": "19:50 ~ 19:52"}, {"location": "基金一路208巷156號(台北大鎮)", "time": "19:52 ~ 20:00"}, {"location": "基金一路208巷116號", "time": "20:01 ~ 20:02"}, {"location": "基金二路3巷37號", "time": "20:05 ~ 20:06"}, {"location": "基金二路3巷11號", "time": "20:06 ~ 20:07"}, {"location": "基金二路3巷1號", "time": "20:08 ~ 20:09"}, {"location": "基金二路1巷5號", "time": "20:09 ~ 20:10"}, {"location": "基金二路1巷104號", "time": "20:10 ~ 20:12"}, {"location": "基金二路1巷158號", "time": "20:12 ~ 20:13"}, {"location": "基金一路135巷65號", "time": "20:17 ~ 20:19"}, {"location": "基金一路135巷11-1號", "time": "20:19 ~ 20:20"}, {"location": "基金一路112巷12~21號(龍邸中國慢行)", "time": "20:24 ~ 20:35"}, {"location": "基金一路108-1號", "time": "20:35 ~ 20:37"}, {"location": "基金一路121巷10號(國揚大地)", "time": "20:37 ~ 20:42"}, {"location": "基金一路121巷28號(國揚大地)", "time": "20:43 ~ 20:50"}, {"location": "基金一路121巷15號(國揚大地)", "time": "20:50 ~ 20:52"}, {"location": "麥金路749號", "time": "20:54 ~ 20:55"}, {"location": "麥金路747號", "time": "20:55 ~ 20:56"}, {"location": "麥金路733號", "time": "20:56 ~ 20:57"}]}, "33-1 - 安樂區基金一路2-3號": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=33-1%E5%AE%89%E6%A8%82%E5%8D%80%E5%9F%BA%E9%87%91%E4%B8%80%E8%B7%AF2-3%E8%99%9F&routeId=65fab3f3d8d36e9688b82f98", "stops": [{"location": "基金一路2-3號", "time": "16:11 ~ 16:12"}, {"location": "基金一路135巷口", "time": "16:16 ~ 16:20"}, {"location": "基金一路135巷41號天鵝堡", "time": "16:21 ~ 16:24"}, {"location": "基金一路135巷11號", "time": "16:24 ~ 16:25"}, {"location": "基金三路20號", "time": "16:29 ~ 16:30"}, {"location": "基金三路80巷口", "time": "16:32 ~ 16:34"}, {"location": "基金三路172號", "time": "16:35 ~ 16:36"}, {"location": "基金三路80巷6-29號", "time": "16:37 ~ 16:40"}, {"location": "基金三路196巷1-130號", "time": "16:41 ~ 16:45"}, {"location": "武聖街12號", "time": "16:46 ~ 16:48"}, {"location": "武聖街16號", "time": "16:48 ~ 16:49"}, {"location": "武聖街30號", "time": "16:49 ~ 16:50"}, {"location": "武聖街52號", "time": "16:50 ~ 16:52"}, {"location": "武聖街102號", "time": "16:52 ~ 16:53"}, {"location": "武聖街130號", "time": "16:53 ~ 16:54"}, {"location": "武聖街148號", "time": "16:54 ~ 16:55"}, {"location": "武聖街160號", "time": "16:55 ~ 16:56"}, {"location": "武聖街184號", "time": "16:56 ~ 16:57"}, {"location": "武聖街190號", "time": "16:57 ~ 16:59"}, {"location": "武聖街204號", "time": "16:59 ~ 17:00"}, {"location": "武聖街246號", "time": "17:00 ~ 17:01"}, {"location": "武聖街270號", "time": "17:01 ~ 17:02"}, {"location": "武隆街111巷1-3", "time": "17:07 ~ 17:08"}, {"location": "武隆街111巷82號", "time": "17:08 ~ 17:09"}, {"location": "武隆街111巷20號", "time": "17:09 ~ 17:10"}, {"location": "武隆街205號", "time": "17:11 ~ 17:13"}, {"location": "武隆街238號", "time": "17:14 ~ 17:16"}, {"location": "武隆街103巷57弄", "time": "17:16 ~ 17:17"}, {"location": "武隆街103巷55弄2號", "time": "17:17 ~ 17:26"}, {"location": "武隆街19號", "time": "17:28 ~ 17:29"}, {"location": "武隆街171號", "time": "17:31 ~ 17:32"}, {"location": "武隆街83號", "time": "17:32 ~ 17:33"}, {"location": "武隆街66號", "time": "17:33 ~ 17:35"}, {"location": "武隆街40號", "time": "17:35 ~ 17:36"}, {"location": "武隆街14號", "time": "17:36 ~ 17:36"}, {"location": "基金三路65號", "time": "17:39 ~ 17:40"}, {"location": "基金三路57號", "time": "17:40 ~ 17:41"}, {"location": "基金三路53號", "time": "17:41 ~ 17:42"}, {"location": "基金三路21號", "time": "17:42 ~ 17:43"}, {"location": "基金二路43號", "time": "17:46 ~ 17:47"}, {"location": "基金二路33號", "time": "17:47 ~ 17:48"}, {"location": "基金二路17號", "time": "17:48 ~ 17:49"}, {"location": "基金二路5號", "time": "17:49 ~ 17:51"}]}, "46-1 - 安樂區樂利三街": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=46-1%E5%AE%89%E6%A8%82%E5%8D%80%E6%A8%82%E5%88%A9%E4%B8%89%E8%A1%97&routeId=65fab3f3d8d36e9688b82fb6", "stops": [{"location": "樂利三街22號金閣社區", "time": "16:55 ~ 17:00"}, {"location": "樂利三街275號台北生活家", "time": "17:00 ~ 17:05"}, {"location": "樂利三街263巷", "time": "17:05 ~ 17:20"}, {"location": "樂利三街261號", "time": "17:20 ~ 17:22"}, {"location": "樂利三街247號", "time": "17:22 ~ 17:23"}, {"location": "樂利三街229號", "time": "17:23 ~ 17:25"}, {"location": "樂利三街68號", "time": "17:25 ~ 17:27"}, {"location": "樂利三街38巷7號", "time": "17:27 ~ 17:28"}, {"location": "樂利三街38巷14號", "time": "17:28 ~ 17:29"}, {"location": "樂利三街38巷17號", "time": "17:30 ~ 17:31"}, {"location": "樂利三街36巷32號", "time": "17:31 ~ 17:32"}, {"location": "樂利三街34巷31號", "time": "17:32 ~ 17:33"}, {"location": "樂利三街32巷33號", "time": "17:33 ~ 17:34"}, {"location": "樂利三街32巷17號", "time": "17:35 ~ 17:36"}, {"location": "樂利三街28巷口1號", "time": "17:36 ~ 17:40"}, {"location": "樂利三街28巷口74號", "time": "17:40 ~ 17:44"}, {"location": "樂利三街41號(天驕社區)", "time": "17:47 ~ 18:05"}]}, "46-2 - 安樂區麥金路240號": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=46-2%E5%AE%89%E6%A8%82%E5%8D%80%E9%BA%A5%E9%87%91%E8%B7%AF240%E8%99%9F&routeId=65fab3f3d8d36e9688b82fb7", "stops": [{"location": "麥金路240號", "time": "19:10 ~ 19:12"}, {"location": "麥金路424巷口", "time": "19:12 ~ 19:14"}, {"location": "麥金路458號", "time": "19:14 ~ 19:16"}, {"location": "麥金路482號", "time": "19:16 ~ 19:18"}, {"location": "麥金路484巷口", "time": "19:18 ~ 19:19"}, {"location": "麥金路498巷口", "time": "19:19 ~ 19:20"}, {"location": "麥金路516巷口", "time": "19:20 ~ 19:21"}, {"location": "麥金路532巷口", "time": "19:21 ~ 19:22"}, {"location": "麥金路564號", "time": "19:22 ~ 19:24"}, {"location": "安和二街3號(富仕堡)", "time": "19:24 ~ 19:27"}, {"location": "麥金路487號", "time": "19:27 ~ 19:28"}, {"location": "麥金路467巷口", "time": "19:28 ~ 19:29"}, {"location": "麥金路461巷口", "time": "19:30 ~ 19:31"}, {"location": "麥金路449號", "time": "19:31 ~ 19:32"}, {"location": "麥金路439號", "time": "19:32 ~ 19:33"}, {"location": "麥金路437號", "time": "19:33 ~ 19:35"}, {"location": "麥金路421巷115號", "time": "19:35 ~ 19:41"}, {"location": "麥金路421巷5號", "time": "19:41 ~ 19:42"}, {"location": "樂利二街18號停車場", "time": "19:42 ~ 19:47"}, {"location": "安和二街8號(安樂國宅)", "time": "19:50 ~ 20:02"}, {"location": "安和二街4號(安樂國宅)", "time": "20:02 ~ 20:06"}, {"location": "安和二街2號(安樂國宅)", "time": "20:06 ~ 20:07"}, {"location": "樂利三街251號(悅莊)", "time": "20:11 ~ 20:14"}, {"location": "樂利三街263號(郵局)", "time": "20:15 ~ 20:19"}, {"location": "樂利三街247號", "time": "20:19 ~ 20:20"}, {"location": "樂利三街229號", "time": "20:20 ~ 20:21"}, {"location": "樂利三街38巷14號", "time": "20:21 ~ 20:22"}, {"location": "樂利三街36巷32號", "time": "20:22 ~ 20:24"}, {"location": "樂利三街32巷33號", "time": "20:24 ~ 20:25"}, {"location": "樂利三街28巷口", "time": "20:25 ~ 20:29"}, {"location": "樂利三街28巷74號", "time": "20:29 ~ 20:32"}, {"location": "樂利三街211號(山海關社區)", "time": "20:32 ~ 20:40"}]}, "47-1 - 安樂區基金一路397號": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=47-1%E5%AE%89%E6%A8%82%E5%8D%80%E5%9F%BA%E9%87%91%E4%B8%80%E8%B7%AF397%E8%99%9F&routeId=65fab3f3d8d36e9688b82fb8", "stops": [{"location": "基金二路3巷41號 星期四收", "time": "17:42 ~ 17:45"}, {"location": "基金一路397號", "time": "17:51 ~ 17:54"}, {"location": "基金一路377號", "time": "17:54 ~ 17:57"}, {"location": "基金一路353號", "time": "17:57 ~ 17:58"}, {"location": "基金一路173號", "time": "17:58 ~ 18:00"}, {"location": "基金一路113號", "time": "18:03 ~ 18:04"}, {"location": "基金一路85號", "time": "18:05 ~ 18:07"}, {"location": "基金一路51號", "time": "18:07 ~ 18:08"}, {"location": "基金一路45號", "time": "18:08 ~ 18:09"}, {"location": "安一路393號", "time": "18:11 ~ 18:13"}, {"location": "安一路383號", "time": "18:13 ~ 18:14"}, {"location": "安一路357號", "time": "18:15 ~ 18:16"}, {"location": "安一路329號", "time": "18:16 ~ 18:17"}, {"location": "麥金路781號(皇家翡翠)", "time": "18:19 ~ 18:23"}]}, "47-2 - 安樂區基金一349巷": {"recycle_days": "回收日：星期二、四、六", "link": "https://green-cycle.klcg.gov.tw/#/routesScheduleStopsList?routeName=47-2%E5%AE%89%E6%A8%82%E5%8D%80%E5%9F%BA%E9%87%91%E4%B8%80349%E5%B7%B7&routeId=65fab3f3d8d36e9688b82fb9", "stops": [{"location": "基金一路349巷", "time": "19:21 ~ 19:25"}, {"location": "基金三路46巷(藍天麗地)", "time": "19:30 ~ 20:37"}, {"location": "武崙街179號 (翰林小城)", "time": "19:42 ~ 19:47"}, {"location": "基金一路135巷3號楓林小橋", "time": "19:51 ~ 19:56"}, {"location": "樂利三街(大衛營)(龍騰大地)", "time": "20:03 ~ 20:45"}]}};
+
+        let allStops = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. 將資料攤平成單一陣列
+            for (const [routeName, routeInfo] of Object.entries(routeData)) {
+                // 清理路線名稱 (拿掉 " - 安樂區")
+                const cleanRouteName = routeName.split(' - ')[0]; 
+                const cleanRecycleDays = routeInfo.recycle_days.replace('回收日：', '');
+
+                routeInfo.stops.forEach(stop => {
+                    // 取出起始時間用來排序與過濾 (例如從 "17:00 ~ 17:02" 取出 "17:00")
+                    const timeMatch = stop.time.match(/(\d{2}:\d{2})/);
+                    const startTime = timeMatch ? timeMatch[1] : stop.time;
+                    const hour = startTime.split(':')[0]; // 取得小時
+
+                    allStops.push({
+                        time: stop.time,
+                        startTime: startTime,
+                        hour: hour,
+                        location: stop.location,
+                        route: cleanRouteName,
+                        recycle: cleanRecycleDays,
+                        link: routeInfo.link
+                    });
+                });
+            }
+
+            // 2. 依照時間早晚進行全域排序
+            allStops.sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+            // 3. 綁定按鈕事件
+            const buttons = document.querySelectorAll('.time-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // 樣式切換
+                    buttons.forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    
+                    // 執行過濾
+                    const selectedHour = e.target.getAttribute('data-hour');
+                    renderTimeline(selectedHour);
+                });
+            });
+
+            // 初始渲染：顯示全部
+            renderTimeline('all');
+
+            // 4. 回到頂部按鈕邏輯
+            const backToTopBtn = document.getElementById("backToTopBtn");
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 300) backToTopBtn.classList.add("show");
+                else backToTopBtn.classList.remove("show");
+            });
+            backToTopBtn.addEventListener("click", (e) => {
+                e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        });
+
+        // 渲染畫面
+        function renderTimeline(hourFilter) {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = '';
+
+            let filteredStops = allStops;
+            if (hourFilter !== 'all') {
+                filteredStops = allStops.filter(stop => stop.hour === hourFilter);
+            }
+
+            document.getElementById('resultCount').innerText = `共載入 ${filteredStops.length} 筆停靠資訊`;
+
+            if (filteredStops.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-gray-500 font-bold">這個時段目前沒有垃圾車班次喔！</div>`;
+                return;
+            }
+
+            filteredStops.forEach((stop) => {
+                const item = document.createElement('div');
+                item.className = 'bg-[#f8f5f0] p-4 md:p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col md:flex-row gap-3 md:gap-6 items-start md:items-center';
+                
+                item.innerHTML = `
+                    <!-- 左側：醒目的時間 -->
+                    <div class="text-transformative-teal font-black text-2xl md:text-3xl shrink-0 flex items-center md:w-48">
+                        <i class="fa-regular fa-clock mr-2 text-xl text-amber-haze"></i> ${stop.time}
+                    </div>
+                    
+                    <!-- 右側：地點與附屬資訊 -->
+                    <div class="flex-grow">
+                        <div class="font-bold text-lg md:text-xl text-gray-800 mb-2">${stop.location}</div>
+                        
+                        <div class="flex flex-wrap gap-2 text-xs md:text-sm font-bold">
+                            <a href="${stop.link}" target="_blank" class="bg-transformative-teal/10 text-transformative-teal hover:bg-transformative-teal hover:text-white px-2 py-1 rounded transition-colors" title="查看官方路線地圖">
+                                <i class="fa-solid fa-truck"></i> 路線 ${stop.route}
+                            </a>
+                            <span class="bg-gray-200 text-gray-600 px-2 py-1 rounded">
+                                <i class="fa-solid fa-recycle"></i> ${stop.recycle}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>
