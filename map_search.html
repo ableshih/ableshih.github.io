@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>門牌座標與地圖導航系統 - 嘉仁里</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- CSV 解析庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- 座標轉換庫 (處理 EPSG:3826 轉 Google Maps 的 WGS84) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'] },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'transformative-teal-dark': '#23494A',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    }
+                }
+            }
+        }
+        
+        // 定義台灣 TWD97 (EPSG:3826) 座標系統
+        proj4.defs("EPSG:3826","+proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+    </script>
+
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        /* 隱藏滾動條 */
+        ::-webkit-scrollbar { display: none; }
+        
+        #backToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+            transform: translateY(20px);
+        }
+        #backToTopBtn.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-20 sticky top-0">
+        <div>
+            <h1 class="text-xl md:text-2xl font-black tracking-widest"><i class="fa-solid fa-map-location-dot mr-2 text-amber-haze"></i>門牌座標導航系統</h1>
+        </div>
+        <a href="index.html" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2 shadow-sm shrink-0">
+            <i class="fa-solid fa-house"></i> 回首頁
+        </a>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-6">
+        
+        <!-- 狀態與手動上傳區塊 -->
+        <div id="loadingStatus" class="bg-white rounded-2xl shadow-md border-t-8 border-amber-haze mb-6 p-6">
+            <h2 id="loadingTitle" class="text-xl font-bold text-transformative-teal-dark mb-2">
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i>系統初始化中
+            </h2>
+            <p id="loadingDesc" class="text-gray-600 font-medium">正在自動載入門牌資料 (門牌_2.csv)...</p>
+            <p class="text-sm text-red-500 font-bold mt-4 hidden bg-red-50 p-4 rounded-lg border border-red-200" id="errorMsg"></p>
+            
+            <div id="manualUploadSection" class="mt-4 pt-4 border-t border-gray-200 hidden">
+                <p class="text-sm text-gray-500 font-bold mb-2"><i class="fa-solid fa-hand-pointer mr-1"></i> 請手動選擇 CSV 檔案：</p>
+                <div class="flex flex-col md:flex-row gap-4 items-center">
+                    <input type="file" id="csvFileInput" accept=".csv" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-transformative-teal/10 file:text-transformative-teal hover:file:bg-transformative-teal/20 cursor-pointer">
+                    <select id="encodingSelect" class="border border-gray-300 rounded-lg p-2 text-sm text-gray-600 focus:outline-none">
+                        <option value="utf-8">編碼: UTF-8</option>
+                        <option value="big5">編碼: Big5 (政府CSV預設)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 篩選面板 -->
+        <div id="controlPanel" class="bg-white rounded-2xl shadow-md border-t-8 border-transformative-teal mb-6 p-6 hidden">
+            <div class="flex justify-between items-center mb-4 border-b pb-4">
+                <h2 class="text-xl font-bold text-transformative-teal-dark"><i class="fa-solid fa-filter mr-2"></i>門牌篩選與定位</h2>
+                <div class="bg-[#f8f5f0] border border-amber-haze/30 px-4 py-2 rounded-lg shadow-sm flex items-center gap-3">
+                    <div class="text-gray-600 font-bold text-sm">篩選筆數</div>
+                    <div class="text-2xl font-black text-amber-haze" id="totalCount">0</div>
+                </div>
+            </div>
+
+            <!-- 下拉選單 -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">鄰</label>
+                    <select id="filterLin" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-transformative-teal outline-none"><option value="all">全部</option></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">街、路段</label>
+                    <select id="filterStreet" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-transformative-teal outline-none"><option value="all">全部</option></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">巷</label>
+                    <select id="filterLane" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-transformative-teal outline-none"><option value="all">全部</option></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">號</label>
+                    <select id="filterNumber" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-transformative-teal outline-none"><option value="all">全部</option></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">樓層</label>
+                    <select id="filterFloor" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-transformative-teal outline-none"><option value="all">全部</option></select>
+                </div>
+            </div>
+            <div class="mt-4 text-right">
+                <button onclick="resetFilters()" class="text-sm text-gray-500 hover:text-transformative-teal underline font-bold"><i class="fa-solid fa-rotate-right"></i> 重置篩選</button>
+            </div>
+        </div>
+
+        <!-- 門牌資料表格清單 -->
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200" id="tableContainer">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left min-w-[800px]">
+                    <thead class="bg-transformative-teal text-cloud-dancer">
+                        <tr>
+                            <th class="p-3 border-b border-transformative-teal-dark font-bold w-12 text-center">鄰</th>
+                            <th class="p-3 border-b border-transformative-teal-dark font-bold">街、路段</th>
+                            <th class="p-3 border-b border-transformative-teal-dark font-bold w-16">巷</th>
+                            <th class="p-3 border-b border-transformative-teal-dark font-bold w-20">號</th>
+                            <th class="p-3 border-b border-transformative-teal-dark font-bold w-20">樓層</th>
+                            <th class="p-3 border-b border-transformative-teal-dark font-bold text-center">橫座標 (X) / 縱座標 (Y)</th>
+                            <th class="p-3 border-b border-transformative-teal-dark font-bold text-center w-32">Google 地圖</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTable" class="text-gray-800 divide-y divide-gray-200">
+                        <tr id="emptyRow"><td colspan="7" class="text-center py-12 text-gray-400 font-bold">等待資料載入中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 回到最上按鈕 -->
+    <a href="#" id="backToTopBtn" class="bg-amber-haze hover:bg-transformative-teal text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl cursor-pointer transition-all duration-300 transform" title="回到頂部">
+        <i class="fa-solid fa-chevron-up text-xl"></i>
+    </a>
+
+    <script>
+        let allData = [];
+        const filters = { lin: 'all', street: 'all', lane: 'all', number: 'all', floor: 'all' };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchCSVData();
+        });
+
+        function fetchCSVData() {
+            // 自動讀取指定的 門牌_2.csv 檔案
+            const csvFilePath = '門牌_2.csv';
+            
+            fetch(csvFilePath)
+                .then(response => {
+                    if (!response.ok) throw new Error(`無法讀取檔案 (HTTP 狀態碼: ${response.status})`);
+                    return response.arrayBuffer();
+                })
+                .then(buffer => {
+                    // 自動載入預設為 UTF-8 編碼
+                    const decoder = new TextDecoder('utf-8'); 
+                    const text = decoder.decode(buffer);
+                    
+                    Papa.parse(text, {
+                        header: true,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            document.getElementById('loadingStatus').classList.add('hidden');
+                            processData(results.data);
+                        },
+                        error: function(err) {
+                            showError("檔案解析失敗：" + err.message);
+                        }
+                    });
+                })
+                .catch(err => {
+                    // 若受瀏覽器安全性阻擋或檔案不存在，則顯示上傳按鈕
+                    showError("無法自動載入檔案。請確認「門牌_2.csv」是否存在且位於同一個資料夾，或使用下方手動上傳。");
+                });
+        }
+
+        // 供瀏覽器防護機制阻擋時，手動上傳 CSV 使用
+        document.getElementById('csvFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const buffer = event.target.result;
+                const encoding = document.getElementById('encodingSelect').value;
+                const decoder = new TextDecoder(encoding); 
+                const text = decoder.decode(buffer);
+                
+                Papa.parse(text, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        document.getElementById('loadingStatus').classList.add('hidden');
+                        processData(results.data);
+                    },
+                    error: function() {
+                        alert("檔案解析失敗，請確認檔案格式或切換編碼。");
+                    }
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        function showError(msg) {
+            const errorEl = document.getElementById('errorMsg');
+            errorEl.textContent = msg;
+            errorEl.classList.remove('hidden');
+            
+            document.getElementById('loadingTitle').innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2"></i>載入失敗';
+            document.getElementById('loadingTitle').classList.replace('text-transformative-teal-dark', 'text-red-600');
+            document.getElementById('loadingDesc').textContent = '自動讀取發生錯誤，請嘗試手動選擇檔案。';
+            
+            document.getElementById('manualUploadSection').classList.remove('hidden');
+            document.getElementById('emptyRow').innerHTML = '<td colspan="7" class="text-center py-12 text-red-500 font-bold">請於上方手動選擇 CSV 檔案</td>';
+        }
+
+        function processData(rawData) {
+            allData = rawData.map(row => {
+                // 涵蓋常見的 CSV 欄位名稱變體
+                let lin = row['鄰'] || '';
+                let street = row['街、路'] || row['街路'] || row['街、路段'] || '';
+                let lane = row['巷'] || '';
+                let number = row['號'] || '';
+                let floor = row['樓層'] || '一樓'; 
+                
+                let x = parseFloat(row['橫座標']);
+                let y = parseFloat(row['縱座標']);
+                let lat = null, lng = null;
+                
+                // 數學核心：TWD97 (EPSG:3826) 轉為 WGS84 (EPSG:4326) 經緯度，供 Google Map 使用
+                if (!isNaN(x) && !isNaN(y)) {
+                    let coords = proj4("EPSG:3826", "EPSG:4326", [x, y]);
+                    lng = coords[0];
+                    lat = coords[1];
+                }
+
+                return {
+                    lin: lin,
+                    street: street,
+                    lane: lane,
+                    number: number,
+                    floor: floor,
+                    x: x,
+                    y: y,
+                    lat: lat,
+                    lng: lng
+                };
+            }).filter(item => item.street !== '' || item.number !== '');
+
+            document.getElementById('controlPanel').classList.remove('hidden');
+            
+            populateSelects();
+            renderTable();
+        }
+
+        function populateSelects() {
+            const createOptions = (selectId, key) => {
+                const select = document.getElementById(selectId);
+                // 排序並過濾重複值
+                const uniqueVals = [...new Set(allData.map(item => item[key]))].filter(v => v).sort((a, b) => a.localeCompare(b, 'zh-TW', {numeric: true}));
+                select.innerHTML = '<option value="all">全部</option>';
+                uniqueVals.forEach(val => {
+                    select.add(new Option(val, val));
+                });
+            };
+
+            createOptions('filterLin', 'lin');
+            createOptions('filterStreet', 'street');
+            createOptions('filterLane', 'lane');
+            createOptions('filterNumber', 'number');
+            createOptions('filterFloor', 'floor');
+        }
+
+        // 綁定所有下拉選單的過濾事件
+        ['Lin', 'Street', 'Lane', 'Number', 'Floor'].forEach(key => {
+            document.getElementById(`filter${key}`).addEventListener('change', (e) => {
+                filters[key.toLowerCase()] = e.target.value;
+                renderTable();
+            });
+        });
+
+        function resetFilters() {
+            ['Lin', 'Street', 'Lane', 'Number', 'Floor'].forEach(key => {
+                document.getElementById(`filter${key}`).value = 'all';
+                filters[key.toLowerCase()] = 'all';
+            });
+            renderTable();
+        }
+
+        function renderTable() {
+            const tableBody = document.getElementById('dataTable');
+            
+            // 執行多重條件過濾
+            const filteredData = allData.filter(item => {
+                return (filters.lin === 'all' || item.lin === filters.lin) &&
+                       (filters.street === 'all' || item.street === filters.street) &&
+                       (filters.lane === 'all' || item.lane === filters.lane) &&
+                       (filters.number === 'all' || item.number === filters.number) &&
+                       (filters.floor === 'all' || item.floor === filters.floor);
+            });
+
+            document.getElementById('totalCount').textContent = filteredData.length;
+            tableBody.innerHTML = '';
+
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-gray-500 font-bold">找不到符合條件的門牌</td></tr>`;
+                return;
+            }
+
+            // 限制單次渲染數量最高 1500 筆以避免瀏覽器卡頓
+            const displayData = filteredData.slice(0, 1500);
+            let htmlString = '';
+            
+            displayData.forEach((item, index) => {
+                // 如果有轉換成功的經緯度，建立 Google Maps 超連結
+                let mapBtn = `<span class="text-gray-300 text-xs font-bold bg-gray-50 px-3 py-1 rounded">無座標</span>`;
+                if (item.lat && item.lng) {
+                    mapBtn = `<a href="https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lng}" target="_blank" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-transformative-teal text-white hover:bg-amber-haze transition-colors shadow-sm text-sm font-bold w-full whitespace-nowrap"><i class="fa-solid fa-map-location-dot mr-2"></i> 開啟地圖</a>`;
+                }
+
+                // 斑馬紋交替色
+                const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-[#f8f5f0]';
+                
+                // 座標格式化顯示
+                let coordsText = (!isNaN(item.x) && !isNaN(item.y)) ? `X: ${item.x}<br>Y: ${item.y}` : '-';
+
+                htmlString += `
+                    <tr class="${rowClass} hover:bg-transformative-teal/10 transition-colors">
+                        <td class="p-3 border-b border-gray-200 text-center font-bold text-gray-600">${item.lin}</td>
+                        <td class="p-3 border-b border-gray-200 font-bold text-transformative-teal-dark">${item.street}</td>
+                        <td class="p-3 border-b border-gray-200 font-medium text-gray-700">${item.lane}</td>
+                        <td class="p-3 border-b border-gray-200 font-black text-gray-800 text-lg">${item.number}</td>
+                        <td class="p-3 border-b border-gray-200 font-bold text-amber-haze">${item.floor}</td>
+                        <td class="p-3 border-b border-gray-200 text-center text-xs text-gray-500 font-mono tracking-wide leading-relaxed">${coordsText}</td>
+                        <td class="p-3 border-b border-gray-200 text-center">${mapBtn}</td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = htmlString;
+        }
+
+        // 回到最上方的動態按鈕邏輯
+        const backToTopBtn = document.getElementById("backToTopBtn");
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add("show");
+            } else {
+                backToTopBtn.classList.remove("show");
+            }
+        });
+
+        backToTopBtn.addEventListener("click", (e) => {
+            e.preventDefault(); 
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
+</body>
+</html>
