@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>施圳溪 AI 競選歌曲點播平台 - 嘉仁里</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'] },
+                    colors: {
+                        'transformative-teal': '#306263',
+                        'transformative-teal-dark': '#23494A',
+                        'cloud-dancer': '#F0EEE9',
+                        'amber-haze': '#D9A441' 
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #F0EEE9; color: #1F2937; }
+        .pattern-bg {
+            background-image: radial-gradient(#F0EEE9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #306263;
+        }
+        .lyrics-box {
+            background: linear-gradient(145deg, #ffffff, #f8f5f0);
+            box-shadow: 0 10px 30px rgba(48, 98, 99, 0.1);
+        }
+        
+        /* 自訂音樂播放器樣式 */
+        audio {
+            width: 100%;
+            height: 40px;
+            outline: none;
+            border-radius: 50px;
+        }
+        audio::-webkit-media-controls-panel {
+            background-color: #F0EEE9;
+        }
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-mute-button {
+            background-color: #D9A441;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:bg-transformative-teal selection:text-cloud-dancer">
+
+    <!-- 頂部導覽列 -->
+    <header class="pattern-bg text-cloud-dancer py-4 px-6 shadow-md flex justify-between items-center z-20 sticky top-0">
+        <div>
+            <h1 class="text-xl md:text-2xl font-black tracking-widest"><i class="fa-solid fa-music mr-2 text-amber-haze"></i>嘉仁里專屬點播站</h1>
+        </div>
+        <a href="index.html" class="bg-amber-haze text-transformative-teal-dark px-4 py-2 rounded-full font-bold text-sm hover:bg-white transition-colors flex items-center gap-2 shadow-sm shrink-0">
+            <i class="fa-solid fa-house"></i> 首頁
+        </a>
+    </header>
+
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-10">
+        
+        <!-- 標題與 Slogan -->
+        <div class="text-center mb-12">
+            <div class="inline-block bg-amber-haze text-transformative-teal-dark font-black px-6 py-2 rounded-full text-lg mb-6 tracking-widest shadow-md border-2 border-white">
+                🎵 科技結合藝術，唱出嘉仁好未來
+            </div>
+            <h2 class="text-4xl md:text-5xl font-black text-transformative-teal-dark mb-4">施圳溪 AI 競選歌曲</h2>
+            <p class="text-gray-600 font-medium text-lg">用台語歌聲，傳遞我們對這片土地最深的熱愛與承諾。</p>
+        </div>
+
+        <!-- 點播排行榜與控制面板 -->
+        <div class="bg-white rounded-2xl shadow-md border-t-8 border-transformative-teal mb-12 p-6 md:p-8">
+            <h3 class="text-2xl font-black text-transformative-teal-dark mb-6 border-b pb-4"><i class="fa-solid fa-list-ol mr-2 text-amber-haze"></i>線上點播清單</h3>
+            
+            <div class="space-y-4" id="playlist-container">
+                <!-- 歌曲將由 JavaScript 動態生成 -->
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+
+            <!-- 歌曲 2：好料理 (第一首) -->
+            <div class="lyrics-box rounded-3xl p-8 relative overflow-hidden">
+                <i class="fa-solid fa-bowl-food absolute text-9xl text-transformative-teal opacity-5 -right-4 -top-4"></i>
+                <div class="text-center mb-6">
+                    <span class="bg-gray-800 text-white text-xs font-bold px-3 py-1 rounded-full tracking-widest mb-3 inline-block">經典神曲</span>
+                    <h3 class="text-3xl font-black text-transformative-teal-dark">歌名：好料理</h3>
+                </div>
+
+                <!-- 海報展示區 -->
+                <div class="mb-6 rounded-xl overflow-hidden shadow-lg border-2 border-white">
+                    <img src="images/好料理_.png" alt="好料理 競選海報" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500">
+                </div>
+
+                
+                <div class="text-center text-lg leading-loose font-medium text-gray-700 space-y-2 mt-8">
+                    <p>大菜一盤一盤捧出來<br>一項一項 順利行落去</p>
+                    <p class="text-transformative-teal font-bold text-2xl my-4">愛嘉仁 愛子兒 愛你來鬥支持<br>服務、支援、安全 我挺你</p>
+                    <p>手機仔拍開 逐項知<br>做回收趁的 奉獻嘉仁里</p>
+                    <p>顧長輩 學東西 學會展厝邊<br>去上班 若有代誌 找里長鬥處理</p>
+                    <p>讀冊囡仔 學 English<br>用英語佮外國人 開講來來去去</p>
+                    <p class="text-amber-haze font-black text-2xl mt-6">嘉仁里 嘉仁里 大家 大步走出去</p>
+                </div>
+            </div>
+			
+            <!-- 歌曲 1：花香鳥語 (新歌) -->
+            <div class="lyrics-box rounded-3xl p-8 relative overflow-hidden border-2 border-transparent hover:border-amber-haze transition-colors">
+                <i class="fa-solid fa-dove absolute text-9xl text-transformative-teal opacity-5 -right-4 -top-4"></i>
+                <div class="text-center mb-6">
+                    <span class="bg-amber-haze text-transformative-teal-dark text-xs font-black px-3 py-1 rounded-full tracking-widest mb-3 inline-block shadow-sm">最新發行</span>
+                    <h3 class="text-3xl font-black text-transformative-teal-dark">歌名：花香鳥語</h3>
+                </div>
+                
+                <!-- 海報展示區 -->
+                <div class="mb-6 rounded-xl overflow-hidden shadow-lg border-2 border-white">
+                    <img src="song/花香鳥語・嘉仁里春日競選海報.png" alt="花香鳥語 競選海報" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500">
+                </div>
+
+                <div class="text-center text-lg leading-loose font-medium text-gray-700 space-y-2">
+                    <p>阿公 阿嬤 有我有你<br>鬆土 澆花 同心協力</p>
+                    <p>感謝 有你 來道支持<br>花蕊 開呷 滿滿都是</p>
+                    <p>花香 鳥話 心情歡喜<br>拍相 上傳FB</p>
+                    <p>這是 那裡 這麼那美<br>這是 咱們 嘉仁里</p>
+                    <p class="text-transformative-teal font-bold text-2xl my-4">嘉仁里 家人裡 龍是我的家人里<br>家人裡 嘉仁里 龍是我的嘉仁里</p>
+                </div>
+            </div>
+			
+        </div>
+
+    </main>
+
+    <footer class="bg-transformative-teal-dark text-cloud-dancer py-8 text-center border-t-8 border-amber-haze mt-auto">
+        <p class="text-lg text-amber-haze font-bold mb-2">愛嘉仁 ❤️ 愛子兒 ❤️ 愛厝邊</p>
+        <p class="text-sm opacity-60">2026 施圳溪競選團隊・扎根嘉仁 永續躍進</p>
+    </footer>
+
+    <script>
+        // GitHub MP3 來源路徑 (請替換為您真實的 raw 或 github.io 連結)
+        // 注意：GitHub 檔案必須使用 raw 連結，例如 https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/花香鳥語1.mp3
+        const GITHUB_BASE_URL = "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/";
+
+        // 歌曲資料庫 (您可隨時增減)
+        const songs = [
+            { id: "song_food_2", title: "好料理", file: "song.mp3" },
+            { id: "song_food_1", title: "花香鳥語 (男聲版)", file: "song/花香鳥語-1.mp3" },
+            { id: "song_food_2", title: "花香鳥語 (熱血版)", file: "song/花香鳥語-2.mp3" },
+            { id: "song_food_3", title: "花香鳥語 (抒情版)", file: "song/花香鳥語-3.mp3" },
+            { id: "song_food_4", title: "花香鳥語 (抒情版)", file: "song/花香鳥語-4.mp3" },
+            { id: "song_food_5", title: "花香鳥語 (輕快版)", file: "song/花香鳥語-5.mp3" }
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.getElementById("playlist-container");
+
+            songs.forEach(song => {
+                // 從 localStorage 讀取目前這首歌的點播次數，若無則為 0
+                let playCount = localStorage.getItem(`playCount_${song.id}`) || 0;
+
+                // 建立歌曲播放區塊
+                const songItem = document.createElement("div");
+                songItem.className = "bg-[#f8f5f0] p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-4 hover:shadow-md transition-shadow";
+                
+                songItem.innerHTML = `
+                    <div class="flex items-center gap-4 w-full md:w-1/3">
+                        <div class="w-12 h-12 bg-transformative-teal text-white rounded-full flex items-center justify-center shrink-0 shadow-sm">
+                            <i class="fa-solid fa-music text-xl"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="font-black text-lg text-transformative-teal-dark">${song.title}</h4>
+                            <p class="text-sm text-gray-500 font-bold mt-1">
+                                <i class="fa-solid fa-headphones mr-1 text-amber-haze"></i> 
+                                您已點播 <span id="count_${song.id}" class="text-amber-haze text-base">${playCount}</span> 次
+                            </p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-2/3">
+                        <audio id="audio_${song.id}" controls preload="none">
+                            <!-- 請確認 mp3 檔名與 GitHub 上完全一致 -->
+                            <source src="${GITHUB_BASE_URL}${encodeURIComponent(song.file)}" type="audio/mpeg">
+                            您的瀏覽器不支援音樂播放。
+                        </audio>
+                    </div>
+                `;
+                
+                container.appendChild(songItem);
+
+                // 綁定播放事件：只要按下播放，就增加點擊次數
+                const audioElement = document.getElementById(`audio_${song.id}`);
+                const countElement = document.getElementById(`count_${song.id}`);
+
+                audioElement.addEventListener("play", () => {
+                    // 暫停其他正在播放的音樂 (避免同時吵雜)
+                    pauseAllOtherAudios(song.id);
+
+                    // 增加並儲存點播次數
+                    playCount++;
+                    localStorage.setItem(`playCount_${song.id}`, playCount);
+                    countElement.innerText = playCount;
+                    
+                    // 簡單的特效
+                    countElement.classList.add("text-transformative-teal");
+                    setTimeout(() => countElement.classList.remove("text-transformative-teal"), 500);
+                });
+            });
+        });
+
+        // 停止其他音樂的功能
+        function pauseAllOtherAudios(currentId) {
+            const allAudios = document.querySelectorAll("audio");
+            allAudios.forEach(audio => {
+                if (audio.id !== `audio_${currentId}`) {
+                    audio.pause();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
