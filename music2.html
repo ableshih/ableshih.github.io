@@ -155,12 +155,12 @@
 
         // 歌曲資料庫 (您可隨時增減)
         const songs = [
-            { id: "song_food_2", title: "好料理", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song.mp3" },
-            { id: "song_food_1", title: "花香鳥語 (男聲版)", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/花香鳥語-1.mp3" },
-            { id: "song_food_2", title: "花香鳥語 (熱血版)", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/花香鳥語-2.mp3" },
-            { id: "song_food_3", title: "花香鳥語 (抒情版)", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/花香鳥語-3.mp3" },
-            { id: "song_food_4", title: "花香鳥語 (抒情版)", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/花香鳥語-4.mp3" },
-            { id: "song_food_5", title: "花香鳥語 (輕快版)", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/花香鳥語-5.mp3" }
+            { id: "song_food_0", title: "好料理", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song.mp3" },
+            { id: "song_flower_1", title: "花香鳥語 (男聲版)", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/%E8%8A%B1%E9%A6%99%E9%B3%A5%E8%AA%9E-1.mp3" },
+            { id: "song_flower_2", title: "花香鳥語 (熱血版)", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/%E8%8A%B1%E9%A6%99%E9%B3%A5%E8%AA%9E-2.mp3" },
+            { id: "song_flower_3", title: "花香鳥語 (抒情版)", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/%E8%8A%B1%E9%A6%99%E9%B3%A5%E8%AA%9E-3.mp3" },
+            { id: "song_flower_4", title: "花香鳥語 (抒情版)", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/%E8%8A%B1%E9%A6%99%E9%B3%A5%E8%AA%9E-4.mp3" },
+            { id: "song_flower_5", title: "花香鳥語 (輕快版)", file: "https://raw.githubusercontent.com/ableshih/ableshih.github.io/master/song/%E8%8A%B1%E9%A6%99%E9%B3%A5%E8%AA%9E-5.mp3" }
         ];
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -190,7 +190,9 @@
                     <div class="w-full md:w-2/3">
                         <audio id="audio_${song.id}" controls preload="none">
                             <!-- 請確認 mp3 檔名與 GitHub 上完全一致 -->
-                            <source src="${GITHUB_BASE_URL}${encodeURIComponent(song.file)}" type="audio/mpeg">
+                            <source src="${song.file}" type="audio/mpeg">
+
+                           /* <source src="${GITHUB_BASE_URL}${encodeURIComponent(song.file)}" type="audio/mpeg"> */
                             您的瀏覽器不支援音樂播放。
                         </audio>
                     </div>
